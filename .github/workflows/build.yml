@@ -256,6 +256,7 @@ jobs:
             --sha "${{ matrix.sha }}" \
             --config-id "${{ matrix.config_id }}" \
             --build-settings "${{ matrix.build_settings }}" \
+            --strip-style "${{ matrix.strip_style }}" \
             --toolchain "${{ steps.toolchain.outputs.desc }}" \
             --pods-did-run "${{ steps.pods.outputs.did_run }}" \
             --spm-did-run "${{ steps.spm.outputs.did_run }}" \
@@ -287,8 +288,12 @@ jobs:
           print("|---|---|")
           for k in ("toolchain", "scheme_verdict", "scheme", "scheme_elapsed_s",
                     "map_verdict", "map_mode", "build_outcome",
-                    "maps_found", "maps_with_requested_basename", "map_bytes_max",
-                    "binary_bytes", "uuid", "collect_note",
+                    "maps_found", "maps_by_output_kind", "app_map_bytes",
+                    "strip_style", "strip_did_run",
+                    "nsyms_before", "nsyms_after",
+                    "binary_bytes_before_strip", "binary_bytes",
+                    "strip_preserves_layout", "map_matches_binary",
+                    "uuid", "collect_note",
                     "usable_for_groundtruth"):
               print(f"| {k} | `{m.get(k)}` |")
           PY

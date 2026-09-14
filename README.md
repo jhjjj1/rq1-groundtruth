@@ -136,9 +136,12 @@ B1 尤其要记住：`steps.<id>.outcome` 是**应用 `continue-on-error` 之前
 算进最早卡住它的那一档，且**分桶合计必须等于本批应有 job 数**：
 
 ```
-OK / BUILT_NO_BINARY / BUILT_NO_MAP / BUILD_FAILED /
+OK / MAP_BINARY_MISMATCH / BUILT_NO_BINARY / BUILT_NO_MAP / BUILD_FAILED /
 BUILD_NOT_ATTEMPTED / NO_USABLE_MAP_MODE / NO_APP_SCHEME / MANIFEST_MISSING
 ```
+
+`MAP_BINARY_MISMATCH` 是文件都在但节区表对不上号（或读不出来）—— 齐全不等于
+配套，这种产物必须判负而不是当成 OK。
 
 没回收到 manifest 的 job 单独一档，并且**留在分母里**。把它们从分母拿掉会让
 失败率被做低 —— 「未观测到」不是零结果。
@@ -146,13 +149,70 @@ BUILD_NOT_ATTEMPTED / NO_USABLE_MAP_MODE / NO_APP_SCHEME / MANIFEST_MISSING
 这个率是论文外部效度段要写的数（「N 个开源 iOS 应用里只有 K 个能复现构建」），
 所以由流水线自己算，不靠人事后数绿勾。
 
-## 还没验的三个前提（P1 闸门）
+## P1 闸门：三个前提的实测结论
 
-方案成立依赖这三条，任一不成立就要改形态：
+原本写的是三条「还没验的前提」。跑完之后，**其中两条的措辞是错的**，错在我，
+不在实现。修正后的版本和各自的证据：
 
-1. **strip 前后地址不变** —— 连接键是地址，不是符号名
-2. **map 对应的就是分析的那个二进制** —— 靠 `LC_UUID` 比对
-3. **`.a(x.o)` → pod 名查得回去** —— 歧义时记 `GT_AMBIGUOUS`，排除出分母，不猜
+### 前提 1（原：strip 前后地址不变）—— 表述错了
+
+原来的验法是拿 `base` 和 `strip_all` 两次**独立构建**去比。实测：
+
+```
+__text  size 17,316,112 vs 17,316,424    起始地址相同，差 312 字节
+同名符号 232,681 个，地址不同的 156,165 = 67.12%
+```
+
+同一 commit、同一 Xcode，两次构建 67% 的符号地址就不一样 —— 编译/链接本来就
+不是确定性的。但这**不影响评分**：每个 job 自己构建、自己产 map，评分只在同
+一次链接内部闭环，从不跨配置复用 map。所以这条约束是我当初多加的。
+
+正确的表述是：**同一次链接产出的 map，对该次 `strip` 之后的二进制仍然有效**
+—— 因为 `strip` 是链接后的后处理。现在由 `collect_build_artifacts.py` 在同一个
+job 里 strip 前后各量一次节区表，把结果写进 `strip_preserves_layout`。
+每个 job 自带这个数，不再是写在文档里的假设。
+
+### 前提 2（原：靠 `LC_UUID` 比对）—— 判据不存在
+
+map 文件里**没有 UUID 字段**（解析 315,059 行，只有 `# Path:` / `# Arch:` /
+`# Sections:` / `# Symbols:` / `# Dead Stripped Symbols:`）。而且 `LC_UUID`
+本身不稳定：同一 SHA、同一 Xcode 26.2 连着三次构建给出
+`FAFA5749…` / `3796D76A…` / `89B98069…`。
+
+正确的锚点是**节区表**：map 的 `# Sections:` 和二进制的 `otool -l` 各列一份
+（段、节名、地址、大小），逐条比对。在真实产物上验过：
+
+| | |
+|---|---|
+| `base`：map 42 节 ↔ 二进制 42 节 | `IDENTICAL` |
+| `strip_all`：map 42 节 ↔ 二进制 42 节 | `IDENTICAL` |
+| **证伪项**：`base` 的 map vs `strip_all` 的二进制 | `SAME_SECTIONS_DIFFERENT_LAYOUT`，25 行不同 |
+
+第三行是量具的证伪项 —— 它必须能把两个不同的二进制分开，否则什么都判不出来。
+现在每个 job 自动做这件事，结果写进 `map_matches_binary`，并且**它是
+`usable_for_groundtruth` 的必要条件**：文件都在但对不上号，这份产物判负。
+
+### 前提 3（`.a(x.o)` → 单元名可回查）—— 成立，且对 SwiftPM 是平凡的
+
+app 主二进制的 map 里 192 个 object file **全部**由具名规则推出单元，
+`NO_RULE_MATCHED` = 0，共 119 个单元。SwiftPM 依赖以 `<产品名>.o` 形式进来，
+单元名就是文件名。`ARCHIVE_MEMBER`（`.a(x.o)`）那条规则有 15 个命中，都是系统
+静态库；**CocoaPods 仓库的那条路径还没验过**。
+
+### 附带发现：`strip_all` 这档配置原本什么都没做
+
+```
+base       LC_SYMTAB  nsyms 695,589   strsize 27,270,824   binary 62,702,680
+strip_all  LC_SYMTAB  nsyms 695,594   strsize 27,270,944   binary 62,702,880
+```
+
+strip 掉全部符号的二进制比不 strip 的还大 200 字节 —— 因为根本没 strip。
+`STRIP_INSTALLED_PRODUCT=YES` 只在安装阶段生效，`xcodebuild build` 不走那一步。
+而两格都显示 success。
+
+这正是本项目一贯反对的形态：没测和测过长得一样。现在 strip 由收集脚本在链接
+之后显式执行（`--strip-style`），并强制记录 `nsyms_before` / `nsyms_after`
+—— 没降下来就是没 strip，一眼可见。
 
 ## 探针 run #1 实测（2026-09-14，macos-latest / Xcode 26.6 / Swift 6.3.3）
 

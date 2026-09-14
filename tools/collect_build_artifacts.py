@@ -31,6 +31,9 @@ import shutil
 import subprocess
 import sys
 
+import macho_sections
+import parse_link_map
+
 #: Filenames that could be a linker map.  Deliberately wide: `rra_link.map` is
 #: what per_target mode asks for, `*-LinkMap-*` is Xcode's own default name,
 #: and `*.map` catches anything else so an unexpected name shows up as an
@@ -55,6 +58,24 @@ MAP_HEAD_LINES = 12
 #: the same as never-existed, and the index is what keeps the two apart.
 #:
 #: `.app/` does not match `.appex/` -- the slash matters.
+#: `strip` 的三种档位，对应 Xcode 的 STRIP_STYLE。
+#:
+#: 上一版把 strip 写成 build setting（`STRIP_STYLE=all STRIP_INSTALLED_PRODUCT=YES`），
+#: 实测**完全没生效**：base 与 strip_all 两格的 LC_SYMTAB 是 695,589 / 695,594
+#: 条，二进制反而大了 200 字节。STRIP_INSTALLED_PRODUCT 只在安装阶段生效，
+#: 而 `xcodebuild build` 不走那一步 —— 一个什么都没做的配置却两格全绿，正是
+#: 「没测」和「测过且通过」长得一样。
+#:
+#: 所以 strip 改在收集阶段显式执行：可控、可观测，而且能在**同一次链接内部**
+#: 做 strip 前后对照 —— 这才是「strip 不重排代码」该有的验证方式（用两次独立
+#: 构建去比是错的：同一 SHA 同一工具链两次构建就有 67% 的符号地址不同）。
+STRIP_FLAGS = {
+    "none": None,
+    "all": [],            # 对可执行文件：能删的全删，最接近 App Store 形态
+    "non_global": ["-x"],
+    "debug": ["-S"],
+}
+
 KIND_APP = "APP_BUNDLE"
 KIND_APPEX = "APPEX_BUNDLE"
 KIND_PRELINK = "PRELINK_OBJECT"
@@ -171,14 +192,39 @@ def collect_maps(roots, out_dir, map_basename, limit_copy_bytes, keep_kinds):
     return entries, copied_bytes
 
 
-def collect_binary(derived_data, out_dir):
-    """Find the built .app and copy its main executable out.
+def describe_binary(path):
+    """节区表 + LC_SYMTAB + 字节数。三者都取自 `otool -l`，不做任何推断。"""
+    rc, text = run(["otool", "-l", str(path)], timeout=300)
+    sections = macho_sections.parse_otool_sections(text) if rc == 0 else []
+    symtab = macho_sections.parse_symtab(text) if rc == 0 else None
+    try:
+        size = os.path.getsize(path)
+    except OSError:
+        size = None
+    return {"sections": sections, "symtab": symtab, "bytes": size,
+            "otool_rc": rc, "_raw": text}
+
+
+def collect_binary(derived_data, out_dir, map_sections=None, strip_style="none"):
+    """Find the built .app, copy its main executable, optionally strip it.
 
     Returns a dict that always has the same keys, so a job with no app and a
     job with an app produce comparable records.
     """
     info = {"app_bundle": None, "executable_name": None, "binary_bytes": None,
-            "uuid": None, "arch": None, "collect_note": None}
+            "uuid": None, "arch": None, "collect_note": None,
+            "strip_style": strip_style,
+            "nsyms_before": None, "nsyms_after": None,
+            "strsize_before": None, "strsize_after": None,
+            "binary_bytes_before_strip": None,
+            "strip_did_run": False, "strip_rc": None,
+            # 「strip 不重排代码」——每个 job 自己量一遍，不靠假设
+            "strip_preserves_layout": None,
+            "strip_layout_detail": None,
+            # 「这份 map 描述的就是这个二进制」——判据是节区表，不是 LC_UUID。
+            # map 里没有 UUID 字段，而且同一 SHA 三次构建给出三个不同 UUID。
+            "map_matches_binary": None,
+            "map_binary_detail": None}
     products = pathlib.Path(derived_data) / "Build" / "Products"
     if not products.is_dir():
         info["collect_note"] = "NO_BUILD_PRODUCTS_DIR"
@@ -219,7 +265,55 @@ def collect_binary(derived_data, out_dir):
         info["collect_note"] = f"BINARY_COPY_FAILED: {exc}"
         return info
 
-    # LC_UUID is the only anchor tying a map to the binary it describes.
+    # ---- strip 前 ----
+    before = describe_binary(dst)
+    info["binary_bytes_before_strip"] = before["bytes"]
+    info["nsyms_before"] = (before["symtab"] or {}).get("nsyms")
+    info["strsize_before"] = (before["symtab"] or {}).get("strsize")
+
+    flags = STRIP_FLAGS.get(strip_style)
+    after = before
+    if flags is not None:
+        rc_s, out_s = run(["strip", *flags, str(dst)], timeout=600)
+        info["strip_did_run"] = True
+        info["strip_rc"] = rc_s
+        if rc_s != 0:
+            info["collect_note"] = f"STRIP_FAILED_rc{rc_s}: {out_s.strip()[:200]}"
+        after = describe_binary(dst)
+        cmp_layout = macho_sections.compare_tables(
+            before["sections"], after["sections"], "pre_strip", "post_strip")
+        # NO_DATA 是「没量到」，不是「量了且不保持」。False 会被读成后者，
+        # 所以这里只在真的比过两张非空表时才给布尔。
+        info["strip_preserves_layout"] = (
+            None if cmp_layout["verdict"] == "NO_DATA" else cmp_layout["identical"])
+        info["strip_layout_detail"] = {k: v for k, v in cmp_layout.items()
+                                       if k != "first_diffs"} or None
+        if not cmp_layout["identical"]:
+            info["strip_layout_detail"]["first_diffs"] = cmp_layout.get("first_diffs")
+
+    info["binary_bytes"] = after["bytes"]
+    info["nsyms_after"] = (after["symtab"] or {}).get("nsyms")
+    info["strsize_after"] = (after["symtab"] or {}).get("strsize")
+
+    # ---- map ↔ 二进制同一性 ----
+    # 三种「比不了」的原因要分开记：没有 app map / 有 map 但没解析出节区表 /
+    # 二进制的节区表没读到。合并成一句「没得比」就看不出该去修哪一头。
+    if map_sections is None:
+        info["map_binary_detail"] = {"verdict": "NO_APP_MAP"}
+    elif not map_sections:
+        info["map_binary_detail"] = {"verdict": "MAP_HAS_NO_SECTIONS"}
+    elif not after["sections"]:
+        info["map_binary_detail"] = {"verdict": "BINARY_SECTIONS_UNREADABLE",
+                                     "otool_rc": after["otool_rc"]}
+    else:
+        cmp_map = macho_sections.compare_tables(
+            map_sections, after["sections"], "map", "binary")
+        info["map_matches_binary"] = cmp_map["identical"]
+        info["map_binary_detail"] = cmp_map
+
+    (pathlib.Path(out_dir) / "loadcmds.txt").write_text(
+        after["_raw"], encoding="utf-8")
+
     rc, out = run(["dwarfdump", "--uuid", str(dst)])
     (pathlib.Path(out_dir) / "uuid.txt").write_text(out, encoding="utf-8")
     if rc == 0:
@@ -228,8 +322,7 @@ def collect_binary(derived_data, out_dir):
             info["uuid"] = parts[1]
             info["arch"] = parts[2].strip("()") if len(parts) > 2 else None
 
-    for name, cmd in (("loadcmds.txt", ["otool", "-l", str(dst)]),
-                      ("size.txt", ["size", "-m", str(dst)]),
+    for name, cmd in (("size.txt", ["size", "-m", str(dst)]),
                       ("lipo.txt", ["lipo", "-info", str(dst)])):
         _rc, text = run(cmd, timeout=180)
         (pathlib.Path(out_dir) / name).write_text(text, encoding="utf-8")
@@ -253,6 +346,8 @@ def main(argv=None):
                     help="upload budget for copied maps（按未压缩大小计）")
     ap.add_argument("--keep-map-kinds", default=f"{KIND_APP},{KIND_APPEX}",
                     help="上传哪几类 map；其余只记账不上传")
+    ap.add_argument("--strip-style", default="none", choices=sorted(STRIP_FLAGS),
+                    help="收集阶段对主二进制执行哪一档 strip")
     # Everything below is recorded verbatim.  These are the job's own facts;
     # this script judges none of them.
     for flag in ("repo", "sha", "config-id", "build-settings",
@@ -276,7 +371,18 @@ def main(argv=None):
         limit_copy_bytes=int(args.max_copy_mb * 1024 * 1024),
         keep_kinds=keep,
     )
-    binary = collect_binary(dd, out_dir)
+    # app bundle 的 map 的节区表 —— 只读 Sections 段，不全量解析那 51 MB
+    app_map_src = next((m["src"] for m in maps
+                        if m["output_kind"] == KIND_APP), None)
+    map_sections = None
+    if app_map_src:
+        try:
+            map_sections = parse_link_map.parse_sections_only(app_map_src)
+        except OSError as exc:
+            print(f"读 map 节区表失败: {exc}", file=sys.stderr)
+
+    binary = collect_binary(dd, out_dir, map_sections=map_sections,
+                            strip_style=args.strip_style)
 
     requested = [m for m in maps if m["is_requested_basename"]]
     app_maps = [m for m in maps if m["output_kind"] == KIND_APP]
@@ -306,9 +412,12 @@ def main(argv=None):
         # The single field downstream scoring keys on.  It is deliberately
         # conjunctive: a map without its binary cannot be checked for identity,
         # and a binary without a map has no ground truth.
-        # ground truth 的充要条件：app bundle 的 map 在，且主二进制在。
-        # 只有 map 没有二进制就无从比对同一性；只有二进制没有 map 就没有真值。
-        "usable_for_groundtruth": bool(app_maps) and bool(binary.get("binary_bytes")),
+        # ground truth 的充要条件：app bundle 的 map 在、主二进制在，**且两者
+        # 经节区表比对确认是同一个**。前两条成立而第三条不成立时，这份产物是
+        # 不可用的 —— 那种情况必须显式判负，不能靠「文件都在」就放行。
+        "usable_for_groundtruth": (bool(app_maps)
+                                   and bool(binary.get("binary_bytes"))
+                                   and binary.get("map_matches_binary") is True),
     }
 
     with open(out_dir / "maps_index.json", "w", encoding="utf-8") as fh:
@@ -319,6 +428,14 @@ def main(argv=None):
 
     print(json.dumps({k: v for k, v in manifest.items()},
                      ensure_ascii=False, indent=2))
+    print()
+    print("=== 同一性与 strip ===")
+    for k in ("strip_style", "strip_did_run", "nsyms_before", "nsyms_after",
+              "binary_bytes_before_strip", "binary_bytes",
+              "strip_preserves_layout", "map_matches_binary"):
+        print(f"    {k:<26} {manifest.get(k)}")
+    if manifest.get("map_binary_detail", {}).get("verdict") not in (None, "IDENTICAL"):
+        print("    map/binary 差异:", manifest["map_binary_detail"])
     print()
     print(f"=== map 候选 {len(maps)} 个，按输出类型：{dict(kinds)} ===")
     print(f"    上传 {manifest['maps_uploaded']} 个，"

@@ -46,17 +46,23 @@ def bucket_of(m):
         return "BUILT_NO_MAP"
     if not m.get("binary_bytes"):
         return "BUILT_NO_BINARY"
+    # map 和二进制都在，但节区表对不上号 —— 文件齐全不等于配套。
+    # None 表示没量到（otool 读不出来），和「量了且不一致」都不能算 OK，
+    # 但它们是两件事，所以留在 detail 里可查。
+    if m.get("map_matches_binary") is not True:
+        return "MAP_BINARY_MISMATCH"
     return "OK"
 
 
-BUCKETS = ("OK", "BUILT_NO_BINARY", "BUILT_NO_MAP", "BUILD_FAILED",
-           "BUILD_NOT_ATTEMPTED", "NO_USABLE_MAP_MODE", "NO_APP_SCHEME",
-           "MANIFEST_MISSING")
+BUCKETS = ("OK", "MAP_BINARY_MISMATCH", "BUILT_NO_BINARY", "BUILT_NO_MAP",
+           "BUILD_FAILED", "BUILD_NOT_ATTEMPTED", "NO_USABLE_MAP_MODE",
+           "NO_APP_SCHEME", "MANIFEST_MISSING")
 
 #: Explanations carried into the summary table so the failure column is
 #: readable by someone who has not read this file.
 WHY = {
     "OK": "map 和主二进制都有，可进入评分",
+    "MAP_BINARY_MISMATCH": "map 和二进制都在，但节区表对不上号（或读不出来）",
     "BUILT_NO_BINARY": "编过了、有 map，但 .app 里没捞到主可执行文件",
     "BUILT_NO_MAP": "编过了，但没产出 # Path: 指向 .app/ 的那个 map",
     "BUILD_FAILED": "xcodebuild 退出码非 0",

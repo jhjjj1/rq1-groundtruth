@@ -219,6 +219,31 @@ def parse(path_or_fh):
     return lm
 
 
+def parse_sections_only(path):
+    """只读 `# Sections:` 段就返回。
+
+    app 的 map 有 51 MB、31.5 万条符号；收集阶段只需要那 42 行节区表去和
+    二进制比对，全量解析是白花时间和内存。读到 `# Symbols:` 就停。
+    """
+    sections = []
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        section = None
+        for line in fh:
+            line = line.rstrip("\n")
+            if line.startswith(SEC_SECTIONS):
+                section = "sec"; continue
+            if line.startswith(SEC_SYMBOLS):
+                break
+            if section != "sec" or line.startswith("#") or not line:
+                continue
+            m = RE_SECT.match(line)
+            if m:
+                sections.append({"addr": int(m.group(1), 16),
+                                 "size": int(m.group(2), 16),
+                                 "segment": m.group(3), "section": m.group(4)})
+    return sections
+
+
 def summarize(lm, src=None):
     nz = [s for s in lm.symbols if s[1] > 0]
     by_rule = collections.Counter(o["rule"] for o in lm.objects.values())

@@ -11,9 +11,18 @@ GitHub 的矩阵上限是 **256 job / 每次 run**。超了它的行为是报错
 ------------------
 每一项都对应归属算法的一个具体依赖面,不是随手列的:
 
-  base          Release + -Os。基线。
-  strip_all     `STRIP_STYLE=all` —— 符号名没了,直接打 `attribution.py` 的
-                L0/L1 定位阶梯和符号族证据。**最大杠杆**。
+  base          Release + -Os，不 strip。基线,也是诊断用的最好情形。
+  strip_all     链接后显式 `strip` —— 符号名没了,直接打 `attribution.py` 的
+                L0/L1 定位阶梯和符号族证据。**最大杠杆**,也最接近语料库里
+                真实 App Store 二进制的形态。
+
+                注意这一档**不是 build setting**。上一版写成
+                `STRIP_STYLE=all STRIP_INSTALLED_PRODUCT=YES`,实测完全没生效
+                （base 与 strip_all 的 LC_SYMTAB 是 695,589 / 695,594 条,
+                二进制反而大了 200 字节）—— STRIP_INSTALLED_PRODUCT 只在安装
+                阶段生效,`xcodebuild build` 不走那一步。现在由
+                `collect_build_artifacts.py --strip-style` 在链接之后显式执行,
+                并在**同一次链接内部**记录 strip 前后的节区表与符号表。
   no_deadstrip  关掉 dead code stripping —— 影响哪些桩还在,这也是路线 B
                 (导入面)依赖的东西。
   lto           `LLVM_LTO=YES` —— 跨 .o 内联。**注意:它会让 ground truth
@@ -32,12 +41,14 @@ from pathlib import Path
 
 MATRIX_LIMIT = 256
 
+#: 每一档 = (传给 xcodebuild 的 build settings, 链接后的 strip 档位)。
+#: 两者分开，是因为 strip 不是构建设置能办到的事 —— 见上面的说明。
 CONFIGS = {
-    "base": "",
-    "strip_all": "STRIP_STYLE=all STRIP_INSTALLED_PRODUCT=YES",
-    "no_deadstrip": "DEAD_CODE_STRIPPING=NO",
-    "lto": "LLVM_LTO=YES",
-    "wholemodule": "SWIFT_COMPILATION_MODE=wholemodule",
+    "base":         ("", "none"),
+    "strip_all":    ("", "all"),
+    "no_deadstrip": ("DEAD_CODE_STRIPPING=NO", "none"),
+    "lto":          ("LLVM_LTO=YES", "none"),
+    "wholemodule":  ("SWIFT_COMPILATION_MODE=wholemodule", "none"),
 }
 
 
@@ -80,7 +91,8 @@ def main() -> int:
                 "sha": sha,                      # 钉死 commit —— 不钉就不可复现
                 "slug": slug(repo),
                 "config_id": config,
-                "build_settings": CONFIGS[config],
+                "build_settings": CONFIGS[config][0],
+                "strip_style": CONFIGS[config][1],
                 "linkage": target.get("linkage", "UNKNOWN"),
             })
 

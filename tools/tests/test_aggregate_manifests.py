@@ -24,7 +24,7 @@ def base(**kw):
     m = {"repo": "o/r", "config_id": "base", "scheme_verdict": "APP_SCHEME_FOUND",
          "map_verdict": "MAP_MODE_CHOSEN", "build_outcome": "success",
          "maps_by_output_kind": {"APP_BUNDLE": 1, "PRELINK_OBJECT": 30},
-         "binary_bytes": 12345}
+         "binary_bytes": 12345, "map_matches_binary": True}
     m.update(kw)
     return m
 
@@ -47,27 +47,32 @@ def main():
         # scheme 和 map mode 都拿到了，但构建那步被跳过（mapmode 步骤中途崩了）
         write(td, "j8", base(repo="g/g", build_outcome="skipped",
                              maps_by_output_kind={}, binary_bytes=None))
+        # 文件都在，但 map 的节区表和二进制对不上 —— 不能算 OK
+        write(td, "j9", base(repo="h/h", map_matches_binary=False))
+        # 没量到（otool 读不出来）也不能算 OK，但它和「量了且不一致」是两件事
+        write(td, "j10", base(repo="i/i", map_matches_binary=None))
         out = str(pathlib.Path(td) / "agg.json")
         # 本批本应有 10 个 job，只回收到 8 份 manifest
-        A.main(["--artifacts-dir", td, "--expected", "10", "--out", out])
+        A.main(["--artifacts-dir", td, "--expected", "12", "--out", out])
         res = json.loads(open(out).read())
 
     t = res["totals"]
     got = sum(t.values())
-    if got != 10:
-        fails.append(f"分桶合计 {got} != jobs_expected 10（丢了 job）")
+    if got != 12:
+        fails.append(f"分桶合计 {got} != jobs_expected 12（丢了 job）")
     if res["manifests_unaccounted"] != 2:
         fails.append(f"unaccounted={res['manifests_unaccounted']}, 期望 2")
     if t["MANIFEST_MISSING"] != 2:
         fails.append(f"MANIFEST_MISSING={t['MANIFEST_MISSING']}, 期望 2")
     for b, want in (("OK", 2), ("BUILD_FAILED", 1), ("BUILT_NO_MAP", 1),
                     ("BUILT_NO_BINARY", 1), ("NO_APP_SCHEME", 1),
-                    ("NO_USABLE_MAP_MODE", 1), ("BUILD_NOT_ATTEMPTED", 1)):
+                    ("NO_USABLE_MAP_MODE", 1), ("BUILD_NOT_ATTEMPTED", 1),
+                    ("MAP_BINARY_MISMATCH", 2)):
         if t[b] != want:
             fails.append(f"{b}={t[b]}, 期望 {want}")
     # 代码里 ok_rate 是 round(x, 4)，容差不能比它还紧
-    if abs(res["ok_rate"] - round(2 / 10, 4)) > 1e-9:
-        fails.append(f"ok_rate={res['ok_rate']}, 期望 {round(2/10,4)}（分母是 10 不是 8）")
+    if abs(res["ok_rate"] - round(2 / 12, 4)) > 1e-9:
+        fails.append(f"ok_rate={res['ok_rate']}, 期望 {round(2/12,4)}（分母是 12 不是 10）")
     if len(res["ambiguous_app_scheme"]) != 1:
         fails.append(f"ambiguous 记了 {len(res['ambiguous_app_scheme'])} 条, 期望 1")
     # a/a 两个配置，base 成功 strip_all 也成功 -> 仓库口径算 1 个成功
@@ -79,7 +84,7 @@ def main():
         for f in fails:
             print("  -", f)
         return 1
-    print("PASS  分桶守恒：8 份 manifest + 2 个没回收 = 10，与 jobs_expected 一致")
+    print("PASS  分桶守恒：10 份 manifest + 2 个没回收 = 12，与 jobs_expected 一致")
     print(f"      ok_rate={res['ok_rate']} （分母用应有 job 数，不是回收数）")
     return 0
 
