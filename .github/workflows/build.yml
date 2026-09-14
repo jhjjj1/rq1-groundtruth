@@ -4,12 +4,29 @@
 # --------
 # * **不 fork 目标仓库**：job 里动态 clone，目标仓库一个都不用改。
 # * **fail-fast: false**：一个仓库编不过不能掐掉整个矩阵。构建失败率本身是
-#   要报的数（「N 个开源 iOS 应用里只有 M 个能复现构建」），所以失败必须被
+#   要报的数（「N 个开源 iOS 应用里只有 K 个能复现构建」），所以失败必须被
 #   记录下来，而不是让整批中止。
 # * **max-parallel: 5**：GitHub 对 macOS 的并发上限就是 5（Free/Pro 同），
 #   写出来是为了让排队行为可预期，不是限流。
 # * 矩阵上限是 **256 job/run**，所以目标清单按 batch 切；`make_matrix.py`
 #   会在超限时直接失败并告诉你该切多少份，而不是让 GitHub 静默截断。
+#
+# 第一次 P1 跑（run #1）暴露的四个缺陷，都修在这一版里
+# ----------------------------------------------------
+# B1 `xcodebuild 2>&1 | tee | tail` 没开 `pipefail`。GitHub 给 run: 的默认
+#    shell 是 `bash -e {0}`，但管道的退出码取自最后一个命令（tail），恒为 0。
+#    `** BUILD FAILED **` 被吞掉，`steps.xcbuild.outcome` 记成 success，
+#    网页上是绿的。—— 这违反本项目一贯口径：「没测」和「测过且通过」不能
+#    长得一样。现在 `set -o pipefail`，outcome 说什么就是什么。
+# B2 scheme 按字母序取 `schemes[0]`。IceCubesApp 拿到的是 `Account`（一个
+#    SPM 库 scheme），产物是 `Account.o` 不是 `.app`。现在由
+#    `pick_app_scheme.py` 按 xcodebuild 自报的 PRODUCT_TYPE 判。
+# B3 `LD_MAP_FILE_PATH` 写在命令行上是**全局**覆盖，21 个 target 的 Ld 任务
+#    全指向同一路径，XCBuild 在计划阶段判 duplicate output 直接拒编（15 秒，
+#    一个文件都没编）。现在由 `decide_map_mode.py` 逐仓库量出不撞的写法。
+# B4 `ls **/Podfile` —— bash 不开 globstar 时 `**` 等价于 `*`，只看一层，
+#    深层的 Podfile / Package.resolved 一律漏掉，依赖解析那步从没生效过。
+#    现在用 `find`。
 name: build-groundtruth
 
 on:
@@ -23,6 +40,10 @@ on:
         description: '构建配置 id，逗号分隔；all = 全矩阵'
         required: true
         default: 'all'
+      developer_dir:
+        description: '强制某个 Xcode（/Applications/Xcode_16.4.app 这种）；留空 = runner 默认'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -45,7 +66,7 @@ jobs:
   build:
     needs: plan
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 75
     strategy:
       fail-fast: false
       max-parallel: 5
@@ -53,120 +74,212 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Clone target at pinned SHA
-        id: clone
+      - name: Pin toolchain
+        if: inputs.developer_dir != ''
         run: |
-          set -x
+          DD="${{ inputs.developer_dir }}/Contents/Developer"
+          [ -d "$DD" ] || { echo "指定的 Xcode 不存在: $DD"; exit 1; }
+          echo "DEVELOPER_DIR=$DD" >> "$GITHUB_ENV"
+
+      - name: Show toolchain
+        id: toolchain
+        run: |
+          set -u
+          set +e
+          V=$(xcodebuild -version 2>&1 | tr '\n' ' ' | sed 's/  */ /g')
+          S=$(xcodebuild -showsdks 2>/dev/null | grep -oE 'iphoneos[0-9.]+' | tail -1)
+          echo "desc=$V sdk=${S:-?}" >> "$GITHUB_OUTPUT"
+          echo "$V sdk=${S:-?}"
+          swift --version 2>&1 | head -2
+
+      - name: Clone target at pinned SHA
+        run: |
+          set -euo pipefail
           git clone --filter=blob:none "https://github.com/${{ matrix.repo }}.git" target
           cd target
           git checkout --detach "${{ matrix.sha }}"
-          echo "resolved_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          git rev-parse HEAD
 
-      - name: Show toolchain
-        run: |
-          xcodebuild -version
-          swift --version || true
-
-      - name: Resolve dependencies
-        id: deps
+      # CocoaPods 必须在容器探测之前跑完 —— .xcworkspace 是 `pod install`
+      # 之后才生成的，先探容器就会探到只有 .xcodeproj，链不上 Pods 的 target。
+      - name: CocoaPods
+        id: pods
         continue-on-error: true
         working-directory: target
         run: |
-          set -x
-          if ls **/Podfile Podfile >/dev/null 2>&1; then
-            # Podfile.lock 已钉死版本；--deployment 禁止它改动 lock，
-            # 否则 ground truth 对应的依赖版本和仓库记录的就不是一回事了。
-            pod install --deployment || pod install
+          set -uo pipefail
+          PODFILE=$(find . -maxdepth 3 -name Podfile -not -path '*/Pods/*' -print -quit) || PODFILE=""
+          if [ -z "$PODFILE" ]; then
+            echo "did_run=no_podfile" >> "$GITHUB_OUTPUT"
+            echo "没有 Podfile，跳过"; exit 0
           fi
-          ls **/Package.resolved Package.resolved >/dev/null 2>&1 && \
-            xcodebuild -resolvePackageDependencies || true
+          echo "找到 $PODFILE"
+          cd "$(dirname "$PODFILE")"
+          # --deployment 禁止改动 Podfile.lock：ground truth 必须对应仓库
+          # 自己记录的依赖版本，不是解析当天的最新版本。
+          if pod install --deployment; then
+            echo "did_run=deployment" >> "$GITHUB_OUTPUT"
+          else
+            pod install
+            echo "did_run=fallback_no_deployment" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Discover scheme
-        id: scheme
+      - name: Discover container
+        id: container
         working-directory: target
         run: |
-          # 方案名各仓库不同，必须探测而不是猜。优先 .xcworkspace（CocoaPods
-          # 装完之后必须用 workspace，用 .xcodeproj 会找不到 Pods 的 target）。
-          WS=$(ls -d *.xcworkspace 2>/dev/null | head -1 || true)
-          PJ=$(ls -d *.xcodeproj  2>/dev/null | head -1 || true)
-          if [ -n "$WS" ]; then CONTAINER="-workspace $WS";
-          elif [ -n "$PJ" ]; then CONTAINER="-project $PJ";
-          else echo "没有 .xcworkspace / .xcodeproj"; exit 78; fi
-          echo "container=$CONTAINER" >> "$GITHUB_OUTPUT"
-          xcodebuild $CONTAINER -list -json > /tmp/schemes.json || true
-          cat /tmp/schemes.json
-          SCHEME=$(python3 -c "
-          import json,sys
-          d=json.load(open('/tmp/schemes.json'))
-          s=(d.get('workspace') or d.get('project') or {}).get('schemes') or []
-          # Pods 自己的方案不是 app；排除掉常见的库方案名
-          bad=('Pods','Pods-',)
-          real=[x for x in s if not any(x.startswith(b) for b in bad)]
-          print(real[0] if real else '')
-          ")
-          [ -n "$SCHEME" ] || { echo "找不到可用 scheme"; exit 78; }
-          echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+          set -uo pipefail
+          # .xcodeproj 里自带一个 project.xcworkspace，它不是容器，要排除
+          WS=$(find . -maxdepth 2 -name '*.xcworkspace' -not -path '*/*.xcodeproj/*' -print -quit) || WS=""
+          PJ=$(find . -maxdepth 2 -name '*.xcodeproj' -print -quit) || PJ=""
+          if [ -n "$WS" ]; then FLAG=-workspace; P=$WS;
+          elif [ -n "$PJ" ]; then FLAG=-project;  P=$PJ;
+          else echo "没有 .xcworkspace / .xcodeproj"; exit 1; fi
+          echo "container=$FLAG $P" >> "$GITHUB_OUTPUT"
+          echo "container = $FLAG $P"
+
+      - name: Resolve SwiftPM dependencies
+        id: spm
+        continue-on-error: true
+        working-directory: target
+        run: |
+          set -uo pipefail
+          RES=$(find . -maxdepth 6 \( -name Package.resolved -o -name Package.swift \) -print -quit) || RES=""
+          if [ -z "$RES" ]; then
+            echo "did_run=no_spm" >> "$GITHUB_OUTPUT"
+            echo "没有 Package.resolved / Package.swift，跳过"; exit 0
+          fi
+          echo "找到 $RES"
+          xcodebuild -resolvePackageDependencies ${{ steps.container.outputs.container }}
+          echo "did_run=resolved" >> "$GITHUB_OUTPUT"
+
+      - name: Pick app scheme
+        id: scheme
+        continue-on-error: true
+        working-directory: target
+        run: |
+          set -uo pipefail
+          set +e
+          mkdir -p "$RUNNER_TEMP/out"
+          xcodebuild ${{ steps.container.outputs.container }} -list -json \
+            > "$RUNNER_TEMP/out/schemes.json"
+          python3 "$GITHUB_WORKSPACE/tools/pick_app_scheme.py" \
+            --container "${{ steps.container.outputs.container }}" \
+            --schemes-json "$RUNNER_TEMP/out/schemes.json" \
+            --out "$RUNNER_TEMP/out/schemes_classified.json"
+          rc=$?
+          [ -f "$RUNNER_TEMP/out/schemes_classified.json" ] || exit 1
+          python3 - >> "$GITHUB_OUTPUT" <<'PY'
+          import json, os
+          d = json.load(open(os.environ["RUNNER_TEMP"] + "/out/schemes_classified.json"))
+          print("scheme=" + (d["chosen"] or ""))
+          print("verdict=" + d["chosen_verdict"])
+          print("elapsed=" + str(d["total_elapsed_s"]))
+          PY
+          exit $rc
+
+      # 逐仓库量，不套用别的仓库的结论：单 target 工程和二十几个 target 的
+      # 工程，能不能用全局 map 路径本来就不一样。
+      - name: Decide map mode
+        id: mapmode
+        continue-on-error: true
+        if: steps.scheme.outputs.scheme != ''
+        working-directory: target
+        run: |
+          set -uo pipefail
+          source "$GITHUB_WORKSPACE/tools/map_settings.sh"
+          ARGS=()
+          for MODE in default per_target global; do
+            map_settings_for "$MODE"
+            xcodebuild -showBuildSettings -json \
+              ${{ steps.container.outputs.container }} \
+              -scheme "${{ steps.scheme.outputs.scheme }}" \
+              -configuration Release \
+              -destination 'generic/platform=iOS' \
+              "${MAP_SETTINGS[@]}" ${{ matrix.build_settings }} \
+              > "$RUNNER_TEMP/bs_$MODE.json" 2>/dev/null
+            ARGS+=( "$MODE=$RUNNER_TEMP/bs_$MODE.json" )
+          done
+          python3 "$GITHUB_WORKSPACE/tools/decide_map_mode.py" \
+            --settings "${ARGS[@]}" \
+            --github-output "$GITHUB_OUTPUT" \
+            --out "$RUNNER_TEMP/out/map_mode.json"
 
       - name: Build with linker map
         id: xcbuild
         continue-on-error: true
+        if: steps.mapmode.outputs.map_mode != ''
         working-directory: target
-        env:
-          CFG: ${{ matrix.config_id }}
         run: |
           set -x
+          # B1：没有这一行，BUILD FAILED 会被管道吞掉，绿勾变成假阳性。
+          set -o pipefail
+          source "$GITHUB_WORKSPACE/tools/map_settings.sh"
+          map_settings_for "${{ steps.mapmode.outputs.map_mode }}"
           mkdir -p "$RUNNER_TEMP/out"
-          # LD_GENERATE_MAP_FILE=YES + LD_MAP_FILE_PATH 才是 ground truth 的来源。
           # CODE_SIGNING_ALLOWED=NO：CI 上没有证书，签名会直接失败。
           # -destination generic/platform=iOS：不需要模拟器，也避免 arm64 模拟器切片。
           xcodebuild build \
-            ${{ steps.scheme.outputs.container }} \
+            ${{ steps.container.outputs.container }} \
             -scheme "${{ steps.scheme.outputs.scheme }}" \
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -derivedDataPath "$RUNNER_TEMP/dd" \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
-            LD_GENERATE_MAP_FILE=YES \
-            LD_MAP_FILE_PATH="$RUNNER_TEMP/out/link.map" \
+            "${MAP_SETTINGS[@]}" \
             ${{ matrix.build_settings }} \
-            2>&1 | tee "$RUNNER_TEMP/out/build.log" | tail -40
+            2>&1 | tee "$RUNNER_TEMP/out/build.log" | tail -60
 
       - name: Collect artifacts
         if: always()
         run: |
-          set -x
-          OUT="$RUNNER_TEMP/out"
-          mkdir -p "$OUT"
-          # 主可执行文件：从 DerivedData 里捞 .app
-          APP=$(find "$RUNNER_TEMP/dd" -name '*.app' -type d -maxdepth 6 2>/dev/null | head -1 || true)
-          if [ -n "$APP" ]; then
-            NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist" 2>/dev/null || true)
-            [ -n "$NAME" ] && cp "$APP/$NAME" "$OUT/binary" || true
-            # LC_UUID 是「map 和二进制是不是同一个」的锚点
-            [ -f "$OUT/binary" ] && dwarfdump --uuid "$OUT/binary" > "$OUT/uuid.txt" 2>&1 || true
-            [ -f "$OUT/binary" ] && otool -l "$OUT/binary" | head -200 > "$OUT/loadcmds.txt" 2>&1 || true
-          fi
-          # 记录这次跑的全部事实，失败也记——失败率是要报的数
-          python3 - <<'PY' > "$OUT/manifest.json"
-          import json, os, pathlib
-          out = pathlib.Path(os.environ["RUNNER_TEMP"]) / "out"
-          print(json.dumps({
-            "repo": os.environ.get("M_REPO"), "sha": os.environ.get("M_SHA"),
-            "config_id": os.environ.get("M_CFG"),
-            "build_outcome": os.environ.get("M_OUTCOME"),
-            "deps_outcome": os.environ.get("M_DEPS"),
-            "has_map": (out / "link.map").is_file(),
-            "has_binary": (out / "binary").is_file(),
-            "map_bytes": (out / "link.map").stat().st_size if (out / "link.map").is_file() else 0,
-          }, ensure_ascii=False, indent=2))
+          set -uo pipefail
+          source "$GITHUB_WORKSPACE/tools/map_settings.sh"
+          python3 "$GITHUB_WORKSPACE/tools/collect_build_artifacts.py" \
+            --derived-data "$RUNNER_TEMP/dd" \
+            --out-dir "$RUNNER_TEMP/out" \
+            --map-basename "$MAP_BASENAME" \
+            --repo "${{ matrix.repo }}" \
+            --sha "${{ matrix.sha }}" \
+            --config-id "${{ matrix.config_id }}" \
+            --build-settings "${{ matrix.build_settings }}" \
+            --toolchain "${{ steps.toolchain.outputs.desc }}" \
+            --pods-did-run "${{ steps.pods.outputs.did_run }}" \
+            --spm-did-run "${{ steps.spm.outputs.did_run }}" \
+            --scheme "${{ steps.scheme.outputs.scheme }}" \
+            --scheme-verdict "${{ steps.scheme.outputs.verdict }}" \
+            --scheme-elapsed-s "${{ steps.scheme.outputs.elapsed }}" \
+            --map-mode "${{ steps.mapmode.outputs.map_mode }}" \
+            --map-verdict "${{ steps.mapmode.outputs.map_verdict }}" \
+            --build-outcome "${{ steps.xcbuild.outcome }}"
+
+      # 绿勾不再等于「编出来了」：这张小表直接写在 job 页上。
+      - name: Job summary
+        if: always()
+        run: |
+          set -uo pipefail
+          M="$RUNNER_TEMP/out/manifest.json"
+          python3 - >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json, os
+          p = os.environ["RUNNER_TEMP"] + "/out/manifest.json"
+          try:
+              m = json.load(open(p))
+          except Exception as exc:
+              print(f"### manifest 读不出来：`{exc}`")
+              raise SystemExit(0)
+          ok = m.get("usable_for_groundtruth")
+          print(f"### {'✅' if ok else '❌'} `{m.get('repo')}` / `{m.get('config_id')}`")
+          print()
+          print("| 项 | 值 |")
+          print("|---|---|")
+          for k in ("toolchain", "scheme_verdict", "scheme", "scheme_elapsed_s",
+                    "map_verdict", "map_mode", "build_outcome",
+                    "maps_found", "maps_with_requested_basename", "map_bytes_max",
+                    "binary_bytes", "uuid", "collect_note",
+                    "usable_for_groundtruth"):
+              print(f"| {k} | `{m.get(k)}` |")
           PY
-          ls -la "$OUT"
-        env:
-          M_REPO: ${{ matrix.repo }}
-          M_SHA: ${{ matrix.sha }}
-          M_CFG: ${{ matrix.config_id }}
-          M_OUTCOME: ${{ steps.xcbuild.outcome }}
-          M_DEPS: ${{ steps.deps.outcome }}
+          cat "$M" 2>/dev/null | head -40
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -175,3 +288,29 @@ jobs:
           path: ${{ runner.temp }}/out
           retention-days: 30
           if-no-files-found: warn
+
+  # 「N 个开源 iOS 应用里只有 K 个能复现构建」—— 这个率是论文外部效度段
+  # 必须交代的数，所以它由流水线自己算出来，不靠人事后数绿勾。
+  report:
+    needs: [plan, build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: gt-*
+          path: artifacts
+      - run: |
+          set -uo pipefail
+          python3 tools/aggregate_manifests.py \
+            --artifacts-dir artifacts \
+            --expected "${{ needs.plan.outputs.count }}" \
+            --markdown "$GITHUB_STEP_SUMMARY" \
+            --out aggregate.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-aggregate-${{ inputs.batch }}
+          path: aggregate.json
+          retention-days: 90

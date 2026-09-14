@@ -1,0 +1,315 @@
+# P1 探针 —— 先量，再编
+#
+# 为什么要有这个 workflow
+# ----------------------
+# build.yml 的第一次 P1 跑挂在两个我当时不知道答案的事实上：
+#   * `LD_MAP_FILE_PATH` 写在 xcodebuild 命令行上是**全局**覆盖，21 个 target
+#     的 Ld 任务全指向同一个路径，XCBuild 在计划阶段判 duplicate output，
+#     15 秒拒编。
+#   * runner 上是 Xcode 26.6 / iOS SDK 26.5，而语料库筛的是 DTXcode>=1600。
+#     工具链差多少、能不能钉低，取决于 /Applications 下装了哪几个。
+# 这两件事都能在不编译的前提下量出来（`xcodebuild -showBuildSettings` 是
+# 只读的）。所以这个 job 先把事实摆出来，再拿测出来的答案真编一次。
+#
+# 一个 job 跑完就能回答：
+#   1. 可选工具链有哪些（含各自 iOS SDK）
+#   2. 哪个 scheme 是 app —— 按 PRODUCT_TYPE 判，不按名字猜
+#   3. map 路径三种写法各自解析成什么，哪种不撞
+#   4. 用不撞的那种，能不能编出 map 和主二进制
+name: probe-p1
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: '目标仓库 owner/name'
+        required: true
+        default: 'Dimillian/IceCubesApp'
+      sha:
+        description: '钉死的 commit SHA'
+        required: true
+        default: 'b2db3033fbf67a97b54d25d6dac2df8a029b26b1'
+      developer_dir:
+        description: '强制某个 Xcode（/Applications/Xcode_16.4.app 这种）；留空 = runner 默认'
+        required: false
+        default: ''
+      max_schemes:
+        description: 'scheme 探测上限，0 = 不限；大工程先限一下控成本'
+        required: false
+        default: '0'
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------- 1
+      - name: Toolchain inventory
+        id: toolchain
+        run: |
+          set -uo pipefail
+          echo "## 可选工具链" >> "$GITHUB_STEP_SUMMARY"
+          echo '| Xcode.app | xcodebuild | iOS SDK |' >> "$GITHUB_STEP_SUMMARY"
+          echo '|---|---|---|' >> "$GITHUB_STEP_SUMMARY"
+          for APP in /Applications/Xcode*.app; do
+            [ -d "$APP" ] || continue
+            V=$(DEVELOPER_DIR="$APP/Contents/Developer" xcodebuild -version 2>/dev/null \
+                | tr '\n' ' ' | sed 's/  */ /g') || V="?"
+            S=$(DEVELOPER_DIR="$APP/Contents/Developer" xcodebuild -showsdks 2>/dev/null \
+                | grep -oE 'iphoneos[0-9.]+' | tail -1) || S=""
+            echo "$APP | $V | ${S:-?}"
+            echo "| \`$(basename "$APP")\` | $V | ${S:-?} |" >> "$GITHUB_STEP_SUMMARY"
+          done
+          if [ -n "${{ inputs.developer_dir }}" ]; then
+            DD="${{ inputs.developer_dir }}/Contents/Developer"
+            [ -d "$DD" ] || { echo "指定的 Xcode 不存在: $DD"; exit 1; }
+            echo "DEVELOPER_DIR=$DD" >> "$GITHUB_ENV"
+            echo "已钉到 $DD"
+          fi
+
+      - name: Active toolchain
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks | grep -i iphoneos || true
+          swift --version || true
+
+      # ---------------------------------------------------------------- 2
+      - name: Clone target at pinned SHA
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none "https://github.com/${{ inputs.repo }}.git" target
+          cd target
+          git checkout --detach "${{ inputs.sha }}"
+          git rev-parse HEAD
+
+      # CocoaPods 必须在容器探测之前跑完 —— .xcworkspace 是 `pod install`
+      # 之后才生成的，先探容器就会探到只有 .xcodeproj，链不上 Pods 的 target。
+      - name: CocoaPods
+        id: pods
+        continue-on-error: true
+        working-directory: target
+        run: |
+          set -uo pipefail
+          # 上一版用 `ls **/Podfile`：bash 不开 globstar 时 `**` 等价于 `*`，
+          # 只看一层，深层的 Podfile / Package.resolved 一律漏掉。用 find。
+          PODFILE=$(find . -maxdepth 3 -name Podfile -not -path '*/Pods/*' -print -quit)
+          if [ -z "$PODFILE" ]; then
+            echo "did_run=no_podfile" >> "$GITHUB_OUTPUT"
+            echo "没有 Podfile，跳过"; exit 0
+          fi
+          echo "找到 $PODFILE"
+          cd "$(dirname "$PODFILE")"
+          # --deployment 禁止改动 Podfile.lock：ground truth 必须对应仓库
+          # 自己记录的依赖版本，不是解析当天的最新版本。
+          if pod install --deployment; then
+            echo "did_run=deployment" >> "$GITHUB_OUTPUT"
+          else
+            pod install
+            echo "did_run=fallback_no_deployment" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Discover container
+        id: container
+        working-directory: target
+        run: |
+          set -uo pipefail
+          # .xcodeproj 里自带一个 project.xcworkspace，它不是容器，要排除
+          WS=$(find . -maxdepth 2 -name '*.xcworkspace' -not -path '*/*.xcodeproj/*' -print -quit) || WS=""
+          PJ=$(find . -maxdepth 2 -name '*.xcodeproj' -print -quit) || PJ=""
+          if [ -n "$WS" ]; then FLAG=-workspace; PATH_=$WS;
+          elif [ -n "$PJ" ]; then FLAG=-project;  PATH_=$PJ;
+          else echo "没有 .xcworkspace / .xcodeproj"; exit 1; fi
+          echo "flag=$FLAG"   >> "$GITHUB_OUTPUT"
+          echo "path=$PATH_"  >> "$GITHUB_OUTPUT"
+          echo "container=$FLAG $PATH_" >> "$GITHUB_OUTPUT"
+          echo "container = $FLAG $PATH_"
+
+      - name: Resolve SwiftPM dependencies
+        id: spm
+        continue-on-error: true
+        working-directory: target
+        run: |
+          set -uo pipefail
+          RES=$(find . -maxdepth 6 \( -name Package.resolved -o -name Package.swift \) -print -quit)
+          if [ -z "$RES" ]; then
+            echo "did_run=no_spm" >> "$GITHUB_OUTPUT"
+            echo "没有 Package.resolved / Package.swift，跳过"; exit 0
+          fi
+          echo "找到 $RES"
+          xcodebuild -resolvePackageDependencies \
+            ${{ steps.container.outputs.container }}
+          echo "did_run=resolved" >> "$GITHUB_OUTPUT"
+
+      # ---------------------------------------------------------------- 3
+      - name: List schemes
+        working-directory: target
+        run: |
+          set -uo pipefail
+          xcodebuild ${{ steps.container.outputs.container }} -list -json \
+            > "$RUNNER_TEMP/schemes.json"
+          cat "$RUNNER_TEMP/schemes.json"
+
+      - name: Classify schemes by PRODUCT_TYPE
+        id: scheme
+        working-directory: target
+        run: |
+          set -uo pipefail
+          # GitHub 给 run: 的默认 shell 是 `bash -e {0}`，-e 一直开着。
+          # 不 set +e 的话，脚本一返回非 0 这一步当场中止，下面的 rc=$? 根本
+          # 执行不到 —— 想记录退出码就必须先把 -e 关掉。
+          set +e
+          mkdir -p "$RUNNER_TEMP/out"
+          python3 "$GITHUB_WORKSPACE/tools/pick_app_scheme.py" \
+            --container "${{ steps.container.outputs.container }}" \
+            --schemes-json "$RUNNER_TEMP/schemes.json" \
+            --max-schemes "${{ inputs.max_schemes }}" \
+            --out "$RUNNER_TEMP/out/schemes_classified.json"
+          rc=$?
+          [ -f "$RUNNER_TEMP/out/schemes_classified.json" ] || exit 1
+          CHOSEN=$(python3 -c "import json;print(json.load(open('$RUNNER_TEMP/out/schemes_classified.json'))['chosen'] or '')")
+          VERDICT=$(python3 -c "import json;print(json.load(open('$RUNNER_TEMP/out/schemes_classified.json'))['chosen_verdict'])")
+          echo "scheme=$CHOSEN"   >> "$GITHUB_OUTPUT"
+          echo "verdict=$VERDICT" >> "$GITHUB_OUTPUT"
+          exit $rc
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+
+      # ---------------------------------------------------------------- 4
+      # 决定性实验：三种 map 路径写法，各自 xcodebuild 解析成什么。
+      # -showBuildSettings 不编译，三次加起来通常不到一分钟。
+      - name: Probe LD_MAP_FILE_PATH semantics
+        id: mapmode
+        working-directory: target
+        run: |
+          set -uo pipefail
+          mkdir -p "$RUNNER_TEMP/out"
+          source "$GITHUB_WORKSPACE/tools/map_settings.sh"
+          ARGS=()
+          for MODE in default per_target global; do
+            map_settings_for "$MODE"
+            echo "=== $MODE : ${MAP_SETTINGS[*]} ==="
+            xcodebuild -showBuildSettings -json \
+              ${{ steps.container.outputs.container }} \
+              -scheme "${{ steps.scheme.outputs.scheme }}" \
+              -configuration Release \
+              -destination 'generic/platform=iOS' \
+              "${MAP_SETTINGS[@]}" \
+              > "$RUNNER_TEMP/bs_$MODE.json" 2> "$RUNNER_TEMP/bs_$MODE.err" || \
+              { echo "showBuildSettings 失败："; tail -5 "$RUNNER_TEMP/bs_$MODE.err"; }
+            ARGS+=( "$MODE=$RUNNER_TEMP/bs_$MODE.json" )
+          done
+          python3 "$GITHUB_WORKSPACE/tools/decide_map_mode.py" \
+            --settings "${ARGS[@]}" \
+            --github-output "$GITHUB_OUTPUT" \
+            --out "$RUNNER_TEMP/out/map_mode.json"
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+
+      # ---------------------------------------------------------------- 5
+      - name: Build with the measured map mode
+        id: xcbuild
+        continue-on-error: true
+        working-directory: target
+        run: |
+          # pipefail 是这次最该记住的一行：上一版 `xcodebuild | tee | tail`
+          # 的退出码取自 tail，恒为 0，BUILD FAILED 被管道吞掉，
+          # steps.xcbuild.outcome 记成 success —— 网页上就是绿的。
+          set -x
+          set -o pipefail
+          source "$GITHUB_WORKSPACE/tools/map_settings.sh"
+          map_settings_for "${{ steps.mapmode.outputs.map_mode }}"
+          mkdir -p "$RUNNER_TEMP/out"
+          xcodebuild build \
+            ${{ steps.container.outputs.container }} \
+            -scheme "${{ steps.scheme.outputs.scheme }}" \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/dd" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            "${MAP_SETTINGS[@]}" \
+            2>&1 | tee "$RUNNER_TEMP/out/build.log" | tail -60
+
+      # ---------------------------------------------------------------- 6
+      - name: Collect maps and binary
+        if: always()
+        run: |
+          set -u
+          # 这一步刻意不开 pipefail：末尾的 `head` 提前退出会给上游发 SIGPIPE，
+          # pipefail + 默认的 -e 会把整步判失败，后面的主二进制就收不上来了。
+          set +e
+          source "$GITHUB_WORKSPACE/tools/map_settings.sh"
+          OUT="$RUNNER_TEMP/out"; mkdir -p "$OUT/maps"
+          # 两遍走：先把清单写完，再拷贝。一遍走的话拷进 $OUT/maps 的文件会被
+          # 同一个 find 再次遍历到（$OUT 本身就在搜索根里），越拷越多。
+          # 不预设 map 落在哪：DerivedData 和 out 下所有像 map 的文件都捞，
+          # 连同大小一起记账 ——「没观测到」和「不存在」必须分得开。
+          find "$RUNNER_TEMP/dd" "$OUT" -path "$OUT/maps" -prune -o \
+               \( -name "$MAP_BASENAME" -o -name '*-LinkMap-*' -o -name '*.map' \) \
+               -type f -print0 2>/dev/null > "$RUNNER_TEMP/maps.nul"
+          : > "$OUT/maps_found.txt"
+          while IFS= read -r -d '' f; do
+            printf '%s  %s\n' "$(stat -f '%z' "$f")" "$f" >> "$OUT/maps_found.txt"
+            cp "$f" "$OUT/maps/$(printf '%s' "${f#$RUNNER_TEMP/}" | tr '/' '_')" 2>/dev/null
+          done < "$RUNNER_TEMP/maps.nul"
+          sort -rn -o "$OUT/maps_found.txt" "$OUT/maps_found.txt"
+          echo "=== 找到 $(wc -l < "$OUT/maps_found.txt" | tr -d ' ') 个 map 候选（按大小降序，前 30）==="
+          head -30 "$OUT/maps_found.txt"
+          APP=$(find "$RUNNER_TEMP/dd/Build/Products" -maxdepth 3 -name '*.app' -type d 2>/dev/null | head -1)
+          echo "APP=$APP"
+          if [ -n "$APP" ]; then
+            NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist" 2>/dev/null || true)
+            if [ -n "$NAME" ] && [ -f "$APP/$NAME" ]; then
+              cp "$APP/$NAME" "$OUT/binary"
+              dwarfdump --uuid "$OUT/binary" > "$OUT/uuid.txt" 2>&1 || true
+              otool -l "$OUT/binary" > "$OUT/loadcmds.txt" 2>&1 || true
+              size "$OUT/binary" > "$OUT/size.txt" 2>&1 || true
+            fi
+          fi
+          ls -la "$OUT" "$OUT/maps" | head -60
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+
+      - name: Summary
+        if: always()
+        run: |
+          set -u
+          set +e
+          OUT="$RUNNER_TEMP/out"
+          MAPS=$(ls "$OUT/maps" 2>/dev/null | wc -l | tr -d ' ')
+          BIGGEST=$(head -1 "$OUT/maps_found.txt" 2>/dev/null)
+          [ -n "$BIGGEST" ] || BIGGEST="无"
+          {
+            echo "## P1 探针结果"
+            echo
+            echo "| 项 | 值 |"
+            echo "|---|---|"
+            echo "| repo | \`${{ inputs.repo }}@${{ inputs.sha }}\` |"
+            echo "| container | \`${{ steps.container.outputs.container }}\` |"
+            echo "| pods | \`${{ steps.pods.outputs.did_run }}\` |"
+            echo "| spm | \`${{ steps.spm.outputs.did_run }}\` |"
+            echo "| scheme verdict | \`${{ steps.scheme.outputs.verdict }}\` |"
+            echo "| scheme | \`${{ steps.scheme.outputs.scheme }}\` |"
+            echo "| map verdict | \`${{ steps.mapmode.outputs.map_verdict }}\` |"
+            echo "| map mode | \`${{ steps.mapmode.outputs.map_mode }}\` |"
+            echo "| **build outcome** | **\`${{ steps.xcbuild.outcome }}\`** |"
+            echo "| map 文件数 | $MAPS |"
+            echo "| 最大 map | \`$BIGGEST\` |"
+            echo "| 主二进制 | $([ -f "$OUT/binary" ] && stat -f '%z bytes' "$OUT/binary" || echo '无') |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          # 绿勾不再等于「编出来了」：这一行让汇总页一眼能看出真假。
+          echo "build outcome = ${{ steps.xcbuild.outcome }}; maps = $MAPS"
+        env:
+          RUNNER_TEMP: ${{ runner.temp }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: probe-p1
+          path: ${{ runner.temp }}/out
+          retention-days: 30
+          if-no-files-found: warn
