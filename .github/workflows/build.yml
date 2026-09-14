@@ -1,0 +1,177 @@
+# RQ1 代码归属 ground truth —— 构建矩阵
+#
+# 设计要点
+# --------
+# * **不 fork 目标仓库**：job 里动态 clone，目标仓库一个都不用改。
+# * **fail-fast: false**：一个仓库编不过不能掐掉整个矩阵。构建失败率本身是
+#   要报的数（「N 个开源 iOS 应用里只有 M 个能复现构建」），所以失败必须被
+#   记录下来，而不是让整批中止。
+# * **max-parallel: 5**：GitHub 对 macOS 的并发上限就是 5（Free/Pro 同），
+#   写出来是为了让排队行为可预期，不是限流。
+# * 矩阵上限是 **256 job/run**，所以目标清单按 batch 切；`make_matrix.py`
+#   会在超限时直接失败并告诉你该切多少份，而不是让 GitHub 静默截断。
+name: build-groundtruth
+
+on:
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: 'targets/<batch>.json 里的 batch 名'
+        required: true
+        default: 'batch01'
+      configs:
+        description: '构建配置 id，逗号分隔；all = 全矩阵'
+        required: true
+        default: 'all'
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.make.outputs.matrix }}
+      count: ${{ steps.make.outputs.count }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: make
+        run: |
+          python3 tools/make_matrix.py \
+            --targets "targets/${{ inputs.batch }}.json" \
+            --configs "${{ inputs.configs }}" >> "$GITHUB_OUTPUT"
+      - run: echo "本次矩阵 ${{ steps.make.outputs.count }} 个 job"
+
+  build:
+    needs: plan
+    runs-on: macos-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone target at pinned SHA
+        id: clone
+        run: |
+          set -x
+          git clone --filter=blob:none "https://github.com/${{ matrix.repo }}.git" target
+          cd target
+          git checkout --detach "${{ matrix.sha }}"
+          echo "resolved_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Show toolchain
+        run: |
+          xcodebuild -version
+          swift --version || true
+
+      - name: Resolve dependencies
+        id: deps
+        continue-on-error: true
+        working-directory: target
+        run: |
+          set -x
+          if ls **/Podfile Podfile >/dev/null 2>&1; then
+            # Podfile.lock 已钉死版本；--deployment 禁止它改动 lock，
+            # 否则 ground truth 对应的依赖版本和仓库记录的就不是一回事了。
+            pod install --deployment || pod install
+          fi
+          ls **/Package.resolved Package.resolved >/dev/null 2>&1 && \
+            xcodebuild -resolvePackageDependencies || true
+
+      - name: Discover scheme
+        id: scheme
+        working-directory: target
+        run: |
+          # 方案名各仓库不同，必须探测而不是猜。优先 .xcworkspace（CocoaPods
+          # 装完之后必须用 workspace，用 .xcodeproj 会找不到 Pods 的 target）。
+          WS=$(ls -d *.xcworkspace 2>/dev/null | head -1 || true)
+          PJ=$(ls -d *.xcodeproj  2>/dev/null | head -1 || true)
+          if [ -n "$WS" ]; then CONTAINER="-workspace $WS";
+          elif [ -n "$PJ" ]; then CONTAINER="-project $PJ";
+          else echo "没有 .xcworkspace / .xcodeproj"; exit 78; fi
+          echo "container=$CONTAINER" >> "$GITHUB_OUTPUT"
+          xcodebuild $CONTAINER -list -json > /tmp/schemes.json || true
+          cat /tmp/schemes.json
+          SCHEME=$(python3 -c "
+          import json,sys
+          d=json.load(open('/tmp/schemes.json'))
+          s=(d.get('workspace') or d.get('project') or {}).get('schemes') or []
+          # Pods 自己的方案不是 app；排除掉常见的库方案名
+          bad=('Pods','Pods-',)
+          real=[x for x in s if not any(x.startswith(b) for b in bad)]
+          print(real[0] if real else '')
+          ")
+          [ -n "$SCHEME" ] || { echo "找不到可用 scheme"; exit 78; }
+          echo "scheme=$SCHEME" >> "$GITHUB_OUTPUT"
+
+      - name: Build with linker map
+        id: xcbuild
+        continue-on-error: true
+        working-directory: target
+        env:
+          CFG: ${{ matrix.config_id }}
+        run: |
+          set -x
+          mkdir -p "$RUNNER_TEMP/out"
+          # LD_GENERATE_MAP_FILE=YES + LD_MAP_FILE_PATH 才是 ground truth 的来源。
+          # CODE_SIGNING_ALLOWED=NO：CI 上没有证书，签名会直接失败。
+          # -destination generic/platform=iOS：不需要模拟器，也避免 arm64 模拟器切片。
+          xcodebuild build \
+            ${{ steps.scheme.outputs.container }} \
+            -scheme "${{ steps.scheme.outputs.scheme }}" \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/dd" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            LD_GENERATE_MAP_FILE=YES \
+            LD_MAP_FILE_PATH="$RUNNER_TEMP/out/link.map" \
+            ${{ matrix.build_settings }} \
+            2>&1 | tee "$RUNNER_TEMP/out/build.log" | tail -40
+
+      - name: Collect artifacts
+        if: always()
+        run: |
+          set -x
+          OUT="$RUNNER_TEMP/out"
+          mkdir -p "$OUT"
+          # 主可执行文件：从 DerivedData 里捞 .app
+          APP=$(find "$RUNNER_TEMP/dd" -name '*.app' -type d -maxdepth 6 2>/dev/null | head -1 || true)
+          if [ -n "$APP" ]; then
+            NAME=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$APP/Info.plist" 2>/dev/null || true)
+            [ -n "$NAME" ] && cp "$APP/$NAME" "$OUT/binary" || true
+            # LC_UUID 是「map 和二进制是不是同一个」的锚点
+            [ -f "$OUT/binary" ] && dwarfdump --uuid "$OUT/binary" > "$OUT/uuid.txt" 2>&1 || true
+            [ -f "$OUT/binary" ] && otool -l "$OUT/binary" | head -200 > "$OUT/loadcmds.txt" 2>&1 || true
+          fi
+          # 记录这次跑的全部事实，失败也记——失败率是要报的数
+          python3 - <<'PY' > "$OUT/manifest.json"
+          import json, os, pathlib
+          out = pathlib.Path(os.environ["RUNNER_TEMP"]) / "out"
+          print(json.dumps({
+            "repo": os.environ.get("M_REPO"), "sha": os.environ.get("M_SHA"),
+            "config_id": os.environ.get("M_CFG"),
+            "build_outcome": os.environ.get("M_OUTCOME"),
+            "deps_outcome": os.environ.get("M_DEPS"),
+            "has_map": (out / "link.map").is_file(),
+            "has_binary": (out / "binary").is_file(),
+            "map_bytes": (out / "link.map").stat().st_size if (out / "link.map").is_file() else 0,
+          }, ensure_ascii=False, indent=2))
+          PY
+          ls -la "$OUT"
+        env:
+          M_REPO: ${{ matrix.repo }}
+          M_SHA: ${{ matrix.sha }}
+          M_CFG: ${{ matrix.config_id }}
+          M_OUTCOME: ${{ steps.xcbuild.outcome }}
+          M_DEPS: ${{ steps.deps.outcome }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gt-${{ matrix.slug }}-${{ matrix.config_id }}
+          path: ${{ runner.temp }}/out
+          retention-days: 30
+          if-no-files-found: warn
