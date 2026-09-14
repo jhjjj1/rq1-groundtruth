@@ -121,12 +121,17 @@ jobs:
           cd "$(dirname "$PODFILE")"
           # --deployment 禁止改动 Podfile.lock：ground truth 必须对应仓库
           # 自己记录的依赖版本，不是解析当天的最新版本。
+          # 三条路径各自落一个值。空字符串既像「没跑」又像「跑了但失败」，
+          # 这两件事在记账上必须分得开。
+          set +e
           if pod install --deployment; then
-            echo "did_run=deployment" >> "$GITHUB_OUTPUT"
-          else
-            pod install
-            echo "did_run=fallback_no_deployment" >> "$GITHUB_OUTPUT"
+            echo "did_run=deployment" >> "$GITHUB_OUTPUT"; exit 0
           fi
+          pod install
+          rc=$?
+          [ $rc -eq 0 ] && echo "did_run=fallback_no_deployment" >> "$GITHUB_OUTPUT" \
+                        || echo "did_run=FAILED_rc$rc" >> "$GITHUB_OUTPUT"
+          exit $rc
 
       - name: Discover container
         id: container
@@ -154,8 +159,12 @@ jobs:
             echo "没有 Package.resolved / Package.swift，跳过"; exit 0
           fi
           echo "找到 $RES"
+          set +e
           xcodebuild -resolvePackageDependencies ${{ steps.container.outputs.container }}
-          echo "did_run=resolved" >> "$GITHUB_OUTPUT"
+          rc=$?
+          [ $rc -eq 0 ] && echo "did_run=resolved" >> "$GITHUB_OUTPUT" \
+                        || echo "did_run=FAILED_rc$rc" >> "$GITHUB_OUTPUT"
+          exit $rc
 
       - name: Pick app scheme
         id: scheme

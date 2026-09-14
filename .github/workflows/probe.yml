@@ -77,10 +77,18 @@ jobs:
           fi
 
       - name: Active toolchain
+        id: active
         run: |
+          set -u
+          set +e
           xcodebuild -version
           xcodebuild -showsdks | grep -i iphoneos || true
-          swift --version || true
+          swift --version 2>&1 | head -2
+          # 产物名带上镜像+Xcode+Swift：并行跑几个探针时，下载回来要分得清
+          XV=$(xcodebuild -version 2>/dev/null | head -1 | tr ' ' '_')
+          SV=$(swift --version 2>&1 | grep -oE 'Swift version [0-9.]+' | head -1 | tr ' ' '_')
+          echo "tag=${{ inputs.runs_on || 'macos-latest' }}-${XV:-unknown}-${SV:-unknown}" >> "$GITHUB_OUTPUT"
+          echo "desc=$XV $SV" >> "$GITHUB_OUTPUT"
 
       # ---------------------------------------------------------------- 2
       - name: Clone target at pinned SHA
@@ -110,12 +118,17 @@ jobs:
           cd "$(dirname "$PODFILE")"
           # --deployment 禁止改动 Podfile.lock：ground truth 必须对应仓库
           # 自己记录的依赖版本，不是解析当天的最新版本。
+          # 三条路径各自落一个值。空字符串既像「没跑」又像「跑了但失败」，
+          # 这两件事在记账上必须分得开。
+          set +e
           if pod install --deployment; then
-            echo "did_run=deployment" >> "$GITHUB_OUTPUT"
-          else
-            pod install
-            echo "did_run=fallback_no_deployment" >> "$GITHUB_OUTPUT"
+            echo "did_run=deployment" >> "$GITHUB_OUTPUT"; exit 0
           fi
+          pod install
+          rc=$?
+          [ $rc -eq 0 ] && echo "did_run=fallback_no_deployment" >> "$GITHUB_OUTPUT" \
+                        || echo "did_run=FAILED_rc$rc" >> "$GITHUB_OUTPUT"
+          exit $rc
 
       - name: Discover container
         id: container
@@ -145,9 +158,13 @@ jobs:
             echo "没有 Package.resolved / Package.swift，跳过"; exit 0
           fi
           echo "找到 $RES"
+          set +e
           xcodebuild -resolvePackageDependencies \
             ${{ steps.container.outputs.container }}
-          echo "did_run=resolved" >> "$GITHUB_OUTPUT"
+          rc=$?
+          [ $rc -eq 0 ] && echo "did_run=resolved" >> "$GITHUB_OUTPUT" \
+                        || echo "did_run=FAILED_rc$rc" >> "$GITHUB_OUTPUT"
+          exit $rc
 
       # ---------------------------------------------------------------- 3
       - name: List schemes
@@ -293,6 +310,7 @@ jobs:
             echo "| 项 | 值 |"
             echo "|---|---|"
             echo "| repo | \`${{ inputs.repo }}@${{ inputs.sha }}\` |"
+            echo "| 工具链 | \`${{ steps.active.outputs.desc }}\` |"
             echo "| container | \`${{ steps.container.outputs.container }}\` |"
             echo "| pods | \`${{ steps.pods.outputs.did_run }}\` |"
             echo "| spm | \`${{ steps.spm.outputs.did_run }}\` |"
@@ -313,7 +331,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: probe-p1
+          name: probe-${{ steps.active.outputs.tag }}
           path: ${{ runner.temp }}/out
           retention-days: 30
           if-no-files-found: warn

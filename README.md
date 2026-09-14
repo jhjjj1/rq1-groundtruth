@@ -194,11 +194,45 @@ While running pass #65824 SILFunctionTransform "EarlyPerfInliner"
   for 'deinit' (at Packages/MediaUI/Sources/MediaUI/MediaUIZoomableContainer.swift:96:11)
 ```
 
-## 已知的工具链域差
+## 工具链：钉哪一版，由语料库自己说
 
-runner 默认是 **Xcode 26.6 / iOS SDK 26.5**，而语料库筛的是 `DTXcode >= 1600`
-（Xcode 16.x）。链接器不是同一个，产出的二进制形态也就不完全可比。
+两个 runner 镜像上的工具链（实测，probe run #1 / #3）：
 
-`probe-p1` 会列出 runner 上装了哪几个 Xcode；两个 workflow 都接受
-`developer_dir` 输入，可以把工具链钉到指定版本。钉不钉、钉到哪个，等探针把
-可选项列出来再定 —— 在看到列表之前做决定就是猜。
+| 镜像 | 可选 Xcode | 默认 |
+|---|---|---|
+| `macos-latest` | 26.0.1 ~ 26.6 | 26.6 / iphoneos26.5 / Swift 6.3.3 |
+| `macos-15` | 16.0 ~ 16.4，**外加** 26.0.1 ~ 26.3 | 16.4 / iphoneos18.5 / Swift 6.1 |
+
+语料库 7,714 个包的 `DTXcode` 分布（`pool_inventory_v12361.jsonl`）：
+
+| | 包数 | 占比 |
+|---|---:|---:|
+| Xcode 26.x | 5,268 | **68.3%** |
+| Xcode 16.x | 1,889 | 24.5% |
+| Xcode 15.x | 556 | 7.2% |
+
+按 SDK 看得更细：`iphoneos26.2` **2,009 = 26.0%**（单一最大桶），
+`iphoneos26.5` 1,295 = 16.8%，`iphoneos26.0` 825 = 10.7%。
+
+**结论：主配置钉 `macos-latest` + `Xcode_26.2.app`（SDK iphoneos26.2）。**
+不是因为它新，是因为它命中语料库最大的那个桶。钉 16.x 会把域差从最小拉到
+最大，同时还编不动一批仓库 —— 近期维护的开源 iOS 仓库和语料库一样都在 26.x
+上，两边诉求一致，这里没有取舍。
+
+**但必须如实写进论文的一句：没有任何单一工具链能覆盖超过 26% 的语料库。**
+语料库在工具链上是异质的，选一版消不掉这件事，只能把敏感度量出来 —— 所以
+除主矩阵外，用 `base` 配置在另一版工具链上再跑一遍，报出「换工具链后 P/R
+变了多少」。
+
+### 工具链不匹配会直接表现成构建失败
+
+不是抽象顾虑，两次都撞上了：
+
+* **Xcode 26.6 / Swift 6.3.3**：SIL 优化器编 `MediaUI` 时 crash
+  （`EarlyPerfInliner` on `MediaUIZoomableContainerV...CoordinatorCfD`）。
+* **Xcode 16.4 / Swift 6.1**：IceCubesApp 的 13 个本地包声明
+  `swift-tools-version: 6.2.0`，包图**解析不了**，`exit 74`，连 scheme
+  列表都拿不到。
+
+两者都被记成这一档工具链下的失败，计入构建可复现率的分母 —— 流水线没坏，
+这就是要报的数。
