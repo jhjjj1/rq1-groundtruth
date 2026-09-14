@@ -23,7 +23,8 @@ def write(root, name, m):
 def base(**kw):
     m = {"repo": "o/r", "config_id": "base", "scheme_verdict": "APP_SCHEME_FOUND",
          "map_verdict": "MAP_MODE_CHOSEN", "build_outcome": "success",
-         "maps_with_requested_basename": 3, "binary_bytes": 12345}
+         "maps_by_output_kind": {"APP_BUNDLE": 1, "PRELINK_OBJECT": 30},
+         "binary_bytes": 12345}
     m.update(kw)
     return m
 
@@ -33,8 +34,10 @@ def main():
     with tempfile.TemporaryDirectory() as td:
         write(td, "j1", base(repo="a/a"))
         write(td, "j2", base(repo="b/b", build_outcome="failure",
-                             maps_with_requested_basename=0, binary_bytes=None))
-        write(td, "j3", base(repo="c/c", maps_with_requested_basename=0,
+                             maps_by_output_kind={}, binary_bytes=None))
+        # 编过了、产出了 30 个 prelink map，但没有 app bundle 的那个
+        write(td, "j3", base(repo="c/c",
+                             maps_by_output_kind={"PRELINK_OBJECT": 30},
                              binary_bytes=None))
         write(td, "j4", base(repo="d/d", binary_bytes=None))
         write(td, "j5", base(repo="e/e", scheme_verdict="NO_APP_SCHEME_OBSERVED"))
@@ -43,7 +46,7 @@ def main():
                              scheme_verdict="APP_SCHEME_AMBIGUOUS", scheme="Zeta"))
         # scheme 和 map mode 都拿到了，但构建那步被跳过（mapmode 步骤中途崩了）
         write(td, "j8", base(repo="g/g", build_outcome="skipped",
-                             maps_with_requested_basename=0, binary_bytes=None))
+                             maps_by_output_kind={}, binary_bytes=None))
         out = str(pathlib.Path(td) / "agg.json")
         # 本批本应有 10 个 job，只回收到 8 份 manifest
         A.main(["--artifacts-dir", td, "--expected", "10", "--out", out])

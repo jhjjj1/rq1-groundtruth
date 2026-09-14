@@ -194,6 +194,47 @@ While running pass #65824 SILFunctionTransform "EarlyPerfInliner"
   for 'deinit' (at Packages/MediaUI/Sources/MediaUI/MediaUIZoomableContainer.swift:96:11)
 ```
 
+## 探针 run #4 实测（Xcode 26.2 / Swift 6.2.3，主二进制编出来了）
+
+钉 `Xcode_26.2.app` 同时解决两件事：命中语料库最大的 SDK 桶（iphoneos26.2，
+26.0%），以及绕开 26.6 的 `EarlyPerfInliner` 崩溃 —— 26.2 带 Swift 6.2.3，
+正好满足那些本地包要的 `swift-tools-version: 6.2.0`。
+
+主二进制 `Ice Cubes.app/Ice Cubes`，62,702,680 字节，arm64，
+`LC_UUID = FAFA5749-BC3C-3553-994D-F92E5F7EEC50`。它的 map：
+
+| | |
+|---|---|
+| 符号行 / 解析失败 | **315,059 / 0** |
+| size>0 符号 | 280,437 |
+| 归不到 `.o` | **791 = 0.28%** |
+| dead-stripped | 135,037 |
+| `__text` 覆盖 | 17,316,104 / 17,316,104 = **100.0000%**，差 0 字节 |
+| 地址区间 / 重叠 | 280,437 / **0** |
+| object file 命中具名规则 | **192 / 192**，`NO_RULE_MATCHED` = 0 |
+| 归属单元 | **119** |
+
+全部 39 个 map 合计 1,140,639 符号行，解析失败 0。**P1 前提 3（单元名可回查）
+就此验完**；前提 1（strip 前后地址不变）和前提 2（`LC_UUID` 对得上）要 base 与
+strip_all 两次构建对比，一个产物里做不到。
+
+### 域差的第一个实证点：这个二进制里没有 `__objc_stubs`
+
+节区表里有 `__stubs`、`__objc_methlist`、一整排 `__swift5_*`，**没有
+`__objc_stubs`**。开源 iOS 仓库是 Swift 重、ObjC 轻的，而语料库里是真实
+App Store 包，带着大量 ObjC 第三方 SDK。也就是说 **ground truth 语料可能根本
+不覆盖 ObjC 那条检测路径**。这要写进外部效度段，而且现在有了可量的对照维度。
+
+### 产物体量
+
+单个 job：主二进制 62 MB + app map 51 MB。905 个 job 按原样上传是 ~100 GB。
+所以 `collect_build_artifacts.py` 只上传 `# Path:` 指向 `.app/` 或 `.appex/`
+的 map（其余 34 个是 `ld -r` 预链接合并产物，`# Path:` 以 `<产品名>.o` 结尾，
+不是任何人会去分析的二进制），全部 gzip，保留期 7 天。
+
+**没上传的 map 仍然逐个记在 `maps_index.json` 里**（路径、字节数、头 12 行）——
+「丢掉」和「从未存在」不能长得一样。
+
 ## 工具链：钉哪一版，由语料库自己说
 
 两个 runner 镜像上的工具链（实测，probe run #1 / #3）：

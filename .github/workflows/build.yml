@@ -299,7 +299,10 @@ jobs:
         with:
           name: gt-${{ matrix.slug }}-${{ matrix.config_id }}
           path: ${{ runner.temp }}/out
-          retention-days: 30
+          # 实测单个 job：主二进制 62 MB + app map 51 MB。905 个 job 按原样
+          # 上传就是 ~100 GB。collect 脚本已经只传 bundle map 且全部 gzip
+          # （约 25 MB/job），保留期再缩到 7 天，每批跑完尽快拉回本地。
+          retention-days: 7
           if-no-files-found: warn
 
   # 「N 个开源 iOS 应用里只有 K 个能复现构建」—— 这个率是论文外部效度段

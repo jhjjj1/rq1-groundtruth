@@ -21,6 +21,8 @@ absent-from-the-record.
 from __future__ import annotations
 
 import argparse
+import collections
+import gzip
 import json
 import os
 import pathlib
@@ -40,6 +42,24 @@ MAP_GLOBS = ("*-LinkMap-*", "*.map")
 #: multi-megabyte file into the manifest.
 MAP_HEAD_LINES = 12
 
+#: Which maps are worth uploading.
+#:
+#: Measured on IceCubesApp @ Xcode 26.2: the job produced 39 maps totalling
+#: ~140 MB, of which one -- the app bundle's -- is the ground truth.  The other
+#: 34 are `ld -r` prelink merges whose `# Path:` ends in `<Product>.o`; they
+#: describe an intermediate, not a binary anyone analyses.  At 905 matrix jobs
+#: uploading everything is ~100 GB of transient storage for data nobody reads.
+#:
+#: So: bundle maps are kept (gzipped), prelink maps are recorded in
+#: maps_index.json with their size and header and not copied.  Dropped is not
+#: the same as never-existed, and the index is what keeps the two apart.
+#:
+#: `.app/` does not match `.appex/` -- the slash matters.
+KIND_APP = "APP_BUNDLE"
+KIND_APPEX = "APPEX_BUNDLE"
+KIND_PRELINK = "PRELINK_OBJECT"
+KIND_OTHER = "OTHER"
+
 
 def run(cmd, timeout=120):
     """Run a tool, return (rc, stdout).  Never raises."""
@@ -49,6 +69,28 @@ def run(cmd, timeout=120):
         return p.returncode, (p.stdout or "") + (p.stderr or "")
     except (OSError, subprocess.TimeoutExpired) as exc:
         return -1, f"{type(exc).__name__}: {exc}"
+
+
+def map_output_kind(head):
+    """Classify a map by the binary its `# Path:` names."""
+    first = head[0] if head else ""
+    if not first.startswith("# Path:"):
+        return KIND_OTHER, None
+    out = first[len("# Path:"):].strip()
+    if ".app/" in out:
+        return KIND_APP, out
+    if ".appex/" in out:
+        return KIND_APPEX, out
+    if out.endswith(".o"):
+        return KIND_PRELINK, out
+    return KIND_OTHER, out
+
+
+def gzip_copy(src, dst):
+    """Copy with gzip.  Maps are text and shrink ~8x; binaries ~3x."""
+    with open(src, "rb") as fi, gzip.open(dst, "wb", compresslevel=6) as fo:
+        shutil.copyfileobj(fi, fo, length=1 << 20)
+    return os.path.getsize(dst)
 
 
 def head_lines(path, n=MAP_HEAD_LINES):
@@ -94,7 +136,7 @@ def find_maps(roots, exclude, map_basename):
     return found
 
 
-def collect_maps(roots, out_dir, map_basename, limit_copy_bytes):
+def collect_maps(roots, out_dir, map_basename, limit_copy_bytes, keep_kinds):
     maps_dir = out_dir / "maps"
     maps_dir.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -103,24 +145,28 @@ def collect_maps(roots, out_dir, map_basename, limit_copy_bytes):
                                 map_basename=map_basename):
         rel = os.path.relpath(path, start=str(out_dir.parent))
         flat = rel.replace(os.sep, "_")
+        head = head_lines(path)
+        kind, output = map_output_kind(head)
         entry = {
-            "src": path, "bytes": size,
+            "src": path, "bytes": size, "output_kind": kind,
+            "output_path": output,
             "is_requested_basename": os.path.basename(path) == map_basename,
-            "head": head_lines(path),
-            "copied_as": None,
+            "head": head,
+            "copied_as": None, "copied_bytes": None,
         }
-        # Budget the upload: copy biggest-first until the cap, then record the
-        # rest without bytes.  Skipped copies stay in the index, so the count
-        # is never quietly reduced to what happened to fit.
-        if copied_bytes + size <= limit_copy_bytes:
+        if kind not in keep_kinds:
+            # 记在册，但不上传 —— 「丢掉」和「从未存在」不能长得一样
+            entry["copy_error"] = f"NOT_UPLOADED_KIND_{kind}"
+        elif copied_bytes + size > limit_copy_bytes:
+            entry["copy_error"] = "SKIPPED_OVER_BUDGET"
+        else:
             try:
-                shutil.copy2(path, maps_dir / flat)
-                entry["copied_as"] = flat
+                gz = gzip_copy(path, maps_dir / (flat + ".gz"))
+                entry["copied_as"] = flat + ".gz"
+                entry["copied_bytes"] = gz
                 copied_bytes += size
             except OSError as exc:
                 entry["copy_error"] = str(exc)
-        else:
-            entry["copy_error"] = "SKIPPED_OVER_BUDGET"
         entries.append(entry)
     return entries, copied_bytes
 
@@ -163,6 +209,8 @@ def collect_binary(derived_data, out_dir):
         info["collect_note"] = "EXECUTABLE_MISSING_IN_BUNDLE"
         return info
 
+    # 分析阶段要的是原样字节，所以先留一份未压缩的给 dwarfdump/otool 用，
+    # 上传的是 .gz。实测 Release 主二进制 62 MB，gzip 后约三分之一。
     dst = pathlib.Path(out_dir) / "binary"
     try:
         shutil.copy2(src, dst)
@@ -185,6 +233,13 @@ def collect_binary(derived_data, out_dir):
                       ("lipo.txt", ["lipo", "-info", str(dst)])):
         _rc, text = run(cmd, timeout=180)
         (pathlib.Path(out_dir) / name).write_text(text, encoding="utf-8")
+
+    # 元数据都抽完了，再换成 .gz；原件删掉，否则 artifact 里两份都有
+    try:
+        info["binary_gz_bytes"] = gzip_copy(dst, pathlib.Path(out_dir) / "binary.gz")
+        dst.unlink()
+    except OSError as exc:
+        info["collect_note"] = f"BINARY_GZIP_FAILED: {exc}"
     return info
 
 
@@ -195,7 +250,9 @@ def main(argv=None):
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--map-basename", default="rra_link.map")
     ap.add_argument("--max-copy-mb", type=float, default=400.0,
-                    help="upload budget for copied maps")
+                    help="upload budget for copied maps（按未压缩大小计）")
+    ap.add_argument("--keep-map-kinds", default=f"{KIND_APP},{KIND_APPEX}",
+                    help="上传哪几类 map；其余只记账不上传")
     # Everything below is recorded verbatim.  These are the job's own facts;
     # this script judges none of them.
     for flag in ("repo", "sha", "config-id", "build-settings",
@@ -212,14 +269,18 @@ def main(argv=None):
     out_dir.mkdir(parents=True, exist_ok=True)
     dd = args.derived_data
 
+    keep = {k.strip() for k in args.keep_map_kinds.split(",") if k.strip()}
     maps, copied = collect_maps(
         roots=[dd, str(out_dir)], out_dir=out_dir,
         map_basename=args.map_basename,
         limit_copy_bytes=int(args.max_copy_mb * 1024 * 1024),
+        keep_kinds=keep,
     )
     binary = collect_binary(dd, out_dir)
 
     requested = [m for m in maps if m["is_requested_basename"]]
+    app_maps = [m for m in maps if m["output_kind"] == KIND_APP]
+    kinds = collections.Counter(m["output_kind"] for m in maps)
     manifest = {
         "repo": args.repo, "sha": args.sha, "config_id": args.config_id,
         "build_settings": args.build_settings,
@@ -233,6 +294,10 @@ def main(argv=None):
         # code.  With `set -o pipefail` this field means what it says.
         "build_outcome": args.build_outcome,
         "maps_found": len(maps),
+        "maps_by_output_kind": dict(kinds),
+        "maps_uploaded": sum(1 for m in maps if m["copied_as"]),
+        "map_bytes_uploaded_gz": sum(m["copied_bytes"] or 0 for m in maps),
+        "app_map_bytes": app_maps[0]["bytes"] if app_maps else 0,
         "maps_with_requested_basename": len(requested),
         "map_bytes_max": maps[0]["bytes"] if maps else 0,
         "map_bytes_total": sum(m["bytes"] for m in maps),
@@ -241,7 +306,9 @@ def main(argv=None):
         # The single field downstream scoring keys on.  It is deliberately
         # conjunctive: a map without its binary cannot be checked for identity,
         # and a binary without a map has no ground truth.
-        "usable_for_groundtruth": bool(requested) and bool(binary.get("binary_bytes")),
+        # ground truth 的充要条件：app bundle 的 map 在，且主二进制在。
+        # 只有 map 没有二进制就无从比对同一性；只有二进制没有 map 就没有真值。
+        "usable_for_groundtruth": bool(app_maps) and bool(binary.get("binary_bytes")),
     }
 
     with open(out_dir / "maps_index.json", "w", encoding="utf-8") as fh:
@@ -253,7 +320,11 @@ def main(argv=None):
     print(json.dumps({k: v for k, v in manifest.items()},
                      ensure_ascii=False, indent=2))
     print()
-    print(f"=== map 候选 {len(maps)} 个（前 5，按大小降序）===")
+    print(f"=== map 候选 {len(maps)} 个，按输出类型：{dict(kinds)} ===")
+    print(f"    上传 {manifest['maps_uploaded']} 个，"
+          f"压缩后 {manifest['map_bytes_uploaded_gz']:,} 字节；"
+          f"其余只记在 maps_index.json 里")
+    print("=== 前 5（按大小降序）===")
     for m in maps[:5]:
         print(f"  {m['bytes']:>12,}  {m['src']}")
         for line in m["head"][:3]:

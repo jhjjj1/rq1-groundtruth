@@ -36,7 +36,13 @@ def bucket_of(m):
         return "BUILD_NOT_ATTEMPTED"
     if (m.get("build_outcome") or "").lower() != "success":
         return "BUILD_FAILED"
-    if not m.get("maps_with_requested_basename"):
+    # 判据是「有没有 app bundle 的 map」，不是「有没有叫那个名字的文件」：
+    # 一次构建会产出几十个 map，其中只有 # Path: 指向 .app/ 的那个是真值。
+    # 老 manifest 没有这个字段时退回文件名口径，并且这是退化不是等价。
+    kinds = m.get("maps_by_output_kind")
+    app_maps = (kinds or {}).get("APP_BUNDLE") if kinds is not None \
+        else m.get("maps_with_requested_basename")
+    if not app_maps:
         return "BUILT_NO_MAP"
     if not m.get("binary_bytes"):
         return "BUILT_NO_BINARY"
@@ -52,7 +58,7 @@ BUCKETS = ("OK", "BUILT_NO_BINARY", "BUILT_NO_MAP", "BUILD_FAILED",
 WHY = {
     "OK": "map 和主二进制都有，可进入评分",
     "BUILT_NO_BINARY": "编过了、有 map，但 .app 里没捞到主可执行文件",
-    "BUILT_NO_MAP": "编过了，但没产出我们请求的那个 map 文件名",
+    "BUILT_NO_MAP": "编过了，但没产出 # Path: 指向 .app/ 的那个 map",
     "BUILD_FAILED": "xcodebuild 退出码非 0",
     "BUILD_NOT_ATTEMPTED": "前置步骤没给出 scheme 或 map mode，构建这步被跳过",
     "NO_USABLE_MAP_MODE": "三种 map 路径写法都会撞，工程没法要 map",
