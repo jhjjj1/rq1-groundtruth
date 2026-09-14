@@ -27,22 +27,34 @@ SCHEMES = [
 APPEX = {"IceCubesActionExtension", "IceCubesAppWidgetsExtensionExtension",
          "IceCubesNotifications", "IceCubesShareExtension"}
 
+#: 探针 run #1 在 runner 上实测到的形状，不是编的：
+#:   IceCubesApp              1 个 target : [application]
+#:   IceCubesActionExtension  2 个 target : [app-extension, application]
+#: 扩展 scheme 把宿主 app 拖进了构建图，所以「集合里有 application」判不出来。
+#: 这个 fixture 存在的意义就是别让那个判法回来。
+LIB = "com.apple.product-type.library.static"
+
+
+def _t(name, pt):
+    return {"target": name, "settings": {
+        "PRODUCT_TYPE": pt,
+        "LD_GENERATE_MAP_FILE": "NO",
+        "LD_MAP_FILE_PATH": f"/dd/{name}.build/{name}-LinkMap-normal-arm64.txt",
+        "TARGET_TEMP_DIR": f"/dd/{name}.build",
+    }}
+
 
 def fake_settings(container, scheme, configuration, destination, timeout):
     if scheme == "StatusKit-Package":            # SPM package scheme: not queryable
         return [], "rc=65 xcodebuild: error: scheme not buildable for this destination"
     if scheme == "IceCubesApp":
-        pt = P.PT_APP
-    elif scheme in APPEX:
-        pt = P.PT_APPEX
-    else:
-        pt = "com.apple.product-type.library.static"
-    return [{"target": scheme, "settings": {
-        "PRODUCT_TYPE": pt,
-        "LD_GENERATE_MAP_FILE": "NO",
-        "LD_MAP_FILE_PATH": f"/dd/{scheme}.build/{scheme}-LinkMap-normal-arm64.txt",
-        "TARGET_TEMP_DIR": f"/dd/{scheme}.build",
-    }}], None
+        return [_t("IceCubesApp", P.PT_APP)], None
+    if scheme in APPEX:
+        # 顺序照实测：自己的产物在前，宿主 app 在后
+        return [_t(scheme, P.PT_APPEX), _t("IceCubesApp", P.PT_APP)], None
+    if scheme.endswith("Tests"):
+        return [], "rc=64 xcodebuild: error: Unable to find a destination"
+    return [_t(scheme, LIB)], None
 
 
 def run(schemes, stub=None):
@@ -68,14 +80,22 @@ def main():
         fails.append(f"chosen={res['chosen']!r}, 期望 IceCubesApp（字母序第一是 Account）")
     if res["chosen"] == "Account":
         fails.append("回归：又按字母序取了第一个")
-    if res["app_rule_fired"] != ["PRODUCT_TYPE"]:
-        fails.append(f"app_rule_fired={res['app_rule_fired']}")
     if res["ambiguous"]:
         fails.append("单 app 工程被判成 ambiguous")
     if res["kind_counts"].get("APPEX") != 4:
         fails.append(f"APPEX 计数={res['kind_counts'].get('APPEX')}, 期望 4")
-    if len(res["probe_failures"]) != 1:
-        fails.append(f"probe_failures={len(res['probe_failures'])}, 期望 1")
+    if res["kind_counts"].get("APP") != 1:
+        fails.append(f"APP 计数={res['kind_counts'].get('APP')}, 期望 1"
+                     "（扩展 scheme 不能算 app）")
+    if res["app_schemes"] != ["IceCubesApp"]:
+        fails.append(f"app_schemes={res['app_schemes']}, 期望只有 IceCubesApp")
+    if res["app_rule_fired"] != ["PRIMARY_TARGET"]:
+        fails.append(f"app_rule_fired={res['app_rule_fired']}")
+    if res["rule_disagreement_count"] != 0:
+        fails.append(f"主/次判据分歧 {res['rule_disagreement_count']}，期望 0")
+    # 7 个 *Tests scheme 探测失败 + StatusKit-Package，共 8
+    if len(res["probe_failures"]) != 8:
+        fails.append(f"probe_failures={len(res['probe_failures'])}, 期望 8")
     if rc != 0:
         fails.append(f"rc={rc}, 期望 0")
 
@@ -101,7 +121,21 @@ def main():
         for f in fails:
             print("  -", f)
         return 1
-    print("PASS  3 个场景：正常工程 / 纯库仓库 / 双 app scheme")
+    # 主判据与次判据分歧：app scheme 自己也把扩展列进构建图的工程
+    def app_plus_appex(c, s_, cf, d, t):
+        return [_t("Host", P.PT_APP), _t("Ext", P.PT_APPEX)], None
+    rc5, res5 = run(["Host"], stub=app_plus_appex)
+    if res5["chosen"] != "Host":
+        fails.append(f"app 带扩展的工程 chosen={res5['chosen']}, 期望 Host")
+    if res5["rule_disagreement_count"] != 1:
+        fails.append("app 带扩展时主/次判据应当分歧并被记下来")
+
+    if fails:
+        print("FAIL")
+        for f_ in fails:
+            print("  -", f_)
+        return 1
+    print("PASS  4 个场景：正常工程 / 纯库仓库 / 双 app scheme / app 自带扩展")
     print(f"      IceCubesApp 28 个 scheme -> chosen={res['chosen']} "
           f"(字母序第一是 {SCHEMES[0]})")
     print(f"      kind_counts={res['kind_counts']}")

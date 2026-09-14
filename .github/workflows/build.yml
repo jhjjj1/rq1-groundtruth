@@ -44,6 +44,10 @@ on:
         description: '强制某个 Xcode（/Applications/Xcode_16.4.app 这种）；留空 = runner 默认'
         required: false
         default: ''
+      runs_on:
+        description: 'runner 镜像。macos-latest 上只有 Xcode 26.x；要 16.x 得换旧镜像'
+        required: false
+        default: 'macos-latest'
 
 permissions:
   contents: read
@@ -65,7 +69,7 @@ jobs:
 
   build:
     needs: plan
-    runs-on: macos-latest
+    runs-on: ${{ inputs.runs_on || 'macos-latest' }}
     timeout-minutes: 75
     strategy:
       fail-fast: false

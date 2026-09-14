@@ -43,6 +43,20 @@ PT_APP = "com.apple.product-type.application"
 PT_APPEX = "com.apple.product-type.app-extension"
 PT_WATCHAPP = "com.apple.product-type.application.watchapp2"
 
+#: 所有「扩展」类产品。一个 scheme 只要自己的产物是这些之一，它就不是 app
+#: scheme —— 哪怕它的构建图里带着宿主 app。
+APPEX_TYPES = frozenset({
+    PT_APPEX,
+    "com.apple.product-type.extensionkit-extension",
+    "com.apple.product-type.app-extension.messages",
+    "com.apple.product-type.app-extension.messages-sticker-pack",
+    "com.apple.product-type.watchkit2-extension",
+    "com.apple.product-type.xpc-service",
+})
+
+KIND_BY_TYPE = {PT_APP: "APP", PT_WATCHAPP: "WATCHAPP"}
+KIND_BY_TYPE.update({t: "APPEX" for t in APPEX_TYPES})
+
 #: Settings worth carrying out of the probe.  LD_* are the ground-truth levers;
 #: TARGET_TEMP_DIR is what a per-target map path would expand to.
 HARVEST = (
@@ -109,31 +123,63 @@ def show_build_settings(container, scheme, configuration, destination, timeout):
 
 
 def classify(targets):
-    """Return (kind, rule) for one scheme from its targets' settings.
+    """Classify one scheme from its targets' settings.
 
-    ``rule`` names the evidence that decided it, so the result file can be
-    audited without re-running xcodebuild.
+    Why the *first* target and not the set
+    --------------------------------------
+    The first version asked "does this scheme's target set contain an
+    application target?".  Measured on IceCubesApp (probe run #1)::
+
+        IceCubesApp              1 target : [application]
+        IceCubesActionExtension  2 targets: [app-extension, application]
+        IceCubesShareExtension   2 targets: [app-extension, application]
+
+    An extension scheme drags its host app into the build graph, so the
+    set-wise test says APP for all three, and the alphabetically-first of
+    those -- `IceCubesActionExtension` -- got built.  No `.app` was ever
+    produced.
+
+    `-showBuildSettings -json` emits the scheme's build-action entries in
+    order, and the first entry is the scheme's own product.  That is the
+    primary rule here.
+
+    It is a rule about xcodebuild's output ordering, which this project has
+    observed on exactly one project, so it ships with its own falsifier: the
+    set-wise verdict is computed too and `agrees_with_setwise` records whether
+    they matched.  Disagreements across the corpus are the signal that the
+    ordering assumption does not hold somewhere; silence is not.
     """
-    types = {t["settings"].get("PRODUCT_TYPE") for t in targets}
-    types.discard(None)
-    if types:
-        if PT_APP in types:
-            return "APP", "PRODUCT_TYPE"
-        if PT_WATCHAPP in types:
-            return "WATCHAPP", "PRODUCT_TYPE"
-        if PT_APPEX in types:
-            return "APPEX", "PRODUCT_TYPE"
-        return "OTHER", "PRODUCT_TYPE"
+    if not targets:
+        return {"kind": "NO_TARGETS", "rule": "NONE"}
+
+    types = [t["settings"].get("PRODUCT_TYPE") for t in targets]
+    known = [t for t in types if t]
+
+    if known:
+        primary = known[0]
+        has_app = PT_APP in known or PT_WATCHAPP in known
+        has_appex = any(t in APPEX_TYPES for t in known)
+        kind = KIND_BY_TYPE.get(primary, "OTHER")
+        setwise = ("APPEX" if has_appex else
+                   "APP" if has_app else
+                   KIND_BY_TYPE.get(primary, "OTHER"))
+        return {
+            "kind": kind, "rule": "PRIMARY_TARGET",
+            "primary_product_type": primary,
+            "has_app_target": has_app, "has_appex_target": has_appex,
+            "setwise_kind": setwise,
+            "agrees_with_setwise": kind == setwise,
+        }
 
     # PRODUCT_TYPE absent -> weaker evidence, and say so.
-    wrappers = {t["settings"].get("WRAPPER_EXTENSION") for t in targets}
-    if "app" in wrappers:
-        return "APP", "WRAPPER_EXTENSION"
-    if "appex" in wrappers:
-        return "APPEX", "WRAPPER_EXTENSION"
-    if not targets:
-        return "NO_TARGETS", "NONE"
-    return "OTHER", "WRAPPER_EXTENSION"
+    wrappers = [t["settings"].get("WRAPPER_EXTENSION") for t in targets]
+    first = next((w for w in wrappers if w), None)
+    kind = {"app": "APP", "appex": "APPEX"}.get(first, "OTHER")
+    return {"kind": kind, "rule": "WRAPPER_EXTENSION",
+            "primary_product_type": None,
+            "has_app_target": "app" in wrappers,
+            "has_appex_target": "appex" in wrappers,
+            "setwise_kind": kind, "agrees_with_setwise": True}
 
 
 def main(argv=None):
@@ -175,14 +221,19 @@ def main(argv=None):
         if error is not None:
             failures.append({"scheme": scheme, "error": error, "elapsed_s": elapsed})
             continue
-        kind, rule = classify(targets)
-        rows.append({
-            "scheme": scheme, "kind": kind, "rule": rule,
-            "elapsed_s": elapsed, "targets": targets,
-        })
+        verdict = classify(targets)
+        rows.append({"scheme": scheme, "elapsed_s": elapsed,
+                     "targets": targets, **verdict})
 
     apps = [r["scheme"] for r in rows if r["kind"] == "APP"]
     rules = sorted({r["rule"] for r in rows if r["kind"] == "APP"})
+    # 证伪项：主判据（第一个 target）与次判据（集合里有 app 无 appex）不一致的
+    # scheme。全语料上这个数若不为零，说明 -showBuildSettings 的顺序在某些工程
+    # 上不等于 scheme 顺序，主判据就得换。
+    disagree = [{"scheme": r["scheme"], "primary": r["kind"],
+                 "setwise": r.get("setwise_kind"),
+                 "primary_product_type": r.get("primary_product_type")}
+                for r in rows if r.get("agrees_with_setwise") is False]
 
     # The default LD_* values, read off whichever targets reported them.  This
     # is the measurement that decides whether a global LD_MAP_FILE_PATH is
@@ -223,6 +274,8 @@ def main(argv=None):
             else "APP_SCHEME_AMBIGUOUS" if len(apps) > 1
             else "NO_APP_SCHEME_OBSERVED"
         ),
+        "rule_disagreements": disagree,
+        "rule_disagreement_count": len(disagree),
         "ld_map_defaults": ld_defaults,
         "rows": rows,
         "total_elapsed_s": round(time.monotonic() - started, 1),
@@ -242,6 +295,8 @@ def main(argv=None):
     print(f"verdict  = {result['chosen_verdict']}")
     print(f"chosen   = {result['chosen']}")
     print(f"app_rule = {rules or '-'}")
+    print(f"主判据与次判据分歧 = {len(disagree)}"
+          + (f"  {disagree}" if disagree else ""))
     print(f"probed {len(candidates)} schemes in {result['total_elapsed_s']}s")
 
     # Exit 78 (neutral) only when nothing was observed; the caller turns that

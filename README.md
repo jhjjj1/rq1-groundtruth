@@ -80,6 +80,26 @@ curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 | `build.log` | 失败时的证据 |
 | `manifest.json` | 这次跑的全部事实，**失败也记** |
 
+map 由 `tools/parse_link_map.py` 解析成「地址 → 归属单元」。单元由一条**有序
+规则梯**从 object file 路径推出,每条记录带上生效的规则名；一条都匹配不上就是
+`NO_RULE_MATCHED`,不往邻近单元里塞：
+
+| 规则 | 匹配 | 单元 |
+|---|---|---|
+| `INDEX_ZERO` | `[0] linker synthesized` | 无 |
+| `ARCHIVE_MEMBER` | `libX.a(Y.o)` | `libX`（CocoaPods 走这条） |
+| `TARGET_INTERMEDIATE` | `Intermediates.noindex/<P>.build/<C>/<T>.build/.../y.o` | `<T>` |
+| `TBD` / `DYLIB` / `FRAMEWORK_BINARY` | 系统库 | 库名 |
+| `BUILD_PRODUCT_OBJECT` | `Build/Products/**/X.o` | `X`（SwiftPM 走这条） |
+| `NO_RULE_MATCHED` | 其余 | 无,原样记下来 |
+
+`unit_at(addr)` 返回 `None` 表示**这个地址没被 map 覆盖**,不表示它不属于任何
+单元。零长符号是别名,不占区间,不参与归属。
+
+解析器**不判**第一方/第三方：map 分不出本地包和拉取的包,两者都落在
+`Build/Products`。那一层要 `Package.resolved` / `Podfile.lock`,归有这些文件的
+那一步管。
+
 `maps_index.json` 里存头 12 行，是因为 **runner 上是 Xcode 26.6，本项目从没读过
 这个工具链产出的 map**。解析器要照着观测到的真实格式写，不照着记忆里的 ld64
 格式写。
@@ -133,6 +153,46 @@ BUILD_NOT_ATTEMPTED / NO_USABLE_MAP_MODE / NO_APP_SCHEME / MANIFEST_MISSING
 1. **strip 前后地址不变** —— 连接键是地址，不是符号名
 2. **map 对应的就是分析的那个二进制** —— 靠 `LC_UUID` 比对
 3. **`.a(x.o)` → pod 名查得回去** —— 歧义时记 `GT_AMBIGUOUS`，排除出分母，不猜
+
+## 探针 run #1 实测（2026-09-14，macos-latest / Xcode 26.6 / Swift 6.3.3）
+
+**map 格式是经典 ld64,ld_prime 没改。** 26 个 map、369,818 个符号行,
+`parse_link_map.py` 解析失败 **0**,地址区间重叠 **0**,`__text` 覆盖 **100%**
+（appex 那个 map:3,341,096 字节全覆盖,差值 0,不是四舍五入）。
+
+appex 主二进制的 map:
+
+| | |
+|---|---|
+| 符号行 | 33,998 |
+| size>0 的符号 | 28,130 |
+| 其中归不到真实 `.o` | **175 = 0.62%** |
+| Dead Stripped Symbols | 9,225（单独成段,各带来源索引） |
+| object file 命中具名规则 | 56/56,`NO_RULE_MATCHED` = 0 |
+
+**SwiftPM 依赖是合并后的 `<产品名>.o`**,不是 `.a(成员.o)`：
+
+```
+[ 4] .../Build/Products/Release-iphoneos/Models.o          ← 11,338 符号
+[ 1] .../IceCubesActionExtension.build/.../ActionRequestHandler.o  ← app 自己的代码
+[10] .../libclang_rt.ios.a(os_version_check.c.o)           ← 系统静态库才是 .a(x.o)
+```
+
+所以 **P1 前提 3** 对 SPM 仓库而言是平凡的：单元名就是文件名,没有歧义。
+CocoaPods 仓库走 `ARCHIVE_MEMBER` 规则,那一条还没验过。
+
+**scheme 普查 62.6 秒 / 28 个（中位 1.9s）。** 占本次 8m44s 的 12%,
+占一次成功的 app 构建（20~40 分钟）的 3~5%。**不加提前退出** —— 为省这一分钟
+放弃歧义检测不划算,而这次正是歧义检测拦住了错误的 scheme。
+
+**构建失败原因不是配置,是编译器崩了：**
+
+```
+Apple Swift version 6.3.3
+While running pass #65824 SILFunctionTransform "EarlyPerfInliner"
+  on SILFunction "...MediaUIZoomableContainerV...CoordinatorCfD"
+  for 'deinit' (at Packages/MediaUI/Sources/MediaUI/MediaUIZoomableContainer.swift:96:11)
+```
 
 ## 已知的工具链域差
 
