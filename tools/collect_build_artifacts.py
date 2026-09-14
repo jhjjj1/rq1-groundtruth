@@ -205,38 +205,43 @@ def describe_binary(path):
             "otool_rc": rc, "_raw": text}
 
 
-def collect_binary(derived_data, out_dir, map_sections=None, strip_style="none"):
-    """Find the built .app, copy its main executable, optionally strip it.
+def collect_variants(derived_data, out_dir, map_sections=None,
+                     strip_styles=("all",)):
+    """Find the built .app and emit one binary per strip style, from ONE link.
 
-    Returns a dict that always has the same keys, so a job with no app and a
-    job with an app produce comparable records.
+    Why variants instead of one binary per job
+    ------------------------------------------
+    P1 measured that `strip` is layout-preserving: stripping the IceCubesApp
+    binary took LC_SYMTAB from 695,589 entries to 5,186 and the file from
+    62,702,680 to 24,647,512 bytes, while `strip_preserves_layout` came back
+    True and the link-time map still matched the stripped binary section for
+    section.
+
+    That makes the unstripped and stripped forms two *views of one link*, not
+    two experiments.  Producing them from a single build removes a confound
+    (two independent builds of the same commit can differ) and saves one whole
+    build per repo.
+
+    Returns (variants, shared) where `shared` holds the facts that belong to
+    the link itself (app bundle, executable name) and `variants` is one record
+    per strip style.  A style that could not be produced is recorded with its
+    reason, never dropped.
     """
-    info = {"app_bundle": None, "executable_name": None, "binary_bytes": None,
-            "uuid": None, "arch": None, "collect_note": None,
-            "strip_style": strip_style,
-            "nsyms_before": None, "nsyms_after": None,
-            "strsize_before": None, "strsize_after": None,
-            "binary_bytes_before_strip": None,
-            "strip_did_run": False, "strip_rc": None,
-            # 「strip 不重排代码」——每个 job 自己量一遍，不靠假设
-            "strip_preserves_layout": None,
-            "strip_layout_detail": None,
-            # 「这份 map 描述的就是这个二进制」——判据是节区表，不是 LC_UUID。
-            # map 里没有 UUID 字段，而且同一 SHA 三次构建给出三个不同 UUID。
-            "map_matches_binary": None,
-            "map_binary_detail": None}
+    shared = {"app_bundle": None, "executable_name": None, "collect_note": None}
+    out_dir = pathlib.Path(out_dir)
+
     products = pathlib.Path(derived_data) / "Build" / "Products"
     if not products.is_dir():
-        info["collect_note"] = "NO_BUILD_PRODUCTS_DIR"
-        return info
+        shared["collect_note"] = "NO_BUILD_PRODUCTS_DIR"
+        return [], shared
     apps = sorted(products.glob("*/*.app")) + sorted(products.glob("*.app"))
     if not apps:
-        info["collect_note"] = "NO_APP_BUNDLE_FOUND"
-        return info
+        shared["collect_note"] = "NO_APP_BUNDLE_FOUND"
+        return [], shared
     app = apps[0]
-    info["app_bundle"] = str(app)
+    shared["app_bundle"] = str(app)
     if len(apps) > 1:
-        info["collect_note"] = f"MULTIPLE_APP_BUNDLES({len(apps)})"
+        shared["collect_note"] = f"MULTIPLE_APP_BUNDLES({len(apps)})"
 
     exe_name = None
     plist = app / "Info.plist"
@@ -245,95 +250,112 @@ def collect_binary(derived_data, out_dir, map_sections=None, strip_style="none")
             with open(plist, "rb") as fh:
                 exe_name = (plistlib.load(fh) or {}).get("CFBundleExecutable")
         except Exception as exc:                      # malformed plist is a fact
-            info["collect_note"] = f"INFO_PLIST_UNREADABLE: {exc}"
-    if not exe_name:
-        exe_name = app.stem
-    info["executable_name"] = exe_name
+            shared["collect_note"] = f"INFO_PLIST_UNREADABLE: {exc}"
+    exe_name = exe_name or app.stem
+    shared["executable_name"] = exe_name
 
     src = app / exe_name
     if not src.is_file():
-        info["collect_note"] = "EXECUTABLE_MISSING_IN_BUNDLE"
-        return info
+        shared["collect_note"] = "EXECUTABLE_MISSING_IN_BUNDLE"
+        return [], shared
 
-    # 分析阶段要的是原样字节，所以先留一份未压缩的给 dwarfdump/otool 用，
-    # 上传的是 .gz。实测 Release 主二进制 62 MB，gzip 后约三分之一。
-    dst = pathlib.Path(out_dir) / "binary"
+    # 未经改动的一份，每个变体都从它复制出来 —— strip 是原地操作
+    pristine = out_dir / "_pristine"
     try:
-        shutil.copy2(src, dst)
-        info["binary_bytes"] = dst.stat().st_size
+        shutil.copy2(src, pristine)
     except OSError as exc:
-        info["collect_note"] = f"BINARY_COPY_FAILED: {exc}"
-        return info
+        shared["collect_note"] = f"BINARY_COPY_FAILED: {exc}"
+        return [], shared
+    before = describe_binary(pristine)
 
-    # ---- strip 前 ----
-    before = describe_binary(dst)
-    info["binary_bytes_before_strip"] = before["bytes"]
-    info["nsyms_before"] = (before["symtab"] or {}).get("nsyms")
-    info["strsize_before"] = (before["symtab"] or {}).get("strsize")
+    variants = []
+    for style in strip_styles:
+        rec = {"strip_style": style, "binary_file": None,
+               "binary_bytes": None, "binary_gz_bytes": None,
+               "binary_bytes_before_strip": before["bytes"],
+               "nsyms_before": (before["symtab"] or {}).get("nsyms"),
+               "strsize_before": (before["symtab"] or {}).get("strsize"),
+               "nsyms_after": None, "strsize_after": None,
+               "strip_did_run": False, "strip_rc": None,
+               "strip_preserves_layout": None, "strip_layout_detail": None,
+               "map_matches_binary": None, "map_binary_detail": None,
+               "uuid": None, "arch": None, "note": None}
+        flags = STRIP_FLAGS.get(style)
+        if flags is None and style not in STRIP_FLAGS:
+            rec["note"] = f"UNKNOWN_STRIP_STYLE_{style}"
+            variants.append(rec)
+            continue
 
-    flags = STRIP_FLAGS.get(strip_style)
-    after = before
-    if flags is not None:
-        rc_s, out_s = run(["strip", *flags, str(dst)], timeout=600)
-        info["strip_did_run"] = True
-        info["strip_rc"] = rc_s
-        if rc_s != 0:
-            info["collect_note"] = f"STRIP_FAILED_rc{rc_s}: {out_s.strip()[:200]}"
-        after = describe_binary(dst)
-        cmp_layout = macho_sections.compare_tables(
-            before["sections"], after["sections"], "pre_strip", "post_strip")
-        # NO_DATA 是「没量到」，不是「量了且不保持」。False 会被读成后者，
-        # 所以这里只在真的比过两张非空表时才给布尔。
-        info["strip_preserves_layout"] = (
-            None if cmp_layout["verdict"] == "NO_DATA" else cmp_layout["identical"])
-        info["strip_layout_detail"] = {k: v for k, v in cmp_layout.items()
-                                       if k != "first_diffs"} or None
-        if not cmp_layout["identical"]:
-            info["strip_layout_detail"]["first_diffs"] = cmp_layout.get("first_diffs")
+        work = out_dir / f"_work_{style}"
+        try:
+            shutil.copy2(pristine, work)
+        except OSError as exc:
+            rec["note"] = f"COPY_FAILED: {exc}"
+            variants.append(rec)
+            continue
 
-    info["binary_bytes"] = after["bytes"]
-    info["nsyms_after"] = (after["symtab"] or {}).get("nsyms")
-    info["strsize_after"] = (after["symtab"] or {}).get("strsize")
+        if flags is not None:
+            rc_s, out_s = run(["strip", *flags, str(work)], timeout=900)
+            rec["strip_did_run"] = True
+            rec["strip_rc"] = rc_s
+            if rc_s != 0:
+                rec["note"] = f"STRIP_FAILED_rc{rc_s}: {out_s.strip()[:200]}"
 
-    # ---- map ↔ 二进制同一性 ----
-    # 三种「比不了」的原因要分开记：没有 app map / 有 map 但没解析出节区表 /
-    # 二进制的节区表没读到。合并成一句「没得比」就看不出该去修哪一头。
-    if map_sections is None:
-        info["map_binary_detail"] = {"verdict": "NO_APP_MAP"}
-    elif not map_sections:
-        info["map_binary_detail"] = {"verdict": "MAP_HAS_NO_SECTIONS"}
-    elif not after["sections"]:
-        info["map_binary_detail"] = {"verdict": "BINARY_SECTIONS_UNREADABLE",
-                                     "otool_rc": after["otool_rc"]}
-    else:
-        cmp_map = macho_sections.compare_tables(
-            map_sections, after["sections"], "map", "binary")
-        info["map_matches_binary"] = cmp_map["identical"]
-        info["map_binary_detail"] = cmp_map
+        after = describe_binary(work)
+        rec["binary_bytes"] = after["bytes"]
+        rec["nsyms_after"] = (after["symtab"] or {}).get("nsyms")
+        rec["strsize_after"] = (after["symtab"] or {}).get("strsize")
 
-    (pathlib.Path(out_dir) / "loadcmds.txt").write_text(
-        after["_raw"], encoding="utf-8")
+        if flags is not None:
+            cl = macho_sections.compare_tables(
+                before["sections"], after["sections"], "pre_strip", "post_strip")
+            # NO_DATA 是「没量到」，不是「量了且不保持」
+            rec["strip_preserves_layout"] = (
+                None if cl["verdict"] == "NO_DATA" else cl["identical"])
+            rec["strip_layout_detail"] = {k: v for k, v in cl.items()
+                                          if k != "first_diffs"}
+            if not cl["identical"]:
+                rec["strip_layout_detail"]["first_diffs"] = cl.get("first_diffs")
 
-    rc, out = run(["dwarfdump", "--uuid", str(dst)])
-    (pathlib.Path(out_dir) / "uuid.txt").write_text(out, encoding="utf-8")
-    if rc == 0:
-        parts = out.split()
-        if len(parts) >= 2 and parts[0] == "UUID:":
-            info["uuid"] = parts[1]
-            info["arch"] = parts[2].strip("()") if len(parts) > 2 else None
+        # 三种「比不了」分开记：合并成「没得比」就看不出该修哪一头
+        if map_sections is None:
+            rec["map_binary_detail"] = {"verdict": "NO_APP_MAP"}
+        elif not map_sections:
+            rec["map_binary_detail"] = {"verdict": "MAP_HAS_NO_SECTIONS"}
+        elif not after["sections"]:
+            rec["map_binary_detail"] = {"verdict": "BINARY_SECTIONS_UNREADABLE",
+                                        "otool_rc": after["otool_rc"]}
+        else:
+            cm = macho_sections.compare_tables(
+                map_sections, after["sections"], "map", "binary")
+            rec["map_matches_binary"] = cm["identical"]
+            rec["map_binary_detail"] = cm
 
-    for name, cmd in (("size.txt", ["size", "-m", str(dst)]),
-                      ("lipo.txt", ["lipo", "-info", str(dst)])):
-        _rc, text = run(cmd, timeout=180)
-        (pathlib.Path(out_dir) / name).write_text(text, encoding="utf-8")
+        (out_dir / f"loadcmds.{style}.txt").write_text(after["_raw"],
+                                                       encoding="utf-8")
+        rc_u, out_u = run(["dwarfdump", "--uuid", str(work)])
+        (out_dir / f"uuid.{style}.txt").write_text(out_u, encoding="utf-8")
+        if rc_u == 0:
+            parts = out_u.split()
+            if len(parts) >= 2 and parts[0] == "UUID:":
+                rec["uuid"] = parts[1]
+                rec["arch"] = parts[2].strip("()") if len(parts) > 2 else None
+        for name, cmd in ((f"size.{style}.txt", ["size", "-m", str(work)]),
+                          (f"lipo.{style}.txt", ["lipo", "-info", str(work)])):
+            _rc, text = run(cmd, timeout=180)
+            (out_dir / name).write_text(text, encoding="utf-8")
 
-    # 元数据都抽完了，再换成 .gz；原件删掉，否则 artifact 里两份都有
-    try:
-        info["binary_gz_bytes"] = gzip_copy(dst, pathlib.Path(out_dir) / "binary.gz")
-        dst.unlink()
-    except OSError as exc:
-        info["collect_note"] = f"BINARY_GZIP_FAILED: {exc}"
-    return info
+        try:
+            rec["binary_gz_bytes"] = gzip_copy(work, out_dir / f"binary.{style}.gz")
+            rec["binary_file"] = f"binary.{style}.gz"
+        except OSError as exc:
+            rec["note"] = (rec["note"] or "") + f" GZIP_FAILED: {exc}"
+        finally:
+            work.unlink(missing_ok=True)
+        variants.append(rec)
+
+    pristine.unlink(missing_ok=True)
+    return variants, shared
 
 
 def main(argv=None):
@@ -346,8 +368,9 @@ def main(argv=None):
                     help="upload budget for copied maps（按未压缩大小计）")
     ap.add_argument("--keep-map-kinds", default=f"{KIND_APP},{KIND_APPEX}",
                     help="上传哪几类 map；其余只记账不上传")
-    ap.add_argument("--strip-style", default="none", choices=sorted(STRIP_FLAGS),
-                    help="收集阶段对主二进制执行哪一档 strip")
+    ap.add_argument("--strip-variants", default="all",
+                    help="逗号分隔的 strip 档位；一次链接产出多份二进制，"
+                         "共用同一份 map。例：none,all")
     # Everything below is recorded verbatim.  These are the job's own facts;
     # this script judges none of them.
     for flag in ("repo", "sha", "config-id", "build-settings",
@@ -381,8 +404,13 @@ def main(argv=None):
         except OSError as exc:
             print(f"读 map 节区表失败: {exc}", file=sys.stderr)
 
-    binary = collect_binary(dd, out_dir, map_sections=map_sections,
-                            strip_style=args.strip_style)
+    styles = [x.strip() for x in args.strip_variants.split(",") if x.strip()]
+    unknown = [x for x in styles if x not in STRIP_FLAGS]
+    if unknown:
+        print(f"未知 strip 档位 {unknown}；可选 {sorted(STRIP_FLAGS)}", file=sys.stderr)
+        return 2
+    variants, shared = collect_variants(dd, out_dir, map_sections=map_sections,
+                                        strip_styles=styles)
 
     requested = [m for m in maps if m["is_requested_basename"]]
     app_maps = [m for m in maps if m["output_kind"] == KIND_APP]
@@ -408,16 +436,23 @@ def main(argv=None):
         "map_bytes_max": maps[0]["bytes"] if maps else 0,
         "map_bytes_total": sum(m["bytes"] for m in maps),
         "map_bytes_copied": copied,
-        **binary,
+        **shared,
+        # 一次链接 → 多个 strip 变体，共用上面那份 map。
+        # 评分单元是 variant，不是 job：strip 与否是配置维度之一。
+        "strip_variants_requested": styles,
+        "variants": variants,
+        "usable_variants": [v["strip_style"] for v in variants
+                            if v["map_matches_binary"] is True
+                            and v["binary_bytes"]],
         # The single field downstream scoring keys on.  It is deliberately
         # conjunctive: a map without its binary cannot be checked for identity,
         # and a binary without a map has no ground truth.
-        # ground truth 的充要条件：app bundle 的 map 在、主二进制在，**且两者
-        # 经节区表比对确认是同一个**。前两条成立而第三条不成立时，这份产物是
-        # 不可用的 —— 那种情况必须显式判负，不能靠「文件都在」就放行。
-        "usable_for_groundtruth": (bool(app_maps)
-                                   and bool(binary.get("binary_bytes"))
-                                   and binary.get("map_matches_binary") is True),
+        # job 级判据：app bundle 的 map 在，且**至少一个** strip 变体经节区表
+        # 比对确认与它配套。「文件都在」不等于「配套」，后者才是可评分的条件。
+        # 每个变体自己的可用性在 variants[] 里，聚合按变体展开。
+        "usable_for_groundtruth": bool(app_maps) and bool([
+            v for v in variants
+            if v["map_matches_binary"] is True and v["binary_bytes"]]),
     }
 
     with open(out_dir / "maps_index.json", "w", encoding="utf-8") as fh:
@@ -429,13 +464,23 @@ def main(argv=None):
     print(json.dumps({k: v for k, v in manifest.items()},
                      ensure_ascii=False, indent=2))
     print()
-    print("=== 同一性与 strip ===")
-    for k in ("strip_style", "strip_did_run", "nsyms_before", "nsyms_after",
-              "binary_bytes_before_strip", "binary_bytes",
-              "strip_preserves_layout", "map_matches_binary"):
-        print(f"    {k:<26} {manifest.get(k)}")
-    if manifest.get("map_binary_detail", {}).get("verdict") not in (None, "IDENTICAL"):
-        print("    map/binary 差异:", manifest["map_binary_detail"])
+    print(f"=== strip 变体 {len(variants)} 个（同一次链接，共用一份 map）===")
+    hdr = ("style", "strip?", "nsyms 前→后", "字节 前→后", "保布局", "map 配套")
+    print("    {:<12}{:<8}{:<26}{:<30}{:<10}{}".format(*hdr))
+    for v in variants:
+        nb, na = v["nsyms_before"], v["nsyms_after"]
+        bb, ba = v["binary_bytes_before_strip"], v["binary_bytes"]
+        nsyms = f"{nb:,} → {na:,}" if (nb is not None and na is not None) else "-"
+        size = f"{bb:,} → {ba:,}" if (bb is not None and ba is not None) else "-"
+        print("    {:<12}{:<8}{:<26}{:<30}{:<10}{}".format(
+            v["strip_style"], str(v["strip_did_run"]), nsyms, size,
+            str(v["strip_preserves_layout"]), str(v["map_matches_binary"])))
+        if v.get("note"):
+            print(f"        note: {v['note']}")
+        d = v.get("map_binary_detail") or {}
+        if d.get("verdict") not in (None, "IDENTICAL"):
+            print(f"        map/binary: {d.get('verdict')}")
+    print(f"    可用变体: {manifest['usable_variants']}")
     print()
     print(f"=== map 候选 {len(maps)} 个，按输出类型：{dict(kinds)} ===")
     print(f"    上传 {manifest['maps_uploaded']} 个，"

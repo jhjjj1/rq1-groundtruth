@@ -11,24 +11,32 @@ GitHub 的矩阵上限是 **256 job / 每次 run**。超了它的行为是报错
 ------------------
 每一项都对应归属算法的一个具体依赖面,不是随手列的:
 
-  base          Release + -Os，不 strip。基线,也是诊断用的最好情形。
-  strip_all     链接后显式 `strip` —— 符号名没了,直接打 `attribution.py` 的
-                L0/L1 定位阶梯和符号族证据。**最大杠杆**,也最接近语料库里
-                真实 App Store 二进制的形态。
-
-                注意这一档**不是 build setting**。上一版写成
-                `STRIP_STYLE=all STRIP_INSTALLED_PRODUCT=YES`,实测完全没生效
-                （base 与 strip_all 的 LC_SYMTAB 是 695,589 / 695,594 条,
-                二进制反而大了 200 字节）—— STRIP_INSTALLED_PRODUCT 只在安装
-                阶段生效,`xcodebuild build` 不走那一步。现在由
-                `collect_build_artifacts.py --strip-style` 在链接之后显式执行,
-                并在**同一次链接内部**记录 strip 前后的节区表与符号表。
+  base          Release + -Os。基线。
   no_deadstrip  关掉 dead code stripping —— 影响哪些桩还在,这也是路线 B
                 (导入面)依赖的东西。
   lto           `LLVM_LTO=YES` —— 跨 .o 内联。**注意:它会让 ground truth
                 本身变弱**,因为一个地址可能来自多个 .o 的内联结果。这一档
                 必须单独报,并且把"链接器都说不清归属"的地址排除出分母。
   wholemodule   `SWIFT_COMPILATION_MODE=wholemodule` —— 模块内跨文件内联。
+
+strip 为什么不是一档配置
+------------------------
+它曾经是(`strip_all`),写法是 `STRIP_STYLE=all STRIP_INSTALLED_PRODUCT=YES`。
+实测**完全没生效**:base 与 strip_all 的 LC_SYMTAB 是 695,589 / 695,594 条,
+二进制反而大了 200 字节 —— STRIP_INSTALLED_PRODUCT 只在安装阶段生效,而
+`xcodebuild build` 不走那一步。一个什么都没做的配置却两格全绿。
+
+改正后又量到一件事:`strip` 是**保布局**的。同一次链接的产物 strip 之后,
+LC_SYMTAB 从 695,589 掉到 5,186、文件从 62,702,680 掉到 24,647,512 字节,而
+节区表逐条不变,链接时产出的 map 仍与它配套(`map_matches_binary = True`)。
+
+所以未 strip 和 strip 后是**同一次链接的两个视图**,不是两个实验。由一次构建
+产出两份二进制、共用同一份 map,既去掉了"两次独立构建本身就有差异"这个混杂,
+也省掉每个仓库一整次构建。
+
+因此 `strip_variants` 是配置的一个字段,由收集阶段执行,不是 build setting。
+只有 `base` 需要未 strip 的那一份(诊断用);其余三档只产 strip 后的,因为那才是
+语料库里真实 App Store 二进制的形态。
 """
 
 from __future__ import annotations
@@ -41,14 +49,13 @@ from pathlib import Path
 
 MATRIX_LIMIT = 256
 
-#: 每一档 = (传给 xcodebuild 的 build settings, 链接后的 strip 档位)。
-#: 两者分开，是因为 strip 不是构建设置能办到的事 —— 见上面的说明。
+#: 每一档 = (传给 xcodebuild 的 build settings, 该次链接要产出的 strip 变体)。
+#: 变体在收集阶段产生，一次链接多份二进制、共用一份 map —— 见上面的说明。
 CONFIGS = {
-    "base":         ("", "none"),
-    "strip_all":    ("", "all"),
-    "no_deadstrip": ("DEAD_CODE_STRIPPING=NO", "none"),
-    "lto":          ("LLVM_LTO=YES", "none"),
-    "wholemodule":  ("SWIFT_COMPILATION_MODE=wholemodule", "none"),
+    "base":         ("", "none,all"),
+    "no_deadstrip": ("DEAD_CODE_STRIPPING=NO", "all"),
+    "lto":          ("LLVM_LTO=YES", "all"),
+    "wholemodule":  ("SWIFT_COMPILATION_MODE=wholemodule", "all"),
 }
 
 
@@ -92,7 +99,7 @@ def main() -> int:
                 "slug": slug(repo),
                 "config_id": config,
                 "build_settings": CONFIGS[config][0],
-                "strip_style": CONFIGS[config][1],
+                "strip_variants": CONFIGS[config][1],
                 "linkage": target.get("linkage", "UNKNOWN"),
             })
 
@@ -103,8 +110,12 @@ def main() -> int:
               f"（每份约 {-(-len(targets) // shards)} 个目标）。", file=sys.stderr)
         return 1
 
+    # 评分单元是 variant 不是 job：strip 与否是配置维度之一。两个数都报，
+    # 免得把「构建了多少次」和「能评多少个对象」混成一个。
+    variants = sum(len(j["strip_variants"].split(",")) for j in include)
     print(f"matrix={json.dumps({'include': include}, ensure_ascii=False)}")
     print(f"count={len(include)}")
+    print(f"variant_count={variants}")
     return 0
 
 

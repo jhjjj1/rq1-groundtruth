@@ -44,12 +44,52 @@ def bucket_of(m):
         else m.get("maps_with_requested_basename")
     if not app_maps:
         return "BUILT_NO_MAP"
-    if not m.get("binary_bytes"):
+    vs = variants_of(m)
+    if not any(v.get("binary_bytes") for v in vs):
         return "BUILT_NO_BINARY"
-    # map 和二进制都在，但节区表对不上号 —— 文件齐全不等于配套。
-    # None 表示没量到（otool 读不出来），和「量了且不一致」都不能算 OK，
-    # 但它们是两件事，所以留在 detail 里可查。
-    if m.get("map_matches_binary") is not True:
+    # map 和二进制都在，但没有任何一个变体的节区表对得上号 ——
+    # 文件齐全不等于配套。
+    if not any(v.get("map_matches_binary") is True for v in vs):
+        return "MAP_BINARY_MISMATCH"
+    return "OK"
+
+
+def variants_of(m):
+    """一个 manifest 的 strip 变体列表。
+
+    老格式（每 job 一个二进制）没有 `variants` 字段，这里合成一个，使两代
+    产物能放进同一张表。合成出来的记录标了 `_synthesized`，因为「老格式补出来
+    的」和「新格式真产出的」不该长得一模一样。
+    """
+    vs = m.get("variants")
+    if isinstance(vs, list):
+        return vs
+    return [{
+        "strip_style": m.get("strip_style") or "none",
+        "binary_bytes": m.get("binary_bytes"),
+        "map_matches_binary": m.get("map_matches_binary"),
+        "strip_did_run": m.get("strip_did_run"),
+        "strip_rc": m.get("strip_rc"),
+        "strip_preserves_layout": m.get("strip_preserves_layout"),
+        "_synthesized": True,
+    }]
+
+
+#: 变体一级的分桶。同样有序互斥，合计等于观测到的变体数。
+VARIANT_BUCKETS = ("OK", "MAP_BINARY_MISMATCH", "STRIP_FAILED",
+                   "NO_BINARY", "STRIP_CHANGED_LAYOUT")
+
+
+def variant_bucket(v):
+    if v.get("strip_did_run") and v.get("strip_rc") not in (0, None):
+        return "STRIP_FAILED"
+    if not v.get("binary_bytes"):
+        return "NO_BINARY"
+    # strip 若改了节区布局，链接时的 map 就不再描述这个二进制 —— 单列一档，
+    # 因为它证伪的是方案的一条地基，不是某个仓库编不过。
+    if v.get("strip_preserves_layout") is False:
+        return "STRIP_CHANGED_LAYOUT"
+    if v.get("map_matches_binary") is not True:
         return "MAP_BINARY_MISMATCH"
     return "OK"
 
@@ -102,7 +142,9 @@ def main(argv=None):
     per_config = collections.defaultdict(collections.Counter)
     per_repo = collections.defaultdict(collections.Counter)
     totals = collections.Counter()
-    ambiguous = []
+    vtotals = collections.Counter()
+    per_variant_style = collections.defaultdict(collections.Counter)
+    ambiguous, synthesized = [], 0
 
     for row in rows:
         m = row.get("_manifest")
@@ -114,6 +156,12 @@ def main(argv=None):
         per_repo[repo][b] += 1
         if m and m.get("scheme_verdict") == "APP_SCHEME_AMBIGUOUS":
             ambiguous.append({"repo": repo, "config": cfg, "scheme": m.get("scheme")})
+        if m:
+            for v in variants_of(m):
+                vb = variant_bucket(v)
+                vtotals[vb] += 1
+                per_variant_style[f"{cfg}/{v.get('strip_style')}"][vb] += 1
+                synthesized += bool(v.get("_synthesized"))
 
     observed = len(rows)
     n_jobs = args.expected or observed
@@ -124,6 +172,7 @@ def main(argv=None):
         totals["MANIFEST_MISSING"] += unaccounted
 
     repos_ok = sum(1 for r, c in per_repo.items() if c["OK"])
+    variants_observed = sum(vtotals.values())
     result = {
         "jobs_expected": n_jobs,
         "manifests_observed": observed,
@@ -133,6 +182,14 @@ def main(argv=None):
         "repos_seen": len(per_repo),
         "repos_with_at_least_one_ok": repos_ok,
         "repo_ok_rate": round(repos_ok / len(per_repo), 4) if per_repo else 0.0,
+        # 变体一级：评分单元是变体，不是 job。两个数分开报，免得把
+        # 「构建了多少次」和「能评多少个对象」混成一个。
+        "variants_observed": variants_observed,
+        "variant_totals": {b: vtotals[b] for b in VARIANT_BUCKETS},
+        "variant_ok_rate": (round(vtotals["OK"] / variants_observed, 4)
+                            if variants_observed else 0.0),
+        "variants_from_legacy_manifests": synthesized,
+        "per_config_variant": {c: dict(v) for c, v in per_variant_style.items()},
         "per_config": {c: dict(v) for c, v in per_config.items()},
         "per_repo": {c: dict(v) for c, v in per_repo.items()},
         "ambiguous_app_scheme": ambiguous,
@@ -156,6 +213,30 @@ def main(argv=None):
     lines.append("")
     lines.append(f"**仓库口径**：{len(per_repo)} 个仓库里，"
                  f"至少一个配置可用的有 **{repos_ok}**（{result['repo_ok_rate']:.1%}）")
+    lines.append("")
+    lines.append("### 可评分变体")
+    lines.append("")
+    lines.append(f"评分单元是 strip 变体，不是 job：一次链接可产出多份二进制、"
+                 f"共用一份 map。本批观测到 **{variants_observed}** 个变体。")
+    if synthesized:
+        lines.append(f"其中 {synthesized} 个是从老格式 manifest 合成的（老格式每 job "
+                     f"只有一个二进制）—— 合成出来的和真产出的不是一回事。")
+    lines.append("")
+    lines.append("| 变体结果 | 个数 | 占比 |")
+    lines.append("|---|---:|---:|")
+    for b in VARIANT_BUCKETS:
+        n = vtotals[b]
+        if not n and b != "OK":
+            continue
+        lines.append(f"| `{b}` | {n} | "
+                     f"{n / variants_observed if variants_observed else 0:.1%} |")
+    if per_variant_style:
+        lines.append("")
+        lines.append("| 配置/变体 | " + " | ".join(f"`{b}`" for b in VARIANT_BUCKETS) + " |")
+        lines.append("|---" * (len(VARIANT_BUCKETS) + 1) + "|")
+        for k in sorted(per_variant_style):
+            c = per_variant_style[k]
+            lines.append(f"| `{k}` | " + " | ".join(str(c[b]) for b in VARIANT_BUCKETS) + " |")
     if ambiguous:
         lines.append("")
         lines.append(f"**{len(ambiguous)} 个 job 的 app scheme 有歧义**"

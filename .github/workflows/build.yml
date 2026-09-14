@@ -58,6 +58,7 @@ jobs:
     outputs:
       matrix: ${{ steps.make.outputs.matrix }}
       count: ${{ steps.make.outputs.count }}
+      variant_count: ${{ steps.make.outputs.variant_count }}
     steps:
       - uses: actions/checkout@v4
       - id: make
@@ -65,7 +66,9 @@ jobs:
           python3 tools/make_matrix.py \
             --targets "targets/${{ inputs.batch }}.json" \
             --configs "${{ inputs.configs }}" >> "$GITHUB_OUTPUT"
-      - run: echo "本次矩阵 ${{ steps.make.outputs.count }} 个 job"
+      - run: |
+          echo "本次矩阵 ${{ steps.make.outputs.count }} 个 job，"\
+               "${{ steps.make.outputs.variant_count }} 个待评分变体"
 
   build:
     needs: plan
@@ -256,7 +259,7 @@ jobs:
             --sha "${{ matrix.sha }}" \
             --config-id "${{ matrix.config_id }}" \
             --build-settings "${{ matrix.build_settings }}" \
-            --strip-style "${{ matrix.strip_style }}" \
+            --strip-variants "${{ matrix.strip_variants }}" \
             --toolchain "${{ steps.toolchain.outputs.desc }}" \
             --pods-did-run "${{ steps.pods.outputs.did_run }}" \
             --spm-did-run "${{ steps.spm.outputs.did_run }}" \
@@ -289,13 +292,21 @@ jobs:
           for k in ("toolchain", "scheme_verdict", "scheme", "scheme_elapsed_s",
                     "map_verdict", "map_mode", "build_outcome",
                     "maps_found", "maps_by_output_kind", "app_map_bytes",
-                    "strip_style", "strip_did_run",
-                    "nsyms_before", "nsyms_after",
-                    "binary_bytes_before_strip", "binary_bytes",
-                    "strip_preserves_layout", "map_matches_binary",
-                    "uuid", "collect_note",
+                    "collect_note", "usable_variants",
                     "usable_for_groundtruth"):
               print(f"| {k} | `{m.get(k)}` |")
+          print()
+          print("| 变体 | strip 跑了 | nsyms 前→后 | 字节 前→后 | 保布局 | map 配套 |")
+          print("|---|---|---|---|---|---|")
+          for v in m.get("variants") or []:
+              nb, na = v.get("nsyms_before"), v.get("nsyms_after")
+              bb, ba = v.get("binary_bytes_before_strip"), v.get("binary_bytes")
+              ns = f"{nb:,} → {na:,}" if (nb is not None and na is not None) else "-"
+              sz = f"{bb:,} → {ba:,}" if (bb is not None and ba is not None) else "-"
+              print(f"| `{v.get('strip_style')}` | {v.get('strip_did_run')} | {ns} | {sz} "
+                    f"| `{v.get('strip_preserves_layout')}` | `{v.get('map_matches_binary')}` |")
+              if v.get("note"):
+                  print(f"| | | | | | ⚠ {v['note'][:120]} |")
           PY
           cat "$M" 2>/dev/null | head -40
 

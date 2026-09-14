@@ -20,11 +20,21 @@ def write(root, name, m):
     (d / "manifest.json").write_text(json.dumps(m), encoding="utf-8")
 
 
+def variant(style="all", ok=True, **kw):
+    v = {"strip_style": style, "binary_bytes": 12345,
+         "map_matches_binary": ok, "strip_did_run": style != "none",
+         "strip_rc": 0 if style != "none" else None,
+         "strip_preserves_layout": True if style != "none" else None}
+    v.update(kw)
+    return v
+
+
 def base(**kw):
     m = {"repo": "o/r", "config_id": "base", "scheme_verdict": "APP_SCHEME_FOUND",
          "map_verdict": "MAP_MODE_CHOSEN", "build_outcome": "success",
          "maps_by_output_kind": {"APP_BUNDLE": 1, "PRELINK_OBJECT": 30},
-         "binary_bytes": 12345, "map_matches_binary": True}
+         "strip_variants_requested": ["none", "all"],
+         "variants": [variant("none"), variant("all")]}
     m.update(kw)
     return m
 
@@ -34,23 +44,28 @@ def main():
     with tempfile.TemporaryDirectory() as td:
         write(td, "j1", base(repo="a/a"))
         write(td, "j2", base(repo="b/b", build_outcome="failure",
-                             maps_by_output_kind={}, binary_bytes=None))
+                             maps_by_output_kind={}, variants=[]))
         # 编过了、产出了 30 个 prelink map，但没有 app bundle 的那个
         write(td, "j3", base(repo="c/c",
                              maps_by_output_kind={"PRELINK_OBJECT": 30},
-                             binary_bytes=None))
-        write(td, "j4", base(repo="d/d", binary_bytes=None))
+                             variants=[]))
+        write(td, "j4", base(repo="d/d",
+                             variants=[variant("all", binary_bytes=None)]))
         write(td, "j5", base(repo="e/e", scheme_verdict="NO_APP_SCHEME_OBSERVED"))
         write(td, "j6", base(repo="f/f", map_verdict="NO_USABLE_MAP_MODE"))
         write(td, "j7", base(repo="a/a", config_id="strip_all",
                              scheme_verdict="APP_SCHEME_AMBIGUOUS", scheme="Zeta"))
         # scheme 和 map mode 都拿到了，但构建那步被跳过（mapmode 步骤中途崩了）
         write(td, "j8", base(repo="g/g", build_outcome="skipped",
-                             maps_by_output_kind={}, binary_bytes=None))
+                             maps_by_output_kind={}, variants=[]))
         # 文件都在，但 map 的节区表和二进制对不上 —— 不能算 OK
-        write(td, "j9", base(repo="h/h", map_matches_binary=False))
+        write(td, "j9", base(repo="h/h",
+                             variants=[variant("none", ok=False),
+                                       variant("all", ok=False)]))
         # 没量到（otool 读不出来）也不能算 OK，但它和「量了且不一致」是两件事
-        write(td, "j10", base(repo="i/i", map_matches_binary=None))
+        write(td, "j10", base(repo="i/i",
+                              variants=[variant("none", ok=None),
+                                        variant("all", ok=None)]))
         out = str(pathlib.Path(td) / "agg.json")
         # 本批本应有 10 个 job，只回收到 8 份 manifest
         A.main(["--artifacts-dir", td, "--expected", "12", "--out", out])
@@ -73,6 +88,20 @@ def main():
     # 代码里 ok_rate 是 round(x, 4)，容差不能比它还紧
     if abs(res["ok_rate"] - round(2 / 12, 4)) > 1e-9:
         fails.append(f"ok_rate={res['ok_rate']}, 期望 {round(2/12,4)}（分母是 12 不是 10）")
+    # 变体一级：j1(2 OK) + j5..j7(各 2 OK) = 8 个 OK
+    #   j4 一个 NO_BINARY；j9/j10 各 2 个 MAP_BINARY_MISMATCH
+    #   j2/j3/j8 的 variants 为空，不贡献变体
+    vt = res["variant_totals"]
+    if res["variants_observed"] != sum(vt.values()):
+        fails.append(f"变体合计 {sum(vt.values())} != variants_observed "
+                     f"{res['variants_observed']}")
+    if vt["NO_BINARY"] != 1:
+        fails.append(f"变体 NO_BINARY={vt['NO_BINARY']}, 期望 1")
+    if vt["MAP_BINARY_MISMATCH"] != 4:
+        fails.append(f"变体 MAP_BINARY_MISMATCH={vt['MAP_BINARY_MISMATCH']}, 期望 4")
+    if res["variants_from_legacy_manifests"] != 0:
+        fails.append("新格式不该触发老格式合成")
+
     if len(res["ambiguous_app_scheme"]) != 1:
         fails.append(f"ambiguous 记了 {len(res['ambiguous_app_scheme'])} 条, 期望 1")
     # a/a 两个配置，base 成功 strip_all 也成功 -> 仓库口径算 1 个成功
@@ -84,7 +113,32 @@ def main():
         for f in fails:
             print("  -", f)
         return 1
+    # 老格式 manifest（无 variants 字段）必须能被合成进同一张表，并标记来源
+    with tempfile.TemporaryDirectory() as td:
+        legacy = {"repo": "old/old", "config_id": "base",
+                  "scheme_verdict": "APP_SCHEME_FOUND",
+                  "map_verdict": "MAP_MODE_CHOSEN", "build_outcome": "success",
+                  "maps_by_output_kind": {"APP_BUNDLE": 1},
+                  "binary_bytes": 999, "map_matches_binary": True,
+                  "strip_style": "none"}
+        write(td, "old", legacy)
+        out = str(pathlib.Path(td) / "o.json")
+        A.main(["--artifacts-dir", td, "--expected", "1", "--out", out])
+        r = json.loads(open(out).read())
+    if r["totals"]["OK"] != 1:
+        fails.append(f"老格式 job 没判成 OK：{r['totals']}")
+    if r["variants_observed"] != 1 or r["variants_from_legacy_manifests"] != 1:
+        fails.append(f"老格式合成计数错：{r['variants_observed']} / "
+                     f"{r['variants_from_legacy_manifests']}")
+
+    if fails:
+        print("FAIL")
+        for f_ in fails:
+            print("  -", f_)
+        return 1
     print("PASS  分桶守恒：10 份 manifest + 2 个没回收 = 12，与 jobs_expected 一致")
+    print(f"      变体一级：{res['variants_observed']} 个，合计守恒；"
+          f"老格式 manifest 能合成并标记来源")
     print(f"      ok_rate={res['ok_rate']} （分母用应有 job 数，不是回收数）")
     return 0
 

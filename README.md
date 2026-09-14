@@ -58,11 +58,14 @@ curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 
 | id | 设置 | 打什么 |
 |---|---|---|
-| `base` | Release / -Os | 基线 |
-| `strip_all` | `STRIP_STYLE=all` | 符号名没了 → 定位阶梯与符号族证据。**最大杠杆** |
+| `base` | Release / -Os | 基线。**产 `none` + `all` 两个变体** |
 | `no_deadstrip` | `DEAD_CODE_STRIPPING=NO` | 哪些桩还在（路线 B 的导入面也依赖它） |
 | `lto` | `LLVM_LTO=YES` | 跨 .o 内联。**会让 ground truth 本身变弱**，单独报 |
 | `wholemodule` | `SWIFT_COMPILATION_MODE=wholemodule` | 模块内跨文件内联 |
+
+strip 不是配置，是**变体**：由收集阶段在链接之后执行，一次链接可产多份二进制、
+共用一份 map。`none` = 未 strip（诊断用），`all` = 全 strip（与语料库形态一致）。
+`strip_all` 这个配置名已废弃 —— 它曾经是个什么都没做的 build setting。
 
 ## 产物
 
@@ -154,7 +157,10 @@ BUILD_NOT_ATTEMPTED / NO_USABLE_MAP_MODE / NO_APP_SCHEME / MANIFEST_MISSING
 原本写的是三条「还没验的前提」。跑完之后，**其中两条的措辞是错的**，错在我，
 不在实现。修正后的版本和各自的证据：
 
-### 前提 1（原：strip 前后地址不变）—— 表述错了
+> **三条全部验完（build run #3，Xcode 26.2）。**两条的措辞是错的，改了；
+> 改对之后都成立。下面每条都带自己的实测证据。
+
+### 前提 1（原：strip 前后地址不变）—— 表述错了，改对后成立
 
 原来的验法是拿 `base` 和 `strip_all` 两次**独立构建**去比。实测：
 
@@ -168,11 +174,32 @@ __text  size 17,316,112 vs 17,316,424    起始地址相同，差 312 字节
 一次链接内部闭环，从不跨配置复用 map。所以这条约束是我当初多加的。
 
 正确的表述是：**同一次链接产出的 map，对该次 `strip` 之后的二进制仍然有效**
-—— 因为 `strip` 是链接后的后处理。现在由 `collect_build_artifacts.py` 在同一个
-job 里 strip 前后各量一次节区表，把结果写进 `strip_preserves_layout`。
-每个 job 自带这个数，不再是写在文档里的假设。
+—— 因为 `strip` 是链接后的后处理。实测（同一次链接内部）：
 
-### 前提 2（原：靠 `LC_UUID` 比对）—— 判据不存在
+```
+nsyms   695,589 → 5,186          降 99.25%
+字节    62,702,680 → 24,647,512   降 60.7%
+strip_preserves_layout = True     节区表逐条不变
+map_matches_binary     = True     且是在 strip 之后仍然成立
+```
+
+最后一行是整个方案的地基：strip 后的二进制，节区表仍与链接时的 map 逐条相等，
+所以「在 strip 后的二进制上跑归属算法、用链接时的 map 当真值」站得住。
+每个 job 自带这三个数，不再是写在文档里的假设。
+
+**这也改变了矩阵形态。**既然 strip 保布局，未 strip 和 strip 后就是**同一次链接
+的两个视图**，不是两个实验。由一次构建产出两份二进制、共用一份 map：既去掉了
+「两次独立构建本身就有差异」这个混杂，也省掉每个仓库一整次构建。
+
+| | job | 待评分变体 |
+|---|---:|---:|
+| 原（5 配置 × 181） | 905 | 905 |
+| 现（4 配置 × 181，base 产双变体） | **724** | 905 |
+
+只有 `base` 需要未 strip 的那一份（诊断用）；其余三档只产 strip 后的，因为那
+才是语料库里真实 App Store 二进制的形态。
+
+### 前提 2（原：靠 `LC_UUID` 比对）—— 判据不存在，换成节区表后成立
 
 map 文件里**没有 UUID 字段**（解析 315,059 行，只有 `# Path:` / `# Arch:` /
 `# Sections:` / `# Symbols:` / `# Dead Stripped Symbols:`）。而且 `LC_UUID`
@@ -192,7 +219,7 @@ map 文件里**没有 UUID 字段**（解析 315,059 行，只有 `# Path:` / `#
 现在每个 job 自动做这件事，结果写进 `map_matches_binary`，并且**它是
 `usable_for_groundtruth` 的必要条件**：文件都在但对不上号，这份产物判负。
 
-### 前提 3（`.a(x.o)` → 单元名可回查）—— 成立，且对 SwiftPM 是平凡的
+### 前提 3（`.a(x.o)` → 单元名可回查）—— 成立，对 SwiftPM 是平凡的
 
 app 主二进制的 map 里 192 个 object file **全部**由具名规则推出单元，
 `NO_RULE_MATCHED` = 0，共 119 个单元。SwiftPM 依赖以 `<产品名>.o` 形式进来，
