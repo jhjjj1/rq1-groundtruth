@@ -1,0 +1,580 @@
+{
+  "targets": [
+    {
+      "repo": "rainbow-me/rainbow",
+      "sha": "606f20e96716735dc2d513b8979c81ab9bd66a20",
+      "linkage": "STATIC_LIKELY",
+      "stars": 4387,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "sha": "36128517801825b033a9c1963f76dd42d81f9ca4",
+      "linkage": "STATIC_LIKELY",
+      "stars": 1267,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "bither/bither-ios",
+      "sha": "4ca7b12e5630fd94a50e8a3919abf357988588f4",
+      "linkage": "STATIC_LIKELY",
+      "stars": 273,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "herzbube/littlego",
+      "sha": "8e2a7b80ec900e437673e37b5ede4655f079ffc9",
+      "linkage": "STATIC_LIKELY",
+      "stars": 156,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "sha": "7969212a8b6c938f93391d6e37666cc2c4a4c207",
+      "linkage": "STATIC_LIKELY",
+      "stars": 143,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "sha": "645ceb89944c8fe4024de6a467b5fc0c2fe69402",
+      "linkage": "STATIC_LIKELY",
+      "stars": 86,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "sha": "5d8b5bee17c803e79eebb8fb7849c4bdb85bf876",
+      "linkage": "STATIC_LIKELY",
+      "stars": 10,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "utmapp/UTM",
+      "sha": "b6f7475be54f9cb542c46b131319454b83489ced",
+      "linkage": "SPM_ONLY",
+      "stars": 35479,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "sha": "4df04bdb3ff94059734ad2da7d2766de6dba2cc7",
+      "linkage": "SPM_ONLY",
+      "stars": 19433,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "sha": "377da4061db10d26337a71bb279c506bb951f50f",
+      "linkage": "SPM_ONLY",
+      "stars": 14907,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mozilla-mobile/firefox-ios",
+      "sha": "861fd78df99a65f1919573ae5eba49618d2035f9",
+      "linkage": "SPM_ONLY",
+      "stars": 13040,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "sha": "dc74019c2434acf4a9a7826e709257a4a2541361",
+      "linkage": "SPM_ONLY",
+      "stars": 10377,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "sha": "6ad963e5b62d354da79040f388ae2b9132fb17b8",
+      "linkage": "SPM_ONLY",
+      "stars": 8966,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "sha": "00d8ab3346085cd1626a538564c1aa512e0b7c2c",
+      "linkage": "SPM_ONLY",
+      "stars": 8673,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "sha": "3a4e4bc40ddacf10de610baebb1f5712c724a0fc",
+      "linkage": "SPM_ONLY",
+      "stars": 7563,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "glushchenko/fsnotes",
+      "sha": "4e44ff472b231c595d87199bcdba0e84e0be4d5d",
+      "linkage": "SPM_ONLY",
+      "stars": 7487,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "sha": "b2db3033fbf67a97b54d25d6dac2df8a029b26b1",
+      "linkage": "SPM_ONLY",
+      "stars": 7061,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "blinksh/blink",
+      "sha": "a90b4423c8b7a86770c24a7eaa6c13b0a5904b18",
+      "linkage": "SPM_ONLY",
+      "stars": 6938,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "gluonfield/enchanted",
+      "sha": "dc9bff882411a1317ff0cc5869de7e0515897df0",
+      "linkage": "SPM_ONLY",
+      "stars": 5998,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "claration/Feather",
+      "sha": "b018fca4182c4e6bd158ba6b4d63b2ea8b71cd7c",
+      "linkage": "SPM_ONLY",
+      "stars": 4702,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "sha": "2b80dcfe3ff081ddefa152b87a3e16b84375c13c",
+      "linkage": "SPM_ONLY",
+      "stars": 4162,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "sha": "37b979965cf7c4778877c795e8df60c2c0ff6eb3",
+      "linkage": "SPM_ONLY",
+      "stars": 3976,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "sha": "13f66f3edf2fed50d00b0b2975a98d28a712f734",
+      "linkage": "SPM_ONLY",
+      "stars": 3917,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "sha": "c93026039350e65a191cbe1fdbf1753f364978f0",
+      "linkage": "SPM_ONLY",
+      "stars": 3907,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "yattee/yattee",
+      "sha": "2969b086924b1d9f490615fee57ba42761fa8973",
+      "linkage": "SPM_ONLY",
+      "stars": 3685,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "zzanehip/The-OldOS-Project",
+      "sha": "a2e454d0a4155c8969d236340b37b865376a69de",
+      "linkage": "SPM_ONLY",
+      "stars": 3532,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "wikimedia/wikipedia-ios",
+      "sha": "9db6a52a416a3005c53e668cd853bf5438cd9815",
+      "linkage": "SPM_ONLY",
+      "stars": 3449,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "joreilly/PeopleInSpace",
+      "sha": "0d5cd8b09cf9c83dbf6a1e72a546efdd1b77c301",
+      "linkage": "SPM_ONLY",
+      "stars": 3428,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "airbnb/HorizonCalendar",
+      "sha": "257927434aecbc4a70163570b5ef40976f0428a2",
+      "linkage": "SPM_ONLY",
+      "stars": 3158,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "sha": "706aa63aee68571700f4c09132b99c691427b93a",
+      "linkage": "SPM_ONLY",
+      "stars": 3136,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "analogcode/Swift-Radio-Pro",
+      "sha": "b2b4a457da2fdbba0ba532a2bb2e92a4bb703855",
+      "linkage": "SPM_ONLY",
+      "stars": 2941,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "0xCUB3/wBlock",
+      "sha": "d38efb8afbe8ff3fd1adc59e1053803643630765",
+      "linkage": "SPM_ONLY",
+      "stars": 2880,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "ml-explore/mlx-swift-examples",
+      "sha": "378f2449c257788c5067b9f8b086731d76b39b33",
+      "linkage": "SPM_ONLY",
+      "stars": 2664,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "nextcloud/ios",
+      "sha": "c340d1f82f4cf8b6c60109c074436e3a4bc0394c",
+      "linkage": "SPM_ONLY",
+      "stars": 2499,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "sha": "f39cc7e1547ed5e11f4eb55615af252100f3540f",
+      "linkage": "SPM_ONLY",
+      "stars": 2348,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "sha": "44886cb39a537dc4637f3f33c8d5a6638ff398c7",
+      "linkage": "SPM_ONLY",
+      "stars": 2330,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "sha": "154895b90b5b3612b77972923bd1d22fde49fffa",
+      "linkage": "SPM_ONLY",
+      "stars": 2207,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "sha": "9615a490e34794696e05454b4d66411f4b408ea5",
+      "linkage": "SPM_ONLY",
+      "stars": 2150,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "sha": "b75268ca6c501ad15f179bfc5cfb623827afc263",
+      "linkage": "SPM_ONLY",
+      "stars": 2063,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "sha": "11f73f186d1d611c9c74f4558007dd9a62593a2b",
+      "linkage": "SPM_ONLY",
+      "stars": 1905,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "rafsoh/dimeApp",
+      "sha": "0463cb8caba237de781ae02e70a2ec82ae900c67",
+      "linkage": "SPM_ONLY",
+      "stars": 1886,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "sha": "13c2832b4bea9d157698b464f1fc878f87d413ee",
+      "linkage": "SPM_ONLY",
+      "stars": 1822,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "sha": "28fb7308f1420d9cae15d1d5decc8913e3b7d368",
+      "linkage": "SPM_ONLY",
+      "stars": 1701,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "keepassium/KeePassium",
+      "sha": "e651df4f89b0b8550371566ca9aa55a964d2904e",
+      "linkage": "SPM_ONLY",
+      "stars": 1690,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "sha": "1a382aad432aa5afbe4e922f90a574c2450394be",
+      "linkage": "SPM_ONLY",
+      "stars": 1686,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "sha": "85af0f75622bb2636481afda8b0fc5cc33d5956e",
+      "linkage": "SPM_ONLY",
+      "stars": 1659,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mssun/passforios",
+      "sha": "cb836aaeda1828fd9aff55773c3d355d049dc426",
+      "linkage": "SPM_ONLY",
+      "stars": 1644,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "sha": "7a56507585544f9fc787b2bc905d9a5175c64772",
+      "linkage": "SPM_ONLY",
+      "stars": 1398,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "rajdeep/proton",
+      "sha": "30c0f87c48ccba6f89935d16096b6c01c204a82d",
+      "linkage": "SPM_ONLY",
+      "stars": 1379,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "sha": "da9ec5a2af9ec3b7ad17f869b1c4124f4bc010ca",
+      "linkage": "SPM_ONLY",
+      "stars": 1361,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "sha": "27deb82521cb5185d807ec63e7e9019f09a7100d",
+      "linkage": "SPM_ONLY",
+      "stars": 1180,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "sha": "64aae09c6da0e39b4373575b9fcb5a552f232598",
+      "linkage": "SPM_ONLY",
+      "stars": 945,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "sha": "5e18532e9f6be6afce724b996f8ddc2fc67391da",
+      "linkage": "SPM_ONLY",
+      "stars": 852,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "sha": "06e60f2c196847b5bec0315ed8672effb4b8dab3",
+      "linkage": "SPM_ONLY",
+      "stars": 850,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "sha": "f6ba775ed0a0f518150619e610c2548c0e047f63",
+      "linkage": "SPM_ONLY",
+      "stars": 829,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "awaseem/foqos",
+      "sha": "a58e407d08f44f365daf93641aadc43e64cfc63c",
+      "linkage": "SPM_ONLY",
+      "stars": 811,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "weiran/Hackers",
+      "sha": "d72c6e15b9891ba410126b8167fcb8ea03a05111",
+      "linkage": "SPM_ONLY",
+      "stars": 763,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "sha": "e56c10cb376baaa3ada49b29b8396e1ab9293942",
+      "linkage": "SPM_ONLY",
+      "stars": 763,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "sha": "4a2e73428ee12046c068d57dca1590c928596503",
+      "linkage": "SPM_ONLY",
+      "stars": 735,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "jasudev/FabulaItemsProvider",
+      "sha": "af08a0815e21889db8251578ec28c2c27e5b27b1",
+      "linkage": "SPM_ONLY",
+      "stars": 724,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "bitwarden/ios",
+      "sha": "81be7a7fad5bcdad0c108957919daac6997f5fec",
+      "linkage": "SPM_ONLY",
+      "stars": 684,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "sha": "6973fc1f7703314d80cada3eba377766c55710e5",
+      "linkage": "SPM_ONLY",
+      "stars": 651,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "sha": "cf8b23beaaac4126a396337ac2d5be13f9f76b66",
+      "linkage": "SPM_ONLY",
+      "stars": 582,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "sha": "844b073ed0bb8365ebc7746e5eb3a535df2cdb7b",
+      "linkage": "SPM_ONLY",
+      "stars": 578,
+      "locks": [
+        "Package.resolved"
+      ]
+    }
+  ]
+}

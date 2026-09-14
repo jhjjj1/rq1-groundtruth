@@ -1,0 +1,594 @@
+{
+  "targets": [
+    {
+      "repo": "niochat/nio",
+      "sha": "bccc7792f92a605009a3f6069e179300e5176c04",
+      "linkage": "SPM_ONLY",
+      "stars": 558,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Dimillian/IcySky",
+      "sha": "03560c6a30277175ea91a6bfc63b50380542017c",
+      "linkage": "SPM_ONLY",
+      "stars": 535,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "peterfriese/MakeItSo",
+      "sha": "1e089b47b52adc33551eac948bd8c4ff55298632",
+      "linkage": "SPM_ONLY",
+      "stars": 524,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "owntracks/ios",
+      "sha": "285f915a233cc022f6963573e7cc3ba679e15cd5",
+      "linkage": "SPM_ONLY",
+      "stars": 445,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "vincode-io/Zavala",
+      "sha": "1dffb452140879b8b096409849bdaf216520c4f2",
+      "linkage": "SPM_ONLY",
+      "stars": 426,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "threema-ch/threema-ios",
+      "sha": "356ae5ca9ae3944d622aa5ae714d02d16cd03bd7",
+      "linkage": "SPM_ONLY",
+      "stars": 421,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "cranci1/Sora",
+      "sha": "28f55f3d273b0dd32338e564324054287e500ff9",
+      "linkage": "SPM_ONLY",
+      "stars": 421,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "AnderGoig/github-contributions-ios",
+      "sha": "1eb838a85ac9dac0df29c02c8fd010b5a384fa57",
+      "linkage": "SPM_ONLY",
+      "stars": 388,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "zizicici/Off-Day",
+      "sha": "59850651d495ca70f3bb36d935198f1c74a76c91",
+      "linkage": "SPM_ONLY",
+      "stars": 388,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "woocommerce/woocommerce-ios",
+      "sha": "7d3b1684aa0e6a4207a06aac38b6fe5ad8cc43d7",
+      "linkage": "SPM_ONLY",
+      "stars": 359,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "pia-foss/mobile-ios",
+      "sha": "cb90dd04b0868c0da7e598e95e0feba30016afe5",
+      "linkage": "SPM_ONLY",
+      "stars": 350,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Dimillian/FoundationChat",
+      "sha": "10f46eb4954a994368d76c0273164e4f8da512f2",
+      "linkage": "SPM_ONLY",
+      "stars": 347,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "youstanzr/YouTag",
+      "sha": "f0077608406dfef8d1861270e9f7c50cd2f0514d",
+      "linkage": "SPM_ONLY",
+      "stars": 343,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mikaelacaron/Basic-Car-Maintenance",
+      "sha": "f42a49b6196122337f9f9469f4cebe2f66f74d76",
+      "linkage": "SPM_ONLY",
+      "stars": 336,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "criticalmaps/criticalmaps-ios",
+      "sha": "f1f8e8cc3dc533aac35d4ceb6b2265e25a7c6940",
+      "linkage": "SPM_ONLY",
+      "stars": 318,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "nightscout/nightguard",
+      "sha": "75404bd204e01c49bb73cf19f9ee54ab62a193df",
+      "linkage": "SPM_ONLY",
+      "stars": 280,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "lukeswitz/DragonSync-iOS",
+      "sha": "c9ec702f87f604bdb62399e17bf058450d5c0c85",
+      "linkage": "SPM_ONLY",
+      "stars": 273,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "duckduckgo/apple-browsers",
+      "sha": "f8243b65577ec49ffa810cf54e7274c6f3537ad1",
+      "linkage": "SPM_ONLY",
+      "stars": 252,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mlemgroup/mlem",
+      "sha": "2b0e2ff3f9809298d155a11d7a5c29a0d9ee9e31",
+      "linkage": "SPM_ONLY",
+      "stars": 248,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "joreilly/StarWars",
+      "sha": "7d2273cace2205ebb6b99beb9e5faf1d199a5f96",
+      "linkage": "SPM_ONLY",
+      "stars": 243,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "gdombiak/OctoPod",
+      "sha": "99cdd372693604722cc910af924e14895c0951d9",
+      "linkage": "SPM_ONLY",
+      "stars": 238,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "richardtop/CalendarApp",
+      "sha": "b4903ce323c07f525bb076e24116c270d8cc8d09",
+      "linkage": "SPM_ONLY",
+      "stars": 232,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "EmergeTools/hackernews",
+      "sha": "6eea866e77e956a32fe8435b7427501284f47517",
+      "linkage": "SPM_ONLY",
+      "stars": 219,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "openhab/openhab-ios",
+      "sha": "592f6ffc0690b7cb0d71204d13aabbb5b6ac901f",
+      "linkage": "SPM_ONLY",
+      "stars": 209,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "altstoreio/AltStore",
+      "sha": "56854e66fef2eac32dad88dcbad1dc131d430e60",
+      "linkage": "BOTH",
+      "stars": 14368,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "Finb/Bark",
+      "sha": "8c7973fa7a7791c766f70bfe044d6044e16a3045",
+      "linkage": "BOTH",
+      "stars": 9088,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "Provenance-Emu/Provenance",
+      "sha": "93f49b4079df204fcd77f29883d00bb5bde629d4",
+      "linkage": "BOTH",
+      "stars": 6373,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "rileytestut/Delta",
+      "sha": "c1d3d068e019e6493eed45654569db3cc5beb86a",
+      "linkage": "BOTH",
+      "stars": 6111,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "element-hq/element-ios",
+      "sha": "2552faab76b23e505d80f10ca09848b24069b53d",
+      "linkage": "BOTH",
+      "stars": 1842,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "vinhnx/Clendar",
+      "sha": "422d0de1eb38b334c91d6f8336164aa7077b0977",
+      "linkage": "BOTH",
+      "stars": 729,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "monal-im/Monal",
+      "sha": "a206db31f552dd0884a6cdf7af096a5a89fec586",
+      "linkage": "BOTH",
+      "stars": 671,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "cinderella-project/iMast",
+      "sha": "0dca942ea8b2a02bdaddeb220fc860a6220e02f5",
+      "linkage": "BOTH",
+      "stars": 121,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "bigjermaine/SwiftTracker",
+      "sha": "fda02fefc4a9845add69111019b7cc5f7b146b76",
+      "linkage": "BOTH",
+      "stars": 105,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "soramitsu/fearless-iOS",
+      "sha": "b252a63272afc9ec39e8e1b9153792096bc2d904",
+      "linkage": "BOTH",
+      "stars": 93,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "iBurnApp/iBurn-iOS",
+      "sha": "bc90c99852d33a4e8e78fab5564c06bcc68e077a",
+      "linkage": "BOTH",
+      "stars": 80,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "asuc-octo/berkeley-mobile-ios",
+      "sha": "3c4517a22ff73d5e888e0410c2975ed1d59ae30d",
+      "linkage": "BOTH",
+      "stars": 27,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "miataru/miataru-ios-client",
+      "sha": "3e06f6621be0e3f686b4370b0e9e46260775b8f2",
+      "linkage": "BOTH",
+      "stars": 20,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "walktalkmeditate/pilgrim-ios",
+      "sha": "0fc1f4c2e21a0a44ecf1c0d59c2fb152b300c31b",
+      "linkage": "BOTH",
+      "stars": 13,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "signalapp/Signal-iOS",
+      "sha": "16cf50a6de143c9e1d0b044f6f258f107916116c",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 12239,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "artsy/eigen",
+      "sha": "27fc6da51c093e696a26c2c23a358dc7a31e9981",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 3773,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "OnionBrowser/OnionBrowser",
+      "sha": "725493bf16e26abc1379eed21b3937e68de8cec3",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 2678,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "mateusz-bak/openreads",
+      "sha": "74b613b0b3fc3a6e106fdc5aaede354e45ed4e58",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 1633,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "zulip/zulip-mobile",
+      "sha": "d7cf6da79b4b9467e240b42f24330e97390a8aff",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 1348,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "timfraedrich/OutRun",
+      "sha": "f2ecb3862ef63c7913e5f1754a47c961fd89dd16",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 875,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "kudoleh/iOS-Modular-Architecture",
+      "sha": "02b207642a714495fe5b647b8b6562b184f5a897",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 849,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "DeluxeAlonso/UpcomingMovies",
+      "sha": "d07c8853630c853d4d4cb8f3defb783bb664e48a",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 598,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "deltachat/deltachat-ios",
+      "sha": "6fa94c2b70e4ce1392c6c3bb76eea8560baaf758",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 449,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "guardianproject/orbot-apple",
+      "sha": "82f3ed96ec9f540f6a82cc6b19bf7e712657e4fb",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 305,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "tinode/ios",
+      "sha": "a4db1251549c40b7aa4f269cd79234eb4c07baff",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 291,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "Say-Their-Name/say-their-names-ios",
+      "sha": "e9d9f7a4c529ca3769a0f3bce4b16c4f33145321",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 245,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "leathalman/Jotify",
+      "sha": "219ed7ee020558cf505494a345ef7c82d3f1f441",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 175,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "StepicOrg/stepik-ios",
+      "sha": "5fc20cc066d85916ffb7126e3b918a31b80afdb0",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 170,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "ooni/probe-multiplatform",
+      "sha": "b14279feb917dff7d6b68e65d751e4f92b34b19d",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 91,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "netless-io/flat-ios",
+      "sha": "18fe31c0c765c9ecf6dfe7d17e9dfd5122a51dce",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 59,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "lionheart/Pushpin",
+      "sha": "6947a88276f8fc208b4adbb91d832d1d4ce076f0",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 57,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "suicidesafetyplan/safetyplan-ios",
+      "sha": "dcc67ef10a2069383a5ae6f0a5ee6d5c3b1253ae",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 27,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "chunkyguy/PhotoApp",
+      "sha": "9cf22ea86a3db369ca2a234494f02d48a9d80a1c",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 15,
+      "locks": [
+        "Podfile.lock"
+      ]
+    },
+    {
+      "repo": "daneden/Zeitgeist",
+      "sha": "56c776cbb75248a3dcb49b73ba4260b283e7923b",
+      "linkage": "SPM_ONLY",
+      "stars": 205,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "jpsim/Milestones",
+      "sha": "55f12be2879b398588af3a462146d048f572e5cb",
+      "linkage": "SPM_ONLY",
+      "stars": 204,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "tls-inspector/tls-inspector",
+      "sha": "bd4632f663a08b34d5f040dd1817b943b45d693c",
+      "linkage": "SPM_ONLY",
+      "stars": 196,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "AnthonyH93/GoCycling",
+      "sha": "12f0cfdf37d03b90672a1a1f20b24459962c5e94",
+      "linkage": "SPM_ONLY",
+      "stars": 195,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "simple-login/Simple-Login-iOS",
+      "sha": "4b50dda9f74f14b6b2dfa5caa6a3733187e61a76",
+      "linkage": "SPM_ONLY",
+      "stars": 179,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "ProtonDriveApps/ios-drive",
+      "sha": "09d80671b0485718b235edf50026feaf619a50de",
+      "linkage": "SPM_ONLY",
+      "stars": 177,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "wireapp/wire-ios",
+      "sha": "81459fc7589539d51bf2ed10ca692dddee2f3901",
+      "linkage": "SPM_ONLY",
+      "stars": 169,
+      "locks": [
+        "Package.resolved"
+      ]
+    }
+  ]
+}

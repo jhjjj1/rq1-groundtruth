@@ -13,6 +13,45 @@
   （「N 个开源 iOS 应用里只有 M 个能复现构建」），失败必须被记录而不是中止全批。
 * **钉死 commit sha**：ground truth 是某一次构建的产物，对不上 commit 就不可复现。
 
+## 拉产物（`tools/fetch_run.py`）
+
+一批 256 个 job 产出 257 个 artifact、7~9 GB，手动拉不现实。两个坑足以让
+「拉完了」和「拉全了」长得一样：
+
+* **分页**：`/actions/runs/{id}/artifacts` 默认每页 100 条，不翻页只拿到前
+  100 个，**接口不会报错**，剩下 157 份静默消失。job 列表同理。
+* **重定向**：下载地址跳到另一台主机，`curl` 默认不把 Authorization 带过去
+  （这是对的），所以用 curl 下载、用 API 取元数据，不自己跟跳转。
+
+脚本会翻页、断点续传（已下好的跳过）、并做**对账**：接口说多少个，本地就得
+有多少个目录，对不上非零退出。
+
+```bash
+nohup python3 tools/fetch_run.py \
+  --out-dir ~/autodl-tmp/gt/batch01 --wait \
+  --aggregate tools/aggregate_manifests.py \
+  > ~/autodl-tmp/gt/batch01.log 2>&1 &
+```
+
+## 分批（硬限制）
+
+GitHub 的矩阵上限是 **256 job / 每次 run**。配置 4 档，所以每批最多 64 个目标。
+181 个目标 → **3 个 batch，合计 724 job、905 个待评分变体**。
+
+`make_targets.py --per-batch 0` 会按 `make_matrix.CONFIGS` 的档数自动取最大值，
+不再硬编码 —— 上一版写死 5 档，而配置改成 4 档之后那句「每批多少个不超限」
+就悄悄说错了。
+
+### 选样守恒
+
+`targets/_excluded.json` 逐个记下**没成为目标的候选**及其理由
+（`NOT_SELECTED__OVER_TARGET_N` / `SHA_UNAVAILABLE`），并强制
+**候选 = 目标 + 落选**，对不上直接失败。
+
+这条是为一次实跑事故加的：181 个候选跑出 180 个目标 —— 四档配额各做一次
+`int()` 向下取整（45+81+27+27=180），补位按 `sum(shortfall)` 补，正好剩一个
+`SPM_ONLY` 没人要。丢一个样本不算大事，**丢了却没人知道是谁**才是问题。
+
 ## 硬限制（决定矩阵怎么切）
 
 | | |

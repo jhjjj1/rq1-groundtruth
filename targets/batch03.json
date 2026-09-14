@@ -1,0 +1,481 @@
+{
+  "targets": [
+    {
+      "repo": "5calls/ios",
+      "sha": "f3e34a71af9ed2c0ac50d86e17114dcbaaeadd63",
+      "linkage": "SPM_ONLY",
+      "stars": 168,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "ldakhoa/GistHub",
+      "sha": "05c63a4b9f98401891d0c09a18d9b1547f94199b",
+      "linkage": "SPM_ONLY",
+      "stars": 154,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "eugenepyvovarov/CodeAgentsMobile",
+      "sha": "e815702e7f313fd313f75aef692a88cc305e2f1e",
+      "linkage": "SPM_ONLY",
+      "stars": 152,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "SwissCovid/swisscovid-app-ios",
+      "sha": "25194212ff8ccafc8cc98bdf0d8f7174c7d5170e",
+      "linkage": "SPM_ONLY",
+      "stars": 145,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "VishwaiOSDev/Loadify-iOS",
+      "sha": "64a0934c5040007d79927241045ddf672b65bd45",
+      "linkage": "SPM_ONLY",
+      "stars": 144,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Thomvis/Construct",
+      "sha": "65db2bb055985933cf6121043b6eb01b79f1bd48",
+      "linkage": "SPM_ONLY",
+      "stars": 124,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "gematik/E-Rezept-App-iOS",
+      "sha": "ecdc4712aaeb707cd45bef9e0d912c441e870005",
+      "linkage": "SPM_ONLY",
+      "stars": 124,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "XunMengWinter/PetNote-oss",
+      "sha": "ed28632f49470b05c40a291edd8323b495946b66",
+      "linkage": "SPM_ONLY",
+      "stars": 120,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "daneden/Solstice",
+      "sha": "1b9acee9261f3f9e75829c04c6c9387d78437f50",
+      "linkage": "SPM_ONLY",
+      "stars": 115,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "joreilly/WordMasterKMP",
+      "sha": "e7c194a8cd54cd7c6c86f03a6f7c168486720730",
+      "linkage": "SPM_ONLY",
+      "stars": 106,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "catrobat/catty",
+      "sha": "ba4cdafba2a4312290a1f0c96064200b32b20510",
+      "linkage": "SPM_ONLY",
+      "stars": 104,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "jeffreybergier/Hipstapaper",
+      "sha": "2632929a3a65dc9dc8ee4a8b67dfd03cb268c436",
+      "linkage": "SPM_ONLY",
+      "stars": 94,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "willowtreeapps/vocable-ios",
+      "sha": "58ba45a978e1ebaeae71d9e88509703a9bd67bd6",
+      "linkage": "SPM_ONLY",
+      "stars": 92,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Piecelet/neodb-app",
+      "sha": "9158e3276656b1c9388304e0b3b236fe4abc0c4f",
+      "linkage": "SPM_ONLY",
+      "stars": 84,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "freesuraj/TLDR",
+      "sha": "7a68cfa9aec892d467e13612ac0e4e7f5d3b5c3f",
+      "linkage": "SPM_ONLY",
+      "stars": 75,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "WWDCScholars/iOS-app",
+      "sha": "84bb9439a9e8e2713b81f9b13b9108119ac085ec",
+      "linkage": "SPM_ONLY",
+      "stars": 75,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "kurozora/kurozora-app",
+      "sha": "337ac2cc6abefbe4e04f76078ab0acb659f7e2f3",
+      "linkage": "SPM_ONLY",
+      "stars": 70,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "EvgenyKarkan/Feeds4U",
+      "sha": "dcdefac7b09c8a0dad5716b7117054c8d8ced3f5",
+      "linkage": "SPM_ONLY",
+      "stars": 70,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "b5i/Atwy",
+      "sha": "37b47c3c3e87b90cc338b11249d2e396ae2bcfd5",
+      "linkage": "SPM_ONLY",
+      "stars": 68,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "fulldecent/vowel-practice",
+      "sha": "6e0495ae0b37a1905c9a6c0e7667209732c5b669",
+      "linkage": "SPM_ONLY",
+      "stars": 67,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "mathieudutour/TimeLines",
+      "sha": "53c5ab05aecd9d04941c4bb79dd28bc6864b711c",
+      "linkage": "SPM_ONLY",
+      "stars": 65,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "WezSieTato/ScanNow",
+      "sha": "ab02c440d822380c47b1fb063c4b967e62abc6c8",
+      "linkage": "SPM_ONLY",
+      "stars": 65,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "AnthonyH93/HexaCalc",
+      "sha": "603ead6ca33979b5f240e0daa9cf85f3d371006c",
+      "linkage": "SPM_ONLY",
+      "stars": 59,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "JosephDuffy/Overamped",
+      "sha": "2d527154f10b88e12e04202d89d42b8d9cb7a4a5",
+      "linkage": "SPM_ONLY",
+      "stars": 51,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "vermont42/Conjugar",
+      "sha": "d9570353d570a9624e10bb4431fc741037441361",
+      "linkage": "SPM_ONLY",
+      "stars": 50,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "strumswell/oscar-weather",
+      "sha": "f700c9c4144c6800d12030a62feaec8f74a46205",
+      "linkage": "SPM_ONLY",
+      "stars": 49,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "writingmate/aidictation",
+      "sha": "bcc3b853ced0f2585b0211ff499f1be38a235883",
+      "linkage": "SPM_ONLY",
+      "stars": 45,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "amikhaylin/pompaddo",
+      "sha": "30aa024874ba24b9c28201e97788ba6f9f41e749",
+      "linkage": "SPM_ONLY",
+      "stars": 40,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "FlineDev/Prayer",
+      "sha": "7965f031ad1796aa36fe6b8bea385d8e399e9fc4",
+      "linkage": "SPM_ONLY",
+      "stars": 37,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "joeldavidw/Chronos",
+      "sha": "f302d35413476353b4d4a99ac8cc9b6f6f19893f",
+      "linkage": "SPM_ONLY",
+      "stars": 37,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Visual-Studio-Coder/Recap",
+      "sha": "e3662892950733a0c03faf8fafd48700d06218e2",
+      "linkage": "SPM_ONLY",
+      "stars": 37,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "AlexCatch/Oak",
+      "sha": "9896da29c925d1278cb06c35d60c1925db83d460",
+      "linkage": "SPM_ONLY",
+      "stars": 33,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "NiftyTreeStudios/Bean-Juice",
+      "sha": "13d4ebb22279883caeed32f11d2a24582c146939",
+      "linkage": "SPM_ONLY",
+      "stars": 30,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "misteu/VocabularyTraining",
+      "sha": "3cad2de293f7bbc17ebed3d6043ce89d54589aa1",
+      "linkage": "SPM_ONLY",
+      "stars": 28,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "GigaDuckAI/conduck",
+      "sha": "27f4fa852622523dc6d2d682033e1dbd79111ba5",
+      "linkage": "SPM_ONLY",
+      "stars": 27,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "TICESoftware/tice-ios",
+      "sha": "8ba0392447d33cba693c98083697e985d763a654",
+      "linkage": "SPM_ONLY",
+      "stars": 26,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "256Arts/Sprite-Pencil",
+      "sha": "d14e6419980d48627be060f31661285cbb196b4e",
+      "linkage": "SPM_ONLY",
+      "stars": 25,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "256Arts/Sprite-Catalog",
+      "sha": "9f5581b71a55a626fc892ee30b482cdeb5c66802",
+      "linkage": "SPM_ONLY",
+      "stars": 22,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "sigfault-byte/LegitURL",
+      "sha": "a51c19e2e8fa190890dee3439ae3a4efdff39cd0",
+      "linkage": "SPM_ONLY",
+      "stars": 20,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "hishd/SkyWizard-SwiftUI",
+      "sha": "afaa94f05a2004cbe32c1a6ba7e866244b43c979",
+      "linkage": "SPM_ONLY",
+      "stars": 17,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Keith-43/MuVis-Experimentation",
+      "sha": "2f1d643e01e3d259e0c3a12b78133e5e93b8df9f",
+      "linkage": "SPM_ONLY",
+      "stars": 16,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "marcusraitner/pulse",
+      "sha": "6c1e1d4a45583943fbf378f213a85d6331008094",
+      "linkage": "SPM_ONLY",
+      "stars": 14,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "frostland/GPS-Stone",
+      "sha": "26d53938481ecbe8a4172e3a8205e7980e5890d5",
+      "linkage": "SPM_ONLY",
+      "stars": 12,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "apps-fab/exercism-app",
+      "sha": "3ceb552c1b2eaed8c60e27771f84773aedbd1d3f",
+      "linkage": "SPM_ONLY",
+      "stars": 11,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "saxobroko/SaxWeather",
+      "sha": "a746c4f164cbc59c7cfe4951f80b6596f1437611",
+      "linkage": "SPM_ONLY",
+      "stars": 8,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "denissimon/Cryptocurrency-Info",
+      "sha": "e976300104ee8490227e04abf1969d3c788c185f",
+      "linkage": "SPM_ONLY",
+      "stars": 8,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "dl-alexandre/SymbolGrid",
+      "sha": "cd3325ef6af357a53d1f04c03ec7c62945f5e99f",
+      "linkage": "SPM_ONLY",
+      "stars": 7,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "wvabrinskas/PokePal",
+      "sha": "7e7e37a97f3411d785910f5f03011aa75fdb0083",
+      "linkage": "SPM_ONLY",
+      "stars": 5,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "krazywarez/hutch",
+      "sha": "bbe1b2737dd281220532934893610d68e9a5b642",
+      "linkage": "SPM_ONLY",
+      "stars": 5,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "Loriage/Minidisc",
+      "sha": "e3a74ddaa1bd63a275a2baed9f3effeb762155cb",
+      "linkage": "SPM_ONLY",
+      "stars": 5,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "robertwtucker/kfinderapp-ios",
+      "sha": "29e3375469983b7f807aa9ef32d996459c93fa46",
+      "linkage": "SPM_ONLY",
+      "stars": 4,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "hishd/RicketyRick-iOS",
+      "sha": "ed839bcd5e5131c7f29c31784a77023aed485922",
+      "linkage": "SPM_ONLY",
+      "stars": 1,
+      "locks": [
+        "Package.resolved"
+      ]
+    },
+    {
+      "repo": "lokii49/mirror",
+      "sha": "ed897d5b3c0fe21970bb929e8472946b3e7a0c08",
+      "linkage": "SPM_ONLY",
+      "stars": 0,
+      "locks": [
+        "Package.resolved"
+      ]
+    }
+  ]
+}
