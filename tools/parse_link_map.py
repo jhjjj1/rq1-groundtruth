@@ -64,6 +64,26 @@ RE_SYM = re.compile(r"^(0x[0-9A-Fa-f]+)\t(0x[0-9A-Fa-f]+)\t\[\s*(\d+)\]\s(.*)$")
 RE_DEAD = re.compile(r"^<<dead>>\t(0x[0-9A-Fa-f]+)\t\[\s*(\d+)\]\s(.*)$")
 RE_SECT = re.compile(r"^(0x[0-9A-Fa-f]+)\t(0x[0-9A-Fa-f]+)\t(\S+)\t(\S+)$")
 RE_ARCHIVE = re.compile(r"^(?P<archive>.*/(?P<name>[^/]+)\.a)\((?P<member>[^)]+)\)$")
+
+#: CocoaPods 的两种形态，取自 DaidoujiChen/Dai-Hentai 的实测 map：
+#:
+#:   [56] .../target/Pods/couchbase-lite-ios/Extras/libCBLJSViewCompiler.a(CBLJSFunction.o)
+#:   [58] .../Build/Products/Release-iphoneos/SDWebImage/libSDWebImage.a(SDImageCache.o)
+#:
+#: 第一种是 pod 里自带的**预编译**静态库：pod 名在路径里（`couchbase-lite-ios`），
+#: 而库名（`libCBLJSViewCompiler`）跟 pod 名毫无关系 —— 只看库名会判错单元。
+#: 第二种是**从源码编出来**的 pod：pod 名同时出现在目录名和库名里，两者互为佐证。
+#:
+#: 实测里**没有** `libPods-<App>.a` 那种聚合库 —— CocoaPods 是每个 pod 各自一个
+#: 静态库，比预想的简单。
+#:
+#: `Pods/` 下这几个目录不是 pod，是 CocoaPods 自己的脚手架。
+POD_SCAFFOLD = frozenset({"Target Support Files", "Headers", "Local Podspecs",
+                          "Pods.xcodeproj"})
+RE_POD_VENDORED = re.compile(r"/Pods/(?P<pod>[^/]+)/")
+RE_POD_BUILT = re.compile(
+    r"/Build/Products/[^/]+/(?P<pod>[^/]+)/lib(?P=pod)\.a$")
+RE_BUILT_SUBDIR = re.compile(r"/Build/Products/[^/]+/(?P<dir>[^/]+)/[^/]+\.a$")
 RE_TARGET_OBJ = re.compile(
     r"/Intermediates\.noindex/(?P<project>[^/]+)\.build/(?P<config>[^/]+)/"
     r"(?P<target>[^/]+)\.build/.*?/(?P<obj>[^/]+\.o)$")
@@ -76,9 +96,40 @@ def derive_unit(index, path):
 
     m = RE_ARCHIVE.match(path)
     if m:
-        # libPods-App.a(Foo.o) / libswiftCompatibility51.a(Overrides.cpp.o)
-        return {"unit": m.group("name"), "kind": "STATIC_ARCHIVE",
-                "rule": "ARCHIVE_MEMBER", "member": m.group("member")}
+        archive, member = m.group("archive"), m.group("member")
+        name = m.group("name")
+
+        # (a) pod 自带的预编译库：单元是 Pods/ 下那一层目录名，不是库名
+        pm = RE_POD_VENDORED.search(archive)
+        if pm and pm.group("pod") not in POD_SCAFFOLD:
+            return {"unit": pm.group("pod"), "kind": "COCOAPOD",
+                    "rule": "POD_VENDORED_ARCHIVE",
+                    "archive": name, "member": member,
+                    # 库名和 pod 名不一致是常态（实测 couchbase-lite-ios /
+                    # libCBLJSViewCompiler），记下来以便回查
+                    "archive_name_agrees": name == "lib" + pm.group("pod")}
+
+        # (b) 从源码编出来的 pod：目录名与 lib<名>.a 互相印证
+        bm = RE_POD_BUILT.search(archive)
+        if bm:
+            return {"unit": bm.group("pod"), "kind": "COCOAPOD",
+                    "rule": "POD_BUILT_FROM_SOURCE",
+                    "archive": name, "member": member,
+                    "archive_name_agrees": True}
+
+        # (c) Build/Products 下有子目录但库名对不上 —— 目录名更可能是单元，
+        #     但两者不一致这件事必须记下来，不能悄悄选一个
+        sm = RE_BUILT_SUBDIR.search(archive)
+        if sm:
+            return {"unit": sm.group("dir"), "kind": "STATIC_ARCHIVE",
+                    "rule": "BUILT_PRODUCT_ARCHIVE",
+                    "archive": name, "member": member,
+                    "archive_name_agrees": name == "lib" + sm.group("dir")}
+
+        # (d) 其余静态库（系统库、工具链库）：单元就是库名本身
+        return {"unit": name, "kind": "STATIC_ARCHIVE",
+                "rule": "ARCHIVE_MEMBER",
+                "archive": name, "member": member}
 
     m = RE_TARGET_OBJ.search(path)
     if m:

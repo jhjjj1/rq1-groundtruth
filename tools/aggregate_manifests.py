@@ -26,8 +26,17 @@ import sys
 def bucket_of(m):
     if m is None:
         return "MANIFEST_MISSING"
-    if m.get("scheme_verdict") == "NO_APP_SCHEME_OBSERVED":
-        return "NO_APP_SCHEME"
+    # 上一批把「探测失败」「没有共享 scheme」「平台不符」「工程都没找到」
+    # 全压进了 NO_APP_SCHEME 或 BUILD_NOT_ATTEMPTED。它们的成因完全不同，
+    # 能不能修也完全不同，合在一起就看不出该改哪里。
+    sv = m.get("scheme_verdict")
+    if not sv:
+        # scheme 那一步永远会写 verdict；写不出来说明它没跑 ——
+        # 唯一的可能是更前面的容器探测失败了。
+        return "NO_XCODE_CONTAINER"
+    bucket = SCHEME_VERDICT_BUCKET.get(sv)
+    if bucket:
+        return bucket
     if m.get("map_verdict") == "NO_USABLE_MAP_MODE":
         return "NO_USABLE_MAP_MODE"
     # `skipped` 是 GitHub 对「前置步骤没给出 scheme/map mode，这一步压根没跑」
@@ -94,9 +103,20 @@ def variant_bucket(v):
     return "OK"
 
 
+#: scheme 判定 → 分桶。每一档都对应一个能单独回答「该不该算进分母」的成因。
+SCHEME_VERDICT_BUCKET = {
+    "NO_APP_SCHEME_OBSERVED": "NO_APP_SCHEME",
+    "NO_SHARED_SCHEMES": "NO_SHARED_SCHEMES",
+    "PLATFORM_MISMATCH": "PLATFORM_MISMATCH",
+    "SCHEMES_JSON_UNREADABLE": "SCHEMES_JSON_UNREADABLE",
+    "SCHEME_STEP_CRASHED": "SCHEMES_JSON_UNREADABLE",
+}
+
 BUCKETS = ("OK", "MAP_BINARY_MISMATCH", "BUILT_NO_BINARY", "BUILT_NO_MAP",
            "BUILD_FAILED", "BUILD_NOT_ATTEMPTED", "NO_USABLE_MAP_MODE",
-           "NO_APP_SCHEME", "MANIFEST_MISSING")
+           "NO_APP_SCHEME", "NO_SHARED_SCHEMES", "PLATFORM_MISMATCH",
+           "SCHEMES_JSON_UNREADABLE", "NO_XCODE_CONTAINER",
+           "MANIFEST_MISSING")
 
 #: Explanations carried into the summary table so the failure column is
 #: readable by someone who has not read this file.
@@ -108,7 +128,11 @@ WHY = {
     "BUILD_FAILED": "xcodebuild 退出码非 0",
     "BUILD_NOT_ATTEMPTED": "前置步骤没给出 scheme 或 map mode，构建这步被跳过",
     "NO_USABLE_MAP_MODE": "三种 map 路径写法都会撞，工程没法要 map",
-    "NO_APP_SCHEME": "没观测到 PRODUCT_TYPE 为 application 的 scheme",
+    "NO_APP_SCHEME": "探测了全部 scheme，没有一个的产物是 application",
+    "NO_SHARED_SCHEMES": "工程里没有共享 scheme（scheme 常在 xcuserdata 里不进版本库）",
+    "PLATFORM_MISMATCH": "工程目标平台不是 iOS（tvOS / watchOS / macOS 等）",
+    "SCHEMES_JSON_UNREADABLE": "`xcodebuild -list -json` 没给出可解析的输出",
+    "NO_XCODE_CONTAINER": "四层之内没有 .xcodeproj / .xcworkspace（Bazel、KMM 等）",
     "MANIFEST_MISSING": "job 连 manifest 都没产出（超时/崩溃）—— 未观测，非零结果",
 }
 

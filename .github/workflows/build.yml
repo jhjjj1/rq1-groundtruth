@@ -141,14 +141,42 @@ jobs:
         working-directory: target
         run: |
           set -uo pipefail
-          # .xcodeproj 里自带一个 project.xcworkspace，它不是容器，要排除
-          WS=$(find . -maxdepth 2 -name '*.xcworkspace' -not -path '*/*.xcodeproj/*' -print -quit) || WS=""
-          PJ=$(find . -maxdepth 2 -name '*.xcodeproj' -print -quit) || PJ=""
-          if [ -n "$WS" ]; then FLAG=-workspace; P=$WS;
-          elif [ -n "$PJ" ]; then FLAG=-project;  P=$PJ;
-          else echo "没有 .xcworkspace / .xcodeproj"; exit 1; fi
-          echo "container=$FLAG $P" >> "$GITHUB_OUTPUT"
-          echo "container = $FLAG $P"
+          # 浅的优先，同深度里 .xcworkspace 优先于 .xcodeproj。
+          #
+          # 上一版写死 `-maxdepth 2`，batch01 里 simplex-chat（apps/ios/）和
+          # joreilly/BikeShare 因此被判成「没有工程」。工程放在子目录是常态。
+          #
+          # 路径**分成 flag 和 path 两个输出**。上一版输出一个整串
+          # `-workspace ./Little Go.xcworkspace`，注入命令行后被 bash 按空格
+          # 切开 —— 带空格的工程名（实测三个）全部构建失败。
+          shallowest() {
+            find . -maxdepth 4 \
+                 \( -name Pods -o -name node_modules -o -name Carthage \
+                    -o -name .git -o -name DerivedData \) -prune -o \
+                 -name "$1" -not -path '*/*.xcodeproj/*' -print 2>/dev/null \
+              | awk -F/ '{print NF-1 "	" $0}' | sort -n -k1,1 -k2,2 \
+              | head -1 | cut -f2-
+          }
+          WS=$(shallowest '*.xcworkspace')
+          PJ=$(shallowest '*.xcodeproj')
+          DW=$(printf '%s' "$WS" | awk -F/ '{print NF-1}')
+          DP=$(printf '%s' "$PJ" | awk -F/ '{print NF-1}')
+          FLAG=""; P=""
+          if [ -n "$WS" ] && { [ -z "$PJ" ] || [ "$DW" -le "$DP" ]; }; then
+            FLAG=workspace; P=$WS
+          elif [ -n "$PJ" ]; then
+            FLAG=project; P=$PJ
+          fi
+          if [ -z "$P" ]; then
+            echo "verdict=NO_XCODE_CONTAINER" >> "$GITHUB_OUTPUT"
+            echo "没有 .xcworkspace / .xcodeproj（已搜到第 4 层，排除 Pods/node_modules/Carthage）"
+            exit 1
+          fi
+          echo "flag=$FLAG"     >> "$GITHUB_OUTPUT"
+          echo "path=$P"        >> "$GITHUB_OUTPUT"
+          echo "verdict=FOUND"  >> "$GITHUB_OUTPUT"
+          echo "container = -$FLAG [$P]"
+
 
       - name: Resolve SwiftPM dependencies
         id: spm
@@ -163,7 +191,8 @@ jobs:
           fi
           echo "找到 $RES"
           set +e
-          xcodebuild -resolvePackageDependencies ${{ steps.container.outputs.container }}
+          xcodebuild -resolvePackageDependencies \
+            "-${{ steps.container.outputs.flag }}" "${{ steps.container.outputs.path }}"
           rc=$?
           [ $rc -eq 0 ] && echo "did_run=resolved" >> "$GITHUB_OUTPUT" \
                         || echo "did_run=FAILED_rc$rc" >> "$GITHUB_OUTPUT"
@@ -175,22 +204,38 @@ jobs:
         working-directory: target
         run: |
           set -uo pipefail
+          # GitHub 给 run: 的默认 shell 是 `bash -e {0}`；要记录退出码就得先关掉 -e
           set +e
           mkdir -p "$RUNNER_TEMP/out"
-          xcodebuild ${{ steps.container.outputs.container }} -list -json \
-            > "$RUNNER_TEMP/out/schemes.json"
+          # 容器路径加引号 —— 带空格的工程名不能再被切开
+          xcodebuild "-${{ steps.container.outputs.flag }}" \
+                     "${{ steps.container.outputs.path }}" -list -json \
+            > "$RUNNER_TEMP/out/schemes.json" 2> "$RUNNER_TEMP/out/list_stderr.txt"
+          LIST_RC=$?
+          echo "xcodebuild -list rc=$LIST_RC"
+          head -5 "$RUNNER_TEMP/out/list_stderr.txt"
           python3 "$GITHUB_WORKSPACE/tools/pick_app_scheme.py" \
-            --container "${{ steps.container.outputs.container }}" \
+            --container-flag "${{ steps.container.outputs.flag }}" \
+            --container-path "${{ steps.container.outputs.path }}" \
             --schemes-json "$RUNNER_TEMP/out/schemes.json" \
+            --list-rc "$LIST_RC" \
+            --list-stderr-file "$RUNNER_TEMP/out/list_stderr.txt" \
             --out "$RUNNER_TEMP/out/schemes_classified.json"
           rc=$?
-          [ -f "$RUNNER_TEMP/out/schemes_classified.json" ] || exit 1
+          # 输出**永远**要写：判不了也是一个判定，不能留一片空白。
+          # batch01 里 12 个仓库的 scheme_verdict 是空字符串，正是因为这一步
+          # 在写 output 之前就退出了。
           python3 - >> "$GITHUB_OUTPUT" <<'PY'
-          import json, os
-          d = json.load(open(os.environ["RUNNER_TEMP"] + "/out/schemes_classified.json"))
-          print("scheme=" + (d["chosen"] or ""))
-          print("verdict=" + d["chosen_verdict"])
-          print("elapsed=" + str(d["total_elapsed_s"]))
+          import json, os, pathlib
+          p = pathlib.Path(os.environ["RUNNER_TEMP"]) / "out" / "schemes_classified.json"
+          try:
+              d = json.loads(p.read_text(encoding="utf-8"))
+          except Exception:
+              d = {}
+          print("scheme=" + (d.get("chosen") or ""))
+          print("verdict=" + (d.get("chosen_verdict") or "SCHEME_STEP_CRASHED"))
+          print("elapsed=" + str(d.get("total_elapsed_s") or ""))
+          print("probe_mode=" + (d.get("probe_mode") or ""))
           PY
           exit $rc
 
@@ -208,7 +253,7 @@ jobs:
           for MODE in default per_target global; do
             map_settings_for "$MODE"
             xcodebuild -showBuildSettings -json \
-              ${{ steps.container.outputs.container }} \
+              "-${{ steps.container.outputs.flag }}" "${{ steps.container.outputs.path }}" \
               -scheme "${{ steps.scheme.outputs.scheme }}" \
               -configuration Release \
               -destination 'generic/platform=iOS' \
@@ -236,7 +281,7 @@ jobs:
           # CODE_SIGNING_ALLOWED=NO：CI 上没有证书，签名会直接失败。
           # -destination generic/platform=iOS：不需要模拟器，也避免 arm64 模拟器切片。
           xcodebuild build \
-            ${{ steps.container.outputs.container }} \
+            "-${{ steps.container.outputs.flag }}" "${{ steps.container.outputs.path }}" \
             -scheme "${{ steps.scheme.outputs.scheme }}" \
             -configuration Release \
             -destination 'generic/platform=iOS' \

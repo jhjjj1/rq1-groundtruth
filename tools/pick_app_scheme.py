@@ -31,7 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import shlex
+import pathlib
 import subprocess
 import sys
 import time
@@ -74,18 +74,28 @@ HARVEST = (
 )
 
 
-def show_build_settings(container, scheme, configuration, destination, timeout):
-    """Run ``xcodebuild -showBuildSettings -json`` for one scheme.
+def show_build_settings(container_flag, container_path, name, configuration,
+                        destination, timeout, selector="-scheme"):
+    """Run ``xcodebuild -showBuildSettings -json`` for one scheme or target.
 
-    Returns ``(targets, error)``.  ``targets`` is a list of
-    ``{"target": str, "settings": {...}}``; ``error`` is None on success.
-    Never raises -- a scheme that cannot be queried is a fact to record, not a
-    reason to abort the sweep.
+    The container is passed as **flag + path, as two argv elements**.  The old
+    version took one string and `shlex.split` it, which silently broke every
+    project whose path contains a space -- measured in batch01 on
+    ``./Little Go.xcworkspace``, ``./3. iOS app/DMT.xcworkspace`` and
+    ``./draggable slider/draggable slider.xcodeproj``: bash split the injected
+    string and xcodebuild got a path that does not exist.
+
+    ``selector`` is ``-scheme`` normally, or ``-target`` for the fallback used
+    when a project has no shared schemes (schemes live in ``xcuserdata`` and
+    are frequently not committed).
+
+    Returns ``(targets, error)``.  Never raises -- a name that cannot be
+    queried is a fact to record, not a reason to abort the sweep.
     """
     cmd = [
         "xcodebuild", "-showBuildSettings", "-json",
-        *shlex.split(container),
-        "-scheme", scheme,
+        container_flag, container_path,
+        selector, name,
         "-configuration", configuration,
         "-destination", destination,
     ]
@@ -120,6 +130,33 @@ def show_build_settings(container, scheme, configuration, destination, timeout):
             "settings": {k: settings[k] for k in HARVEST if k in settings},
         })
     return targets, None
+
+
+#: 非 iOS 平台的痕迹。`-destination generic/platform=iOS` 打在 tvOS/watchOS/
+#: macOS 工程上时，xcodebuild 会把它**能接受**的平台列出来 —— batch01 里
+#: yichengchen/ATV-Bilibili-demo 报的是 `{ platform:tvOS Simulator, ... }`。
+OTHER_PLATFORMS = ("tvOS", "watchOS", "macOS", "visionOS", "DriverKit")
+
+
+def platform_mismatch(failures):
+    """所有探测都失败，且失败信息里只提到别的平台。"""
+    text = " ".join(f.get("error") or "" for f in failures)
+    return any(p in text for p in OTHER_PLATFORMS) and "iOS " not in text
+
+
+def read_head(path, n=800):
+    if not path:
+        return None
+    try:
+        return pathlib.Path(path).read_text(encoding="utf-8",
+                                            errors="replace")[:n]
+    except OSError:
+        return None
+
+
+def write_result(path, result):
+    with open(path, "w", encoding="utf-8") as fh:
+        json.dump(result, fh, ensure_ascii=False, indent=2)
 
 
 def classify(targets):
@@ -185,8 +222,17 @@ def classify(targets):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--container", required=True,
-                    help="e.g. '-project X.xcodeproj' or '-workspace X.xcworkspace'")
+    # 不带横杠传。argparse 会把以 `-` 开头的值当成选项名而拒绝消费，
+    # `--container-flag -project` 直接报 "expected one argument" —— 这条是
+    # 本地测试逮到的，否则会在 CI 上原样炸掉每一个 job。
+    ap.add_argument("--container-flag", required=True,
+                    choices=("project", "workspace"))
+    ap.add_argument("--container-path", required=True,
+                    help="工程/工作区路径。单独一个参数，因为路径可能带空格")
+    ap.add_argument("--list-rc", default=None,
+                    help="`xcodebuild -list -json` 的退出码，原样记账")
+    ap.add_argument("--list-stderr-file", default=None,
+                    help="`xcodebuild -list -json` 的 stderr 文件")
     ap.add_argument("--schemes-json", required=True,
                     help="output of `xcodebuild <container> -list -json`")
     ap.add_argument("--configuration", default="Release")
@@ -199,14 +245,90 @@ def main(argv=None):
                     help="where to write the result JSON")
     args = ap.parse_args(argv)
 
-    listing = json.load(open(args.schemes_json, encoding="utf-8"))
+    # `-list -json` 失败时会写出空文件或半截输出。上一版用裸 json.load 去读，
+    # 一坏就抛异常、什么都不写 —— batch01 里 12 个仓库因此连 manifest 的
+    # scheme_verdict 都是空的，「判不了」变成了「没记录」。现在它是一个判定。
+    container_flag = "-" + args.container_flag
+    raw, load_error = "", None
+    try:
+        raw = pathlib.Path(args.schemes_json).read_text(encoding="utf-8",
+                                                        errors="replace")
+        listing = json.loads(raw)
+    except (OSError, json.JSONDecodeError) as exc:
+        listing, load_error = {}, f"{type(exc).__name__}: {exc}"
+
     root = listing.get("workspace") or listing.get("project") or {}
     schemes = list(root.get("schemes") or [])
+    targets_listed = list(root.get("targets") or [])
+    container_kind = ("workspace" if "workspace" in listing
+                      else "project" if "project" in listing else None)
+
+    if load_error is not None:
+        result = {
+            "container_flag": container_flag,
+            "container_path": args.container_path,
+            "chosen": None,
+            "chosen_verdict": "SCHEMES_JSON_UNREADABLE",
+            "load_error": load_error,
+            "schemes_json_head": raw[:600],
+            "list_rc": args.list_rc,
+            "list_stderr": read_head(args.list_stderr_file),
+            "schemes_listed": 0, "schemes_probed": 0,
+            "app_schemes": [], "app_rule_fired": [], "ambiguous": False,
+            "rows": [], "probe_failures": [],
+            "rule_disagreements": [], "rule_disagreement_count": 0,
+            "kind_counts": {}, "ld_map_defaults": [],
+            "total_elapsed_s": 0.0,
+        }
+        write_result(args.out, result)
+        print(f"verdict  = SCHEMES_JSON_UNREADABLE  ({load_error})")
+        print(f"xcodebuild -list rc = {args.list_rc}")
+        print((result["list_stderr"] or "")[:400])
+        return 78
 
     # Pods-* are CocoaPods' own aggregate schemes; they are never the app and
     # probing them costs real seconds on big projects.
     skipped_by_prefix = [s for s in schemes if s.startswith("Pods")]
     candidates = [s for s in schemes if not s.startswith("Pods")]
+
+    # 没有共享 scheme 时退到 target。
+    #
+    # scheme 默认存在 `xcuserdata` 里、不进版本库，用 XcodeGen/Tuist 生成工程的
+    # 仓库尤其如此 —— batch01 里 bitwarden/ios 与 AdguardTeam/AdguardForiOS 的
+    # `-list -json` 都返回了工程但 schemes 为空。这不是「没有 app」，是「没有
+    # scheme」，而 `-target` 不需要 scheme 就能查、能编。
+    #
+    # `-target` 只对 `-project` 有效；workspace 没有 targets 这一层，所以那种
+    # 情形只能如实记成 NO_SHARED_SCHEMES。
+    selector = "-scheme"
+    if not candidates:
+        if targets_listed and container_flag == "-project":
+            selector = "-target"
+            candidates = [t for t in targets_listed if not t.startswith("Pods")]
+            skipped_by_prefix += [t for t in targets_listed if t.startswith("Pods")]
+        else:
+            result = {
+                "container_flag": container_flag,
+                "container_path": args.container_path,
+                "container_kind": container_kind,
+                "chosen": None,
+                "chosen_verdict": "NO_SHARED_SCHEMES",
+                "schemes_listed": 0, "targets_listed": len(targets_listed),
+                "schemes_probed": 0, "probe_mode": selector,
+                "list_rc": args.list_rc,
+                "list_stderr": read_head(args.list_stderr_file),
+                "app_schemes": [], "app_rule_fired": [], "ambiguous": False,
+                "rows": [], "probe_failures": [],
+                "rule_disagreements": [], "rule_disagreement_count": 0,
+                "kind_counts": {}, "ld_map_defaults": [],
+                "total_elapsed_s": 0.0,
+            }
+            write_result(args.out, result)
+            print(f"verdict  = NO_SHARED_SCHEMES  "
+                  f"（容器是 {container_kind}，scheme 0 个，target "
+                  f"{len(targets_listed)} 个）")
+            return 78
+
     if args.max_schemes:
         candidates = candidates[: args.max_schemes]
 
@@ -215,7 +337,8 @@ def main(argv=None):
     for scheme in candidates:
         t0 = time.monotonic()
         targets, error = show_build_settings(
-            args.container, scheme, args.configuration, args.destination, args.timeout
+            container_flag, args.container_path, scheme,
+            args.configuration, args.destination, args.timeout, selector
         )
         elapsed = round(time.monotonic() - t0, 1)
         if error is not None:
@@ -251,7 +374,13 @@ def main(argv=None):
                 })
 
     result = {
-        "container": args.container,
+        "container_flag": container_flag,
+        "container_path": args.container_path,
+        "container_kind": container_kind,
+        "probe_mode": selector,
+        "list_rc": args.list_rc,
+        "list_stderr": read_head(args.list_stderr_file),
+        "targets_listed": len(targets_listed),
         "configuration": args.configuration,
         "destination": args.destination,
         "schemes_listed": len(schemes),
@@ -272,6 +401,10 @@ def main(argv=None):
         "chosen_verdict": (
             "APP_SCHEME_FOUND" if len(apps) == 1
             else "APP_SCHEME_AMBIGUOUS" if len(apps) > 1
+            # 一个都没探成功、且失败原因里提到别的平台 —— 这是平台不符，
+            # 不是「没观测到 app scheme」。后者暗示探测失败，前者是事实。
+            else "PLATFORM_MISMATCH" if (not rows and failures
+                                         and platform_mismatch(failures))
             else "NO_APP_SCHEME_OBSERVED"
         ),
         "rule_disagreements": disagree,
@@ -281,8 +414,7 @@ def main(argv=None):
         "total_elapsed_s": round(time.monotonic() - started, 1),
     }
 
-    with open(args.out, "w", encoding="utf-8") as fh:
-        json.dump(result, fh, ensure_ascii=False, indent=2)
+    write_result(args.out, result)
 
     width = max((len(r["scheme"]) for r in rows), default=6)
     print(f"{'scheme':<{width}}  {'kind':<9}  {'rule':<18}  elapsed")

@@ -1,0 +1,82 @@
+{
+  "originals": 64,
+  "rerun": 45,
+  "left_out": [
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "mozilla-mobile/firefox-ios",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "glushchenko/fsnotes",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "gluonfield/enchanted",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "yattee/yattee",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "zzanehip/The-OldOS-Project",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "wikimedia/wikipedia-ios",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "joreilly/PeopleInSpace",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "airbnb/HorizonCalendar",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "analogcode/Swift-Radio-Pro",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "0xCUB3/wBlock",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "ml-explore/mlx-swift-examples",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "rafsoh/dimeApp",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "keepassium/KeePassium",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "rajdeep/proton",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "awaseem/foqos",
+      "reason": "ALREADY_OK"
+    },
+    {
+      "repo": "jasudev/FabulaItemsProvider",
+      "reason": "ALREADY_OK"
+    }
+  ]
+}

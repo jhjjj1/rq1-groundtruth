@@ -44,7 +44,8 @@ def _t(name, pt):
     }}
 
 
-def fake_settings(container, scheme, configuration, destination, timeout):
+def fake_settings(flag, path, scheme, configuration, destination,
+                  timeout, selector="-scheme"):
     if scheme == "StatusKit-Package":            # SPM package scheme: not queryable
         return [], "rc=65 xcodebuild: error: scheme not buildable for this destination"
     if scheme == "IceCubesApp":
@@ -67,7 +68,9 @@ def run(schemes, stub=None):
         lst.write_text(json.dumps({"project": {"name": "IceCubesApp",
                                                "schemes": schemes}}))
         P.show_build_settings = stub or fake_settings
-        rc = P.main(["--container", "-project IceCubesApp.xcodeproj",
+        rc = P.main(["--container-flag", "project",
+                     # 路径带空格：batch01 里三个仓库因此全军覆没
+                     "--container-path", "./Ice Cubes/IceCubesApp.xcodeproj",
                      "--schemes-json", str(lst), "--out", str(out)])
         return rc, json.loads(out.read_text())
 
@@ -108,7 +111,7 @@ def main():
         fails.append(f"纯库仓库 rc={rc2}, 期望 78")
 
     # 两个 app scheme：必须记 ambiguous，不能静默取第一个当定论。
-    all_app = lambda c, s, cf, d, t: (
+    all_app = lambda fl, pa, s, cf, d, t, sel="-scheme": (
         [{"target": s, "settings": {"PRODUCT_TYPE": P.PT_APP}}], None)
     rc4, res4 = run(["Zeta", "Alpha"], stub=all_app)
     if not res4["ambiguous"]:
@@ -122,7 +125,7 @@ def main():
             print("  -", f)
         return 1
     # 主判据与次判据分歧：app scheme 自己也把扩展列进构建图的工程
-    def app_plus_appex(c, s_, cf, d, t):
+    def app_plus_appex(fl, pa, s_, cf, d, t, sel="-scheme"):
         return [_t("Host", P.PT_APP), _t("Ext", P.PT_APPEX)], None
     rc5, res5 = run(["Host"], stub=app_plus_appex)
     if res5["chosen"] != "Host":
@@ -130,12 +133,58 @@ def main():
     if res5["rule_disagreement_count"] != 1:
         fails.append("app 带扩展时主/次判据应当分歧并被记下来")
 
+    # 输入坏掉时必须给出判定，不能崩 —— batch01 里 12 个仓库的 scheme_verdict
+    # 是空的，正是因为这一步抛了异常什么都没写
+    import tempfile as _tf
+    with _tf.TemporaryDirectory() as td:
+        bad = pathlib.Path(td) / "schemes.json"
+        bad.write_text("xcodebuild: error: the project is damaged", encoding="utf-8")
+        out = pathlib.Path(td) / "o.json"
+        rc6 = P.main(["--container-flag", "project", "--container-path", "./X.xcodeproj",
+                      "--schemes-json", str(bad), "--list-rc", "65",
+                      "--out", str(out)])
+        r6 = json.loads(out.read_text())
+    if r6["chosen_verdict"] != "SCHEMES_JSON_UNREADABLE" or rc6 != 78:
+        fails.append(f"坏输入 verdict={r6['chosen_verdict']} rc={rc6}")
+    if not r6.get("schemes_json_head"):
+        fails.append("坏输入没有把原文头部记下来")
+
+    # 没有共享 scheme 但有 target：project 容器要退到 -target
+    def only_targets(fl, pa, name, cf, d, t, sel="-scheme"):
+        assert sel == "-target", f"应当用 -target，实得 {sel}"
+        return [{"target": name, "settings": {"PRODUCT_TYPE": P.PT_APP}}], None
+    with _tf.TemporaryDirectory() as td:
+        lst = pathlib.Path(td) / "s.json"
+        lst.write_text(json.dumps({"project": {"name": "X", "schemes": [],
+                                               "targets": ["XApp", "XTests"]}}))
+        out = pathlib.Path(td) / "o.json"
+        P.show_build_settings = only_targets
+        P.main(["--container-flag", "project", "--container-path", "./X.xcodeproj",
+                      "--schemes-json", str(lst), "--out", str(out)])
+        r7 = json.loads(out.read_text())
+    if r7.get("probe_mode") != "-target":
+        fails.append(f"没退到 -target：probe_mode={r7.get('probe_mode')}")
+    if r7["chosen_verdict"] != "APP_SCHEME_AMBIGUOUS" and r7["chosen"] != "XApp":
+        fails.append(f"target 退路选中 {r7.get('chosen')}")
+
+    # workspace 没有共享 scheme：没有 target 这一层，只能如实记
+    with _tf.TemporaryDirectory() as td:
+        lst = pathlib.Path(td) / "s.json"
+        lst.write_text(json.dumps({"workspace": {"name": "X", "schemes": []}}))
+        out = pathlib.Path(td) / "o.json"
+        rc8 = P.main(["--container-flag", "workspace", "--container-path", "./X.xcworkspace",
+                      "--schemes-json", str(lst), "--out", str(out)])
+        r8 = json.loads(out.read_text())
+    if r8["chosen_verdict"] != "NO_SHARED_SCHEMES" or rc8 != 78:
+        fails.append(f"workspace 无 scheme verdict={r8['chosen_verdict']} rc={rc8}")
+
     if fails:
         print("FAIL")
         for f_ in fails:
             print("  -", f_)
         return 1
-    print("PASS  4 个场景：正常工程 / 纯库仓库 / 双 app scheme / app 自带扩展")
+    print("PASS  7 个场景：正常 / 纯库 / 双 app / app 带扩展 / "
+          "输入损坏 / 退到 -target / workspace 无 scheme")
     print(f"      IceCubesApp 28 个 scheme -> chosen={res['chosen']} "
           f"(字母序第一是 {SCHEMES[0]})")
     print(f"      kind_counts={res['kind_counts']}")

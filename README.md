@@ -33,6 +33,44 @@ nohup python3 tools/fetch_run.py \
   > ~/autodl-tmp/gt/batch01.log 2>&1 &
 ```
 
+## batch01 暴露的三个驱动缺陷（已修）
+
+64 个仓库只有 19 个产出可用产物。诊断之后，失败分成**驱动自己的 bug** 和
+**工程本身不可构建**两类 —— 这个区分直接决定「构建可复现率」的分子分母。
+
+| 缺陷 | 实测证据 | 修法 |
+|---|---|---|
+| 容器路径**未加引号** | `xcodebuild -workspace ./Little Go.xcworkspace` 被 bash 按空格切开。实测三个仓库：`Little Go.xcworkspace`、`3. iOS app/DMT.xcworkspace`、`draggable slider/draggable slider.xcodeproj` | 容器拆成 `flag` + `path` 两个输出，用处一律加引号 |
+| `-maxdepth 2` 够不着 | `simplex-chat`（`apps/ios/`）、`joreilly/BikeShare` 被判成「没有工程」 | 搜到第 4 层，浅的优先；排除 `Pods` / `node_modules` / `Carthage` / `DerivedData` |
+| `-list -json` 失败后**脚本崩了** | 12 个仓库的产物里连 `schemes_classified.json` 都没有，manifest 的 `scheme_verdict` 是空字符串 —— 裸 `json.load` 抛异常，什么都没写 | 读输入永不抛异常；坏输入记成 `SCHEMES_JSON_UNREADABLE` 并留下原文头部与 `-list` 的退出码 |
+
+还有一个只有跑起来才会暴露、被本地测试提前逮到的：`--container-flag "-project"`
+会被 argparse 当成选项名拒绝消费（`expected one argument`）。容器 flag 现在
+不带横杠传递，用的时候再加。
+
+### 新增的具名判定
+
+上一版把成因完全不同的失败压进了 `NO_APP_SCHEME` 和 `BUILD_NOT_ATTEMPTED`
+两档。现在各自成档，因为「该不该算进分母」的答案不一样：
+
+| 判定 | 含义 | 实例 |
+|---|---|---|
+| `NO_XCODE_CONTAINER` | 四层之内没有 `.xcodeproj` / `.xcworkspace` | `Telegram-iOS`（Bazel） |
+| `NO_SHARED_SCHEMES` | 工程在但没有共享 scheme（scheme 常在 `xcuserdata` 里不进版本库） | `bitwarden/ios`、`AdguardForiOS` |
+| `PLATFORM_MISMATCH` | 目标平台不是 iOS | `ATV-Bilibili-demo`（tvOS） |
+| `SCHEMES_JSON_UNREADABLE` | `-list -json` 没给出可解析输出 | 12 个仓库 |
+| `NO_APP_SCHEME` | 探测了全部 scheme，没有一个产物是 application | —— |
+
+`NO_SHARED_SCHEMES` 有退路：`-list -json` 同时给 `targets`，
+`xcodebuild -target` 不需要 scheme 就能查、能编。这条只对 `-project` 有效 ——
+workspace 没有 targets 那一层，只能如实记。
+
+### 重跑（`tools/make_rerun.py`）
+
+把一批里没产出可评分变体的仓库凑成新 batch。默认**全部重跑**：不可构建的那些
+重跑仍会失败，但失败得快（容器或 scheme 阶段就退出，不进构建），代价很低；
+而事先把它们摘掉要多一层人工判断。守恒：入选 + 未入选 = 原批次仓库数。
+
 ## 分批（硬限制）
 
 GitHub 的矩阵上限是 **256 job / 每次 run**。配置 4 档，所以每批最多 64 个目标。
@@ -129,7 +167,10 @@ map 由 `tools/parse_link_map.py` 解析成「地址 → 归属单元」。单�
 | 规则 | 匹配 | 单元 |
 |---|---|---|
 | `INDEX_ZERO` | `[0] linker synthesized` | 无 |
-| `ARCHIVE_MEMBER` | `libX.a(Y.o)` | `libX`（CocoaPods 走这条） |
+| `POD_VENDORED_ARCHIVE` | `**/Pods/<pod>/**/libX.a(Y.o)` | `<pod>` —— pod 名在**路径**里 |
+| `POD_BUILT_FROM_SOURCE` | `Build/Products/<cfg>/<Pod>/lib<Pod>.a(Y.o)` | `<Pod>` |
+| `BUILT_PRODUCT_ARCHIVE` | `Build/Products/<cfg>/<D>/lib*.a(Y.o)`，库名对不上 | `<D>`，并记下不一致 |
+| `ARCHIVE_MEMBER` | 其余 `libX.a(Y.o)` | `libX`（系统库、工具链库） |
 | `TARGET_INTERMEDIATE` | `Intermediates.noindex/<P>.build/<C>/<T>.build/.../y.o` | `<T>` |
 | `TBD` / `DYLIB` / `FRAMEWORK_BINARY` | 系统库 | 库名 |
 | `BUILD_PRODUCT_OBJECT` | `Build/Products/**/X.o` | `X`（SwiftPM 走这条） |

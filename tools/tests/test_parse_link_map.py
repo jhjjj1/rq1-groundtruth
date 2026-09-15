@@ -27,6 +27,10 @@ MAP = "\n".join([
     f"[  2] {R}/Build/Products/Release-iphoneos/NetworkClient.o",
     f"[  3] {X}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk/System/Library/Frameworks/Foundation.framework/Foundation.tbd",
     f"[  4] {X}/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/libswiftCompatibility51.a(Overrides.cpp.o)",
+    # CocoaPods 的两种形态，路径取自 DaidoujiChen/Dai-Hentai 的实测 map
+    "[  8] /Users/runner/work/rq1-groundtruth/rq1-groundtruth/target/Pods/couchbase-lite-ios/Extras/libCBLJSViewCompiler.a(CBLJSFunction.o)",
+    f"[  9] {R}/Build/Products/Release-iphoneos/SDWebImage/libSDWebImage.a(SDImageCache.o)",
+    "[ 10] /x/Pods/Target Support Files/Pods-App/libscaffold.a(bar.o)",
     "[  5] /usr/lib/system/libdispatch.dylib",
     "[  6] /System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
     "[  7] /somewhere/totally/unexpected.bin",
@@ -69,6 +73,13 @@ def main():
         5: ("DYLIB",          "libdispatch",        "DYLIB"),
         6: ("FRAMEWORK",      "UIKitCore",          "FRAMEWORK_BINARY"),
         7: ("UNKNOWN",        None,                 "NO_RULE_MATCHED"),
+        # pod 自带的预编译库：pod 名在**路径**里，库名与它毫无关系。
+        # 只看库名会把单元判成 libCBLJSViewCompiler —— 这条就是为此存在的。
+        8: ("COCOAPOD", "couchbase-lite-ios", "POD_VENDORED_ARCHIVE"),
+        # 从源码编出来的 pod：目录名与 lib<名>.a 互相印证
+        9: ("COCOAPOD", "SDWebImage", "POD_BUILT_FROM_SOURCE"),
+        # Pods/ 下的脚手架目录不是 pod
+        10: ("STATIC_ARCHIVE", "libscaffold", "ARCHIVE_MEMBER"),
     }
     for i, (kind, unit, rule) in want.items():
         o = lm.objects.get(i)
@@ -96,6 +107,17 @@ def main():
     if (lm.unit_at(0x100004040) or {}).get("index") != 2:
         fails.append("零长别名把地址抢走了")
 
+    # 库名与 pod 名是否一致要如实记录：实测里不一致是常态
+    agree = {i: (lm.objects.get(i) or {}).get("archive_name_agrees")
+             for i in (8, 9, 10)}
+    if agree[8] is not False:
+        fails.append(f"[8] archive_name_agrees={agree[8]}，"
+                     "期望 False（couchbase-lite-ios vs libCBLJSViewCompiler）")
+    if agree[9] is not True:
+        fails.append(f"[9] archive_name_agrees={agree[9]}，期望 True")
+    if (lm.objects.get(8) or {}).get("unit") == "libCBLJSViewCompiler":
+        fails.append("回归：又按库名判 pod 单元了")
+
     if lm.overlap_count != 0:
         fails.append(f"重叠 {lm.overlap_count}，本 fixture 不该有")
     if len(lm.dead) != 2:
@@ -118,7 +140,8 @@ def main():
         for f in fails:
             print("  -", f)
         return 1
-    print("PASS  8 条单元规则 + 地址归属 + 空洞返回 None + 零长别名不抢地址")
+    print("PASS  11 条单元规则（含 CocoaPods 两种形态）+ 地址归属 "
+          "+ 空洞返回 None + 零长别名不抢地址")
     print(f"      __text 覆盖 {s['text_bytes_covered']}/{s['text_size']} 字节 = "
           f"{s['text_coverage']:.0%}，空洞如实计入未覆盖")
     return 0

@@ -135,16 +135,42 @@ jobs:
         working-directory: target
         run: |
           set -uo pipefail
-          # .xcodeproj 里自带一个 project.xcworkspace，它不是容器，要排除
-          WS=$(find . -maxdepth 2 -name '*.xcworkspace' -not -path '*/*.xcodeproj/*' -print -quit) || WS=""
-          PJ=$(find . -maxdepth 2 -name '*.xcodeproj' -print -quit) || PJ=""
-          if [ -n "$WS" ]; then FLAG=-workspace; PATH_=$WS;
-          elif [ -n "$PJ" ]; then FLAG=-project;  PATH_=$PJ;
-          else echo "没有 .xcworkspace / .xcodeproj"; exit 1; fi
-          echo "flag=$FLAG"   >> "$GITHUB_OUTPUT"
-          echo "path=$PATH_"  >> "$GITHUB_OUTPUT"
-          echo "container=$FLAG $PATH_" >> "$GITHUB_OUTPUT"
-          echo "container = $FLAG $PATH_"
+          # 浅的优先，同深度里 .xcworkspace 优先于 .xcodeproj。
+          #
+          # 上一版写死 `-maxdepth 2`，batch01 里 simplex-chat（apps/ios/）和
+          # joreilly/BikeShare 因此被判成「没有工程」。工程放在子目录是常态。
+          #
+          # 路径**分成 flag 和 path 两个输出**。上一版输出一个整串
+          # `-workspace ./Little Go.xcworkspace`，注入命令行后被 bash 按空格
+          # 切开 —— 带空格的工程名（实测三个）全部构建失败。
+          shallowest() {
+            find . -maxdepth 4 \
+                 \( -name Pods -o -name node_modules -o -name Carthage \
+                    -o -name .git -o -name DerivedData \) -prune -o \
+                 -name "$1" -not -path '*/*.xcodeproj/*' -print 2>/dev/null \
+              | awk -F/ '{print NF-1 "	" $0}' | sort -n -k1,1 -k2,2 \
+              | head -1 | cut -f2-
+          }
+          WS=$(shallowest '*.xcworkspace')
+          PJ=$(shallowest '*.xcodeproj')
+          DW=$(printf '%s' "$WS" | awk -F/ '{print NF-1}')
+          DP=$(printf '%s' "$PJ" | awk -F/ '{print NF-1}')
+          FLAG=""; P=""
+          if [ -n "$WS" ] && { [ -z "$PJ" ] || [ "$DW" -le "$DP" ]; }; then
+            FLAG=workspace; P=$WS
+          elif [ -n "$PJ" ]; then
+            FLAG=project; P=$PJ
+          fi
+          if [ -z "$P" ]; then
+            echo "verdict=NO_XCODE_CONTAINER" >> "$GITHUB_OUTPUT"
+            echo "没有 .xcworkspace / .xcodeproj（已搜到第 4 层，排除 Pods/node_modules/Carthage）"
+            exit 1
+          fi
+          echo "flag=$FLAG"     >> "$GITHUB_OUTPUT"
+          echo "path=$P"        >> "$GITHUB_OUTPUT"
+          echo "verdict=FOUND"  >> "$GITHUB_OUTPUT"
+          echo "container = -$FLAG [$P]"
+
 
       - name: Resolve SwiftPM dependencies
         id: spm
@@ -160,7 +186,7 @@ jobs:
           echo "找到 $RES"
           set +e
           xcodebuild -resolvePackageDependencies \
-            ${{ steps.container.outputs.container }}
+            "-${{ steps.container.outputs.flag }}" "${{ steps.container.outputs.path }}"
           rc=$?
           [ $rc -eq 0 ] && echo "did_run=resolved" >> "$GITHUB_OUTPUT" \
                         || echo "did_run=FAILED_rc$rc" >> "$GITHUB_OUTPUT"
@@ -171,7 +197,8 @@ jobs:
         working-directory: target
         run: |
           set -uo pipefail
-          xcodebuild ${{ steps.container.outputs.container }} -list -json \
+          xcodebuild "-${{ steps.container.outputs.flag }}" \
+                     "${{ steps.container.outputs.path }}" -list -json \
             > "$RUNNER_TEMP/schemes.json"
           cat "$RUNNER_TEMP/schemes.json"
 
@@ -186,7 +213,8 @@ jobs:
           set +e
           mkdir -p "$RUNNER_TEMP/out"
           python3 "$GITHUB_WORKSPACE/tools/pick_app_scheme.py" \
-            --container "${{ steps.container.outputs.container }}" \
+            --container-flag "${{ steps.container.outputs.flag }}" \
+            --container-path "${{ steps.container.outputs.path }}" \
             --schemes-json "$RUNNER_TEMP/schemes.json" \
             --max-schemes "${{ inputs.max_schemes }}" \
             --out "$RUNNER_TEMP/out/schemes_classified.json"
@@ -215,7 +243,7 @@ jobs:
             map_settings_for "$MODE"
             echo "=== $MODE : ${MAP_SETTINGS[*]} ==="
             xcodebuild -showBuildSettings -json \
-              ${{ steps.container.outputs.container }} \
+              "-${{ steps.container.outputs.flag }}" "${{ steps.container.outputs.path }}" \
               -scheme "${{ steps.scheme.outputs.scheme }}" \
               -configuration Release \
               -destination 'generic/platform=iOS' \
@@ -246,7 +274,7 @@ jobs:
           map_settings_for "${{ steps.mapmode.outputs.map_mode }}"
           mkdir -p "$RUNNER_TEMP/out"
           xcodebuild build \
-            ${{ steps.container.outputs.container }} \
+            "-${{ steps.container.outputs.flag }}" "${{ steps.container.outputs.path }}" \
             -scheme "${{ steps.scheme.outputs.scheme }}" \
             -configuration Release \
             -destination 'generic/platform=iOS' \
@@ -311,7 +339,7 @@ jobs:
             echo "|---|---|"
             echo "| repo | \`${{ inputs.repo }}@${{ inputs.sha }}\` |"
             echo "| 工具链 | \`${{ steps.active.outputs.desc }}\` |"
-            echo "| container | \`${{ steps.container.outputs.container }}\` |"
+            echo "| container | \`${{ steps.container.outputs.flag }}\` \`${{ steps.container.outputs.path }}\` |"
             echo "| pods | \`${{ steps.pods.outputs.did_run }}\` |"
             echo "| spm | \`${{ steps.spm.outputs.did_run }}\` |"
             echo "| scheme verdict | \`${{ steps.scheme.outputs.verdict }}\` |"
