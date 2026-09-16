@@ -94,7 +94,31 @@ CRITERIA = {
     "lto":          ("_lto.o 出现且吸收了 __text 字节",
                      lambda b, c: (c.get("lto_objects") or 0) > 0
                      and (c.get("lto_text_bytes") or 0) > 0),
-    "singlefile":   ("未定 —— 探针后从四个稳定量里挑", None),
+    # 由 probe_sf 的两个仓库定下来的（第三个 IceCubesApp 在 singlefile 下构建
+    # 失败）。5calls: symbols_nonzero_size 36,923→38,472 (+4.2%)、dead_stripped
+    # 9,256→13,499；Dai-Hentai: 34,349→34,426 (+0.2%)、24,827→25,040。方向一致：
+    # 关掉模块内跨文件优化后，更多函数保留为独立符号、更多东西留给链接器去
+    # 剥。object_files 在 5calls 上纹丝不动（180→180），所以它**不是**判据 ——
+    # Xcode 的 whole-module 编译本来就每个源文件出一个 .o。
+    # 噪声底：48 对 wholemodule-vs-base 独立重建，四个量全部零变化。所以这里
+    # 任何增量都是这个开关的，不需要阈值；效应大小另记在 effect 里，评分时分层。
+    "singlefile":   ("symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+                     lambda b, c: (c.get("symbols_nonzero_size") or 0)
+                     > (b.get("symbols_nonzero_size") or 0)),
+}
+
+#: Effect magnitude per config, for stratifying P/R later.  Unitless ratios.
+EFFECT = {
+    "no_deadstrip": ("base 里被 dead-strip 的符号数 / base 非零符号数",
+                     lambda b, c: (b.get("dead_stripped") or 0)
+                     / max(b.get("symbols_nonzero_size") or 0, 1)),
+    "lto":          ("_lto.o 吸收的 __text 字节 / base __text 字节",
+                     lambda b, c: (c.get("lto_text_bytes") or 0)
+                     / max(b.get("text_size") or 0, 1)),
+    "singlefile":   ("非零符号数增量 / base 非零符号数",
+                     lambda b, c: ((c.get("symbols_nonzero_size") or 0)
+                                   - (b.get("symbols_nonzero_size") or 0))
+                     / max(b.get("symbols_nonzero_size") or 0, 1)),
 }
 
 #: Decide the verdict.  Insensitive to address permutation.
@@ -115,9 +139,12 @@ R_MAP_UNPARSEABLE = "MAP_UNPARSEABLE"
 R_MAP_EMPTY = "MAP_EMPTY"
 R_MAP_PARSE_ERRORS = "MAP_PARSE_ERRORS"
 R_MISSING_VARIANTS = "MISSING_USABLE_VARIANTS"
+R_SHA_MISMATCH = "SHA_MISMATCH"
+R_TOOLCHAIN_MISMATCH = "TOOLCHAIN_MISMATCH"
 R_OK = "OK"
 REASONS = (R_NO_MANIFEST, R_BUILD_FAILED, R_NO_APP_MAP, R_MAP_UNPARSEABLE,
-           R_MAP_EMPTY, R_MAP_PARSE_ERRORS, R_MISSING_VARIANTS)
+           R_MAP_EMPTY, R_MAP_PARSE_ERRORS, R_MISSING_VARIANTS,
+           R_SHA_MISMATCH, R_TOOLCHAIN_MISMATCH)
 
 
 def app_map_path(art_dir):
@@ -162,6 +189,8 @@ def load(dirs):
             art = mpath.parent
             rec = {
                 "artifact_dir": str(art),
+                "sha": m.get("sha"),
+                "toolchain": m.get("toolchain"),
                 "build_outcome": m.get("build_outcome"),
                 "usable_variants": list(m.get("usable_variants") or []),
                 "binary_bytes_before_strip": None,
@@ -225,10 +254,32 @@ def classify(cfg, rec):
 
 
 def gate(table, required):
-    """Split repos into (complete, excluded).  complete = every required config OK."""
+    """Split repos into (complete, excluded).  complete = every required config OK.
+
+    Also requires every config of a repo to be built from the **same commit**
+    and with the **same toolchain** as its base.  A config batch dispatched
+    later (singlefile was) must reuse both, or the comparison is across
+    commits / compilers and the stable metrics stop meaning anything.
+
+    The toolchain check exists because of probe_sf: its dispatch payload
+    omitted `developer_dir`, the workflow only pins Xcode when that input is
+    non-empty, and macos-latest had moved to Xcode 26.6 -- so three singlefile
+    builds landed on a different compiler than their 26.2 bases.  The manifest
+    records `toolchain` verbatim (`xcodebuild -version` + SDK); equality on
+    that string is the check.  A mismatch is charged to every config whose
+    value differs from base's.
+    """
     complete, excluded = {}, {}
     for repo, cfgs in table.items():
         reasons = {c: classify(c, cfgs.get(c)) for c in required}
+        base = cfgs.get(BASE) or {}
+        for c in required:
+            if reasons[c] != R_OK or c == BASE:
+                continue
+            if base.get("sha") and cfgs[c].get("sha") != base.get("sha"):
+                reasons[c] = R_SHA_MISMATCH
+            elif base.get("toolchain") and cfgs[c].get("toolchain") != base.get("toolchain"):
+                reasons[c] = R_TOOLCHAIN_MISMATCH
         bad = {c: r for c, r in reasons.items() if r != R_OK}
         if bad:
             excluded[repo] = bad
@@ -252,6 +303,8 @@ def compare(complete, required):
                 noisy["binary_bytes_before_strip"] = [bb, cb]
             label, fn = CRITERIA.get(cfg, ("无", None))
             holds = None if fn is None else bool(fn(b, c))
+            elabel, efn = EFFECT.get(cfg, ("无", None))
+            effect = None if efn is None else round(efn(b, c), 6)
             rows.append({
                 "repo": repo, "config": cfg,
                 "verdict": "DIFFERS" if deltas else "NO_OBSERVED_DIFFERENCE",
@@ -260,6 +313,8 @@ def compare(complete, required):
                 "config_abs": {k: c.get(k) for k in STABLE + LTO_ABS},
                 "criterion": label,
                 "criterion_holds": holds,      # None = 判据未定
+                "effect": effect,              # 效应量，评分时按它分层
+                "effect_def": elabel,
                 "text_size_base": b.get("text_size"),
             })
     return rows
@@ -306,6 +361,9 @@ def main(argv=None):
         sys.exit(f"CONSERVATION FAILED: {len(rows)} rows, expected {expect}")
 
     print(f"产物里共 {len(table)} 个仓库。")
+    tc = collections.Counter(r.get("toolchain") for cfgs in table.values()
+                             for r in cfgs.values() if r.get("toolchain"))
+    print("产物上记录的工具链：" + "；".join(f"{n} 个 job ← {t}" for t, n in tc.most_common()))
     if retired:
         print(f"产物里还有已撤销的配置 {retired}，不进比对："
               + "；".join(f"{c}: {make_matrix.RETIRED[c]}" for c in retired))
@@ -369,13 +427,18 @@ def main(argv=None):
             continue
         h = sum(1 for r in sub if r["criterion_holds"])
         print(f"  {c:14s} 判据「{label}」成立 {h}/{n}")
-        if c == "lto" and h:
-            fr = sorted(((r["config_abs"]["lto_text_bytes"] or 0) / (r["text_size_base"] or 1), r["repo"])
-                        for r in sub if r["criterion_holds"])
-            q = lambda k: fr[min(len(fr) - 1, int(k * len(fr)))][0]
-            print(f"      _lto.o 吸收的 __text 占比：最小 {fr[0][0]:.2%} / 中位 {q(.5):.2%} / "
-                  f"最大 {fr[-1][0]:.2%}（{fr[-1][1]}）")
-            print("      注意：这是 __text 字节，不含 __profc / __llvm_prf_nm 那些元数据")
+        # 判据不成立却四个量动了的仓库：判据的方向假设在那里不成立，要看
+        disagree = [r["repo"] for r in sub if not r["criterion_holds"] and r["verdict"] == "DIFFERS"]
+        if disagree:
+            print(f"      判据不成立但产物变了 {len(disagree)} 个：{disagree[:4]}"
+                  + (" …" if len(disagree) > 4 else ""))
+        held = sorted((r["effect"], r["repo"]) for r in sub if r["criterion_holds"] and r["effect"] is not None)
+        if held:
+            q = lambda k: held[min(len(held) - 1, int(k * len(held)))][0]
+            print(f"      效应量（{EFFECT[c][0]}）：最小 {held[0][0]:.2%} / 中位 {q(.5):.2%} / "
+                  f"最大 {held[-1][0]:.2%}（{held[-1][1]}）")
+        if c == "lto":
+            print("      注意：__text 字节不含 __profc / __llvm_prf_nm 那些元数据")
 
     if dup:
         print(f"\n{len(dup)} 个 (仓库, 配置) 在多个批次里都有产物，"
@@ -384,6 +447,8 @@ def main(argv=None):
     with io.open(a.out, "w", encoding="utf-8") as fh:
         json.dump({"configs": {k: list(v) for k, v in CONFIGS.items()},
                    "required": required, "retired_seen": retired,
+                   "complete": sorted(complete),      # 基准集成员 = 过闸的仓库
+                   "effects": {k: v[0] for k, v in EFFECT.items()},
                    "criteria": {k: v[0] for k, v in CRITERIA.items()},
                    "stable_metrics": list(STABLE), "noisy_metrics": list(NOISY),
                    "repos_seen": len(table),
