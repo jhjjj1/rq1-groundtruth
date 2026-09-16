@@ -1,0 +1,29 @@
+[
+  {
+    "repo": "DaidoujiChen/Dai-Hentai",
+    "sha": "36128517801825b033a9c1963f76dd42d81f9ca4",
+    "linkage": "STATIC_LIKELY",
+    "stars": 1267,
+    "locks": [
+      "Podfile.lock"
+    ]
+  },
+  {
+    "repo": "Dimillian/IceCubesApp",
+    "sha": "b2db3033fbf67a97b54d25d6dac2df8a029b26b1",
+    "linkage": "SPM_ONLY",
+    "stars": 7061,
+    "locks": [
+      "Package.resolved"
+    ]
+  },
+  {
+    "repo": "5calls/ios",
+    "sha": "f3e34a71af9ed2c0ac50d86e17114dcbaaeadd63",
+    "linkage": "SPM_ONLY",
+    "stars": 168,
+    "locks": [
+      "Package.resolved"
+    ]
+  }
+]

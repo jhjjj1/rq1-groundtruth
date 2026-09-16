@@ -9,15 +9,37 @@ GitHub 的矩阵上限是 **256 job / 每次 run**。超了它的行为是报错
 
 构建配置的选取依据
 ------------------
-每一项都对应归属算法的一个具体依赖面,不是随手列的:
+每一项对应归属算法的一个具体依赖面。这是**论证性**的依据,不是统计性的:
+真实 App Store 应用用了哪些 build setting 从 IPA 里量不出来(和 map 一样,
+build settings 不随 IPA 分发),所以论文只能写"常见开关",不能写"N% 的应用
+这样构建"。
+
+每一档还必须有一个**产物级的生效判据**,跑完就量。判据不成立的仓库,那一档
+的 P/R 不进平均 —— 否则"配置写了、产物没变"的仓库会把稳健性平均得虚高。
+这条规则是被两次同一类错误逼出来的:`STRIP_STYLE=all` 曾经两格全绿但一个
+符号没剥;`SWIFT_COMPILATION_MODE=wholemodule` 曾经是一档,48/48 个仓库
+四个产物量零变化 —— 因为 Release 本来就是 wholemodule,那一档等于把 base
+再链一遍。
 
   base          Release + -Os。基线。
-  no_deadstrip  关掉 dead code stripping —— 影响哪些桩还在,这也是路线 B
+                产 none + all 两个 strip 变体;none 是诊断上界,不是一种配置。
+  no_deadstrip  DEAD_CODE_STRIPPING=NO —— 影响哪些桩还在,这也是路线 B
                 (导入面)依赖的东西。
-  lto           `LLVM_LTO=YES` —— 跨 .o 内联。**注意:它会让 ground truth
-                本身变弱**,因为一个地址可能来自多个 .o 的内联结果。这一档
-                必须单独报,并且把"链接器都说不清归属"的地址排除出分母。
-  wholemodule   `SWIFT_COMPILATION_MODE=wholemodule` —— 模块内跨文件内联。
+                判据:map 的 # Dead Stripped Symbols 归零。实测 47/48。
+  lto           LLVM_LTO=YES —— 跨 .o 内联。实测它**不是**把 .o 合并:对象
+                数只 +1,多出来的是 <Target>_lto.o,被 LTO 吸收的符号全部改
+                指向它。解析器把它记成 LTO_MERGED / 单元 None(链接器自己也
+                说不清),评分时排除出分母 —— 见 parse_link_map.RE_LTO_OBJ。
+                判据:_lto.o 出现且吸收了 __text 字节。实测 22/48 出现;
+                吸收量差异很大(IceCubesApp 0.11% 字节,TLDR 26%),多半由
+                clang 编译的代码占比决定,这一点待从 base map 验证。
+  singlefile    SWIFT_COMPILATION_MODE=singlefile —— 关掉 Swift 模块内的跨
+                文件优化,往 Release 默认的**反方向**拨。它是 counterfactual
+                ablation(实测 0/48 个仓库这样发布),和 base/none 同属诊断
+                组,量的是 whole-module optimization 让归属难了多少。
+                判据:**未定**。先在少数仓库上探针,看四个噪声稳定量哪个动,
+                动的那个才是判据;四个都不动就说明 key 没进到 Swift 编译里,
+                要查 build.log 里的 argv,不能把这一档当成功。
 
 strip 为什么不是一档配置
 ------------------------
@@ -55,7 +77,13 @@ CONFIGS = {
     "base":         ("", "none,all"),
     "no_deadstrip": ("DEAD_CODE_STRIPPING=NO", "all"),
     "lto":          ("LLVM_LTO=YES", "all"),
-    "wholemodule":  ("SWIFT_COMPILATION_MODE=wholemodule", "all"),
+    "singlefile":   ("SWIFT_COMPILATION_MODE=singlefile", "all"),
+}
+#: 已撤销的配置。列在这里是为了让旧的 dispatch 得到一句明确的错误,
+#: 而不是"未知配置"。
+RETIRED = {
+    "wholemodule": "48/48 个仓库产物零变化:Release 默认已是 wholemodule。换成 singlefile。",
+    "strip_all":   "STRIP_INSTALLED_PRODUCT 只在安装阶段生效,xcodebuild build 不走。strip 改为收集阶段的变体。",
 }
 
 
@@ -80,6 +108,11 @@ def main() -> int:
         chosen = list(CONFIGS)
     else:
         chosen = [c.strip() for c in args.configs.split(",") if c.strip()]
+        retired = [c for c in chosen if c in RETIRED]
+        if retired:
+            for c in retired:
+                print(f"配置 {c} 已撤销：{RETIRED[c]}", file=sys.stderr)
+            return 1
         unknown = [c for c in chosen if c not in CONFIGS]
         if unknown:
             print(f"未知配置：{unknown}；可选：{sorted(CONFIGS)}", file=sys.stderr)

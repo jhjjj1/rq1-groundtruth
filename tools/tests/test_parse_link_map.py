@@ -34,6 +34,11 @@ MAP = "\n".join([
     "[  5] /usr/lib/system/libdispatch.dylib",
     "[  6] /System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore",
     "[  7] /somewhere/totally/unexpected.bin",
+    # LTO 输出对象。路径形状取自 Dimillian/IceCubesApp 的 lto 档实测 map
+    # （[103] .../IceCubesApp.build/Objects-normal/arm64/Ice Cubes_lto.o，
+    # 注意文件名里有空格）。它同时也匹配 RE_TARGET_OBJ —— 这条 fixture
+    # 就是为了保证 LTO 规则先于 TARGET_INTERMEDIATE。
+    f"[ 11] {R}/Build/Intermediates.noindex/IceCubesApp.build/Release-iphoneos/IceCubesActionExtension.build/Objects-normal/arm64/Ice Cubes_lto.o",
     "# Sections:",
     "# Address\tSize    \tSegment\tSection",
     "0x100004000\t0x00000100\t__TEXT\t__text",
@@ -45,6 +50,7 @@ MAP = "\n".join([
     "0x100004040\t0x00000040\t[  2] _$s13NetworkClientAAV3fooyyF",
     "0x100004040\t0x00000000\t[  0] _alias_at_same_address",
     "0x100004080\t0x00000040\t[  4] _swift_compat_shim",
+    "0x1000040C0\t0x00000020\t[ 11] _cmark_utf8proc_case_fold",
     "# Dead Stripped Symbols:",
     "#        \tSize    \tFile  Name",
     "<<dead>>\t0x0000003C\t[  1] _$sxIeAgHr_xs5Error_pIegHrzo_Tg5TA",
@@ -80,6 +86,8 @@ def main():
         9: ("COCOAPOD", "SDWebImage", "POD_BUILT_FROM_SOURCE"),
         # Pods/ 下的脚手架目录不是 pod
         10: ("STATIC_ARCHIVE", "libscaffold", "ARCHIVE_MEMBER"),
+        # LTO 输出：单元必须是 None（链接器自己也说不清），不能是 app target
+        11: ("LTO_MERGED", None, "LTO_OUTPUT"),
     }
     for i, (kind, unit, rule) in want.items():
         o = lm.objects.get(i)
@@ -98,10 +106,22 @@ def main():
             fails.append(f"unit_at(0x{addr:x}) = {(got or {}).get('unit')}，期望 {unit}")
 
     # 覆盖范围之外必须返回 None —— 「没覆盖到」不能被说成「属于某个单元」。
-    # 0x1000040C0 是 __text *内部*的空洞：没有任何符号声明占着它。
-    for addr in (0x100003FFF, 0x1000040C0, 0x1000040FF, 0x100004100, 0x200000000):
+    # 0x1000040E0 是 __text *内部*的空洞：没有任何符号声明占着它。
+    for addr in (0x100003FFF, 0x1000040E0, 0x1000040FF, 0x100004100, 0x200000000):
         if lm.unit_at(addr) is not None:
             fails.append(f"unit_at(0x{addr:x}) 应为 None，实际 {lm.unit_at(addr)}")
+
+    # LTO 吸收的地址是另一回事：**覆盖了**，但单元是 None。
+    # 「没覆盖」(unit_at → None) 和「覆盖了但说不清」(记录在、unit 为 None)
+    # 评分时走不同的路 —— 前者是 map 的盲区，后者要排除出分母。
+    got = lm.unit_at(0x1000040C8)
+    if got is None:
+        fails.append("LTO 地址被当成未覆盖了")
+    elif (got.get("kind"), got.get("unit"), got.get("target")) != \
+            ("LTO_MERGED", None, "IceCubesActionExtension"):
+        fails.append(f"LTO 地址的记录不对：{got}")
+    if (lm.objects.get(11) or {}).get("unit") == "IceCubesActionExtension":
+        fails.append("回归：_lto.o 又被归到 app target 了")
 
     # size==0 的别名不能抢地址：0x100004040 属于 [2] 不属于 [0]
     if (lm.unit_at(0x100004040) or {}).get("index") != 2:
@@ -128,19 +148,27 @@ def main():
     s = P.summarize(lm)
     if s["symbols_zero_size"] != 2:
         fails.append(f"零长符号 {s['symbols_zero_size']}，期望 2")
-    # 三段各 0x40 = 192 字节，__text 是 0x100 = 256 字节，
-    # 0x1000040C0~0x100004100 这 64 字节没有符号声明 —— 覆盖率必须如实是 75%
-    if s["text_size"] != 0x100 or s["text_bytes_covered"] != 0xC0:
-        fails.append(f"__text 覆盖 {s['text_bytes_covered']}/{s['text_size']}，期望 192/256")
-    if s["text_coverage"] != 0.75:
-        fails.append(f"text_coverage={s['text_coverage']}，期望 0.75")
+    # 三段各 0x40 + LTO 一段 0x20 = 224 字节，__text 是 0x100 = 256 字节，
+    # 0x1000040E0~0x100004100 这 32 字节没有符号声明 —— 覆盖率必须如实是 87.5%
+    if s["text_size"] != 0x100 or s["text_bytes_covered"] != 0xE0:
+        fails.append(f"__text 覆盖 {s['text_bytes_covered']}/{s['text_size']}，期望 224/256")
+    if s["text_coverage"] != 0.875:
+        fails.append(f"text_coverage={s['text_coverage']}，期望 0.875")
+    # LTO 吸收量：1 个对象、1 个符号、0x20 字节，且全在 __text 里
+    if (s["lto_objects"], s["lto_symbols"], s["lto_bytes"], s["lto_text_bytes"]) \
+            != (1, 1, 0x20, 0x20):
+        fails.append(f"LTO 计数 {(s['lto_objects'], s['lto_symbols'], s['lto_bytes'], s['lto_text_bytes'])}，"
+                     "期望 (1, 1, 32, 32)")
+    # units_seen 不能把 None 算成一个单元，top_units 里也不能出现 None
+    if any(u["unit"] is None for u in s["top_units"]):
+        fails.append("top_units 里出现了 None 单元")
 
     if fails:
         print("FAIL")
         for f in fails:
             print("  -", f)
         return 1
-    print("PASS  11 条单元规则（含 CocoaPods 两种形态）+ 地址归属 "
+    print(f"PASS  {len(want)} 条单元规则（含 CocoaPods 两种形态、LTO 输出）+ 地址归属 "
           "+ 空洞返回 None + 零长别名不抢地址")
     print(f"      __text 覆盖 {s['text_bytes_covered']}/{s['text_size']} 字节 = "
           f"{s['text_coverage']:.0%}，空洞如实计入未覆盖")

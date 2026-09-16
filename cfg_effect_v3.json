@@ -1,0 +1,6785 @@
+{
+  "configs": {
+    "base": [
+      "none",
+      "all"
+    ],
+    "no_deadstrip": [
+      "all"
+    ],
+    "lto": [
+      "all"
+    ],
+    "singlefile": [
+      "all"
+    ]
+  },
+  "required": [
+    "base",
+    "no_deadstrip",
+    "lto"
+  ],
+  "retired_seen": [
+    "wholemodule"
+  ],
+  "criteria": {
+    "no_deadstrip": "dead_stripped 归零",
+    "lto": "_lto.o 出现且吸收了 __text 字节",
+    "singlefile": "未定 —— 探针后从四个稳定量里挑"
+  },
+  "stable_metrics": [
+    "object_files",
+    "dead_stripped",
+    "symbols_nonzero_size",
+    "units_seen"
+  ],
+  "noisy_metrics": [
+    "text_size",
+    "symbols_total",
+    "bytes_covered"
+  ],
+  "repos_seen": 181,
+  "repos_complete": 48,
+  "repos_excluded": 133,
+  "excluded": {
+    "AdguardTeam/AdguardForiOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Automattic/pocket-casts-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "EhPanda-Team/EhPanda": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "ExistOrLive/GithubClient": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "HabitRPG/habitica-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "ProtonVPN/ios-mac-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Ranchero-Software/NetNewsWire": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Swiftgram/Telegram-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "TelegramMessenger/Telegram-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "TortugaPower/BookPlayer": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "automattic/simplenote-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "belm/BaiduFM-Swift": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "bither/bither-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "bitwarden/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "blinksh/blink": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "cagnulein/qdomyos-zwift": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "claration/Feather": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "denissimon/distributed-model-training": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "eerimoq/moblin": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "element-hq/element-x-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "herzbube/littlego": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "holzschu/a-shell": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "home-assistant/iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "jellyfin/Swiftfin": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "kickstarter/ios-oss": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "migueldeicaza/SwiftTerm": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "moonlight-stream/moonlight-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "mssun/passforios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "mullvad/mullvadvpn-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "nextcloud/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "partout-io/passepartout": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "pointfreeco/swift-composable-architecture": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "rainbow-me/rainbow": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "rrroyal/Harbour": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "rudrankriyam/Foundation-Models-Framework-Lab": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "simplex-chat/simplex-chat": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "splinesoft/MUDRammer": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "tnantoka/edhita": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "twostraws/Unwrap": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "utmapp/UTM": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "weiran/Hackers": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "wordpress-mobile/WordPress-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "yichengchen/ATV-Bilibili-demo": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "AnthonyH93/GoCycling": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "DeluxeAlonso/UpcomingMovies": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Dimillian/FoundationChat": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Dimillian/IcySky": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "OnionBrowser/OnionBrowser": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "ProtonDriveApps/ios-drive": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Provenance-Emu/Provenance": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Say-Their-Name/say-their-names-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "StepicOrg/stepik-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "altstoreio/AltStore": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "artsy/eigen": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "asuc-octo/berkeley-mobile-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "bigjermaine/SwiftTracker": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "chunkyguy/PhotoApp": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "cinderella-project/iMast": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "criticalmaps/criticalmaps-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "daneden/Zeitgeist": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "deltachat/deltachat-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "duckduckgo/apple-browsers": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "element-hq/element-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "gdombiak/OctoPod": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "guardianproject/orbot-apple": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "iBurnApp/iBurn-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "leathalman/Jotify": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "lionheart/Pushpin": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "lukeswitz/DragonSync-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "mateusz-bak/openreads": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "miataru/miataru-ios-client": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "mikaelacaron/Basic-Car-Maintenance": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "mlemgroup/mlem": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "monal-im/Monal": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "netless-io/flat-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "nightscout/nightguard": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "niochat/nio": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "ooni/probe-multiplatform": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "openhab/openhab-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "owntracks/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "peterfriese/MakeItSo": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "pia-foss/mobile-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "rileytestut/Delta": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "signalapp/Signal-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "soramitsu/fearless-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "suicidesafetyplan/safetyplan-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "threema-ch/threema-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "tinode/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "tls-inspector/tls-inspector": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "vinhnx/Clendar": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "walktalkmeditate/pilgrim-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "wireapp/wire-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "woocommerce/woocommerce-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "zulip/zulip-mobile": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "256Arts/Sprite-Catalog": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "256Arts/Sprite-Pencil": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "AlexCatch/Oak": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "AnthonyH93/HexaCalc": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "EvgenyKarkan/Feeds4U": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "FlineDev/Prayer": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "GigaDuckAI/conduck": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Keith-43/MuVis-Experimentation": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Loriage/Minidisc": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Piecelet/neodb-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "SwissCovid/swisscovid-app-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "TICESoftware/tice-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "Thomvis/Construct": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "VishwaiOSDev/Loadify-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "WWDCScholars/iOS-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "WezSieTato/ScanNow": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "amikhaylin/pompaddo": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "apps-fab/exercism-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "catrobat/catty": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "daneden/Solstice": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "denissimon/Cryptocurrency-Info": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "dl-alexandre/SymbolGrid": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "eugenepyvovarov/CodeAgentsMobile": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "frostland/GPS-Stone": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "gematik/E-Rezept-App-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "hishd/RicketyRick-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "hishd/SkyWizard-SwiftUI": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "joeldavidw/Chronos": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "krazywarez/hutch": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "kurozora/kurozora-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "marcusraitner/pulse": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "mathieudutour/TimeLines": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "misteu/VocabularyTraining": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "robertwtucker/kfinderapp-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "strumswell/oscar-weather": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "vermont42/Conjugar": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "willowtreeapps/vocable-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "writingmate/aidictation": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    },
+    "wvabrinskas/PokePal": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED"
+    }
+  },
+  "duplicates": [
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-base",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-lto",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-no_deadstrip",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-wholemodule",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-base",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-lto",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-no_deadstrip",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-wholemodule",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mssun/passforios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mssun-passforios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mssun-passforios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mssun/passforios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mssun-passforios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mssun-passforios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mssun/passforios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mssun-passforios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mssun-passforios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    }
+  ],
+  "rows": [
+    {
+      "repo": "0xCUB3/wBlock",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 135,
+        "dead_stripped": 20634,
+        "symbols_nonzero_size": 39221,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 135,
+        "dead_stripped": 20634,
+        "symbols_nonzero_size": 39221,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3082024
+    },
+    {
+      "repo": "0xCUB3/wBlock",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          20634,
+          0
+        ],
+        "symbols_nonzero_size": [
+          39221,
+          39416
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3082024,
+          3087560
+        ],
+        "symbols_total": [
+          41668,
+          41932
+        ],
+        "bytes_covered": [
+          4168891,
+          4176394
+        ],
+        "binary_bytes_before_strip": [
+          12705248,
+          12745800
+        ]
+      },
+      "base_abs": {
+        "object_files": 135,
+        "dead_stripped": 20634,
+        "symbols_nonzero_size": 39221,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 135,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 39416,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3082024
+    },
+    {
+      "repo": "5calls/ios",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          180,
+          181
+        ],
+        "dead_stripped": [
+          9256,
+          9024
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          36779
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1607760
+        ],
+        "symbols_total": [
+          39345,
+          39172
+        ],
+        "bytes_covered": [
+          3566192,
+          3571114
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          8606400
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 181,
+        "dead_stripped": 9024,
+        "symbols_nonzero_size": 36779,
+        "units_seen": 46,
+        "lto_objects": 1,
+        "lto_symbols": 3379,
+        "lto_bytes": 146592,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 1602684
+    },
+    {
+      "repo": "5calls/ios",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9256,
+          0
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          37732
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1643280
+        ],
+        "symbols_total": [
+          39345,
+          40233
+        ],
+        "bytes_covered": [
+          3566192,
+          3653206
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          8738032
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 180,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 37732,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1602684
+    },
+    {
+      "repo": "AnderGoig/github-contributions-ios",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          101,
+          102
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3426688,
+          3426712
+        ],
+        "bytes_covered": [
+          4016447,
+          4016471
+        ]
+      },
+      "base_abs": {
+        "object_files": 101,
+        "dead_stripped": 9119,
+        "symbols_nonzero_size": 29458,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 102,
+        "dead_stripped": 9119,
+        "symbols_nonzero_size": 29458,
+        "units_seen": 48,
+        "lto_objects": 1,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3426688
+    },
+    {
+      "repo": "AnderGoig/github-contributions-ios",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9119,
+          0
+        ],
+        "symbols_nonzero_size": [
+          29458,
+          29701
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3426688,
+          3430604
+        ],
+        "symbols_total": [
+          34595,
+          35044
+        ],
+        "bytes_covered": [
+          4016447,
+          4023373
+        ],
+        "binary_bytes_before_strip": [
+          7292616,
+          7338088
+        ]
+      },
+      "base_abs": {
+        "object_files": 101,
+        "dead_stripped": 9119,
+        "symbols_nonzero_size": 29458,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 101,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 29701,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3426688
+    },
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          330,
+          331
+        ],
+        "dead_stripped": [
+          24827,
+          24594
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34340
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1306332
+        ],
+        "symbols_total": [
+          34431,
+          34422
+        ],
+        "bytes_covered": [
+          2150170,
+          2149530
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3478616
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 331,
+        "dead_stripped": 24594,
+        "symbols_nonzero_size": 34340,
+        "units_seen": 42,
+        "lto_objects": 1,
+        "lto_symbols": 1610,
+        "lto_bytes": 43796,
+        "lto_text_bytes": 96
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 1306812
+    },
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          24827,
+          0
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34993
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1316732
+        ],
+        "symbols_total": [
+          34431,
+          35078
+        ],
+        "bytes_covered": [
+          2150170,
+          2215882
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3586856
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 330,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 34993,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1306812
+    },
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          192,
+          193
+        ],
+        "dead_stripped": [
+          135037,
+          134668
+        ],
+        "symbols_nonzero_size": [
+          280437,
+          280288
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          17316124,
+          17316112
+        ],
+        "symbols_total": [
+          315059,
+          314874
+        ],
+        "bytes_covered": [
+          23160362,
+          23161240
+        ],
+        "binary_bytes_before_strip": [
+          62702680,
+          62673912
+        ]
+      },
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 135037,
+        "symbols_nonzero_size": 280437,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 193,
+        "dead_stripped": 134668,
+        "symbols_nonzero_size": 280288,
+        "units_seen": 119,
+        "lto_objects": 1,
+        "lto_symbols": 2484,
+        "lto_bytes": 24989,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 17316124
+    },
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          135037,
+          0
+        ],
+        "symbols_nonzero_size": [
+          280437,
+          282212
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          17316124,
+          17362016
+        ],
+        "symbols_total": [
+          315059,
+          317349
+        ],
+        "bytes_covered": [
+          23160362,
+          23234802
+        ],
+        "binary_bytes_before_strip": [
+          62702680,
+          62872240
+        ]
+      },
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 135037,
+        "symbols_nonzero_size": 280437,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 192,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 282212,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 17316124
+    },
+    {
+      "repo": "EmergeTools/hackernews",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          525,
+          526
+        ],
+        "dead_stripped": [
+          37074,
+          37073
+        ]
+      },
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 525,
+        "dead_stripped": 37074,
+        "symbols_nonzero_size": 60240,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 526,
+        "dead_stripped": 37073,
+        "symbols_nonzero_size": 60240,
+        "units_seen": 57,
+        "lto_objects": 1,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 2125456
+    },
+    {
+      "repo": "EmergeTools/hackernews",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          37074,
+          0
+        ],
+        "symbols_nonzero_size": [
+          60240,
+          61146
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2125456,
+          2145512
+        ],
+        "symbols_total": [
+          64951,
+          66001
+        ],
+        "bytes_covered": [
+          3707597,
+          3790361
+        ],
+        "binary_bytes_before_strip": [
+          4112664,
+          4192392
+        ]
+      },
+      "base_abs": {
+        "object_files": 525,
+        "dead_stripped": 37074,
+        "symbols_nonzero_size": 60240,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 525,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 61146,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2125456
+    },
+    {
+      "repo": "Finb/Bark",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          1277,
+          1278
+        ],
+        "dead_stripped": [
+          120438,
+          118572
+        ],
+        "symbols_nonzero_size": [
+          147601,
+          146373
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9982300,
+          9985728
+        ],
+        "symbols_total": [
+          169152,
+          167424
+        ],
+        "bytes_covered": [
+          13239111,
+          13233153
+        ],
+        "binary_bytes_before_strip": [
+          27596216,
+          27243912
+        ]
+      },
+      "base_abs": {
+        "object_files": 1277,
+        "dead_stripped": 120438,
+        "symbols_nonzero_size": 147601,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 1278,
+        "dead_stripped": 118572,
+        "symbols_nonzero_size": 146373,
+        "units_seen": 103,
+        "lto_objects": 1,
+        "lto_symbols": 7222,
+        "lto_bytes": 257246,
+        "lto_text_bytes": 1464
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 9982300
+    },
+    {
+      "repo": "Finb/Bark",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          120438,
+          0
+        ],
+        "symbols_nonzero_size": [
+          147601,
+          154912
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9982300,
+          10518884
+        ],
+        "symbols_total": [
+          169152,
+          177178
+        ],
+        "bytes_covered": [
+          13239111,
+          13929788
+        ],
+        "binary_bytes_before_strip": [
+          27596216,
+          28749352
+        ]
+      },
+      "base_abs": {
+        "object_files": 1277,
+        "dead_stripped": 120438,
+        "symbols_nonzero_size": 147601,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 1277,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 154912,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 9982300
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 10131,
+        "symbols_nonzero_size": 41037,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 98,
+        "dead_stripped": 10131,
+        "symbols_nonzero_size": 41037,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 2034012
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          10131,
+          0
+        ],
+        "symbols_nonzero_size": [
+          41037,
+          41369
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2034012,
+          2047636
+        ],
+        "symbols_total": [
+          46102,
+          46525
+        ],
+        "bytes_covered": [
+          3274094,
+          3317095
+        ],
+        "binary_bytes_before_strip": [
+          8540080,
+          8617872
+        ]
+      },
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 10131,
+        "symbols_nonzero_size": 41037,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 98,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 41369,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2034012
+    },
+    {
+      "repo": "JosephDuffy/Overamped",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 91,
+        "dead_stripped": 7743,
+        "symbols_nonzero_size": 15028,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 91,
+        "dead_stripped": 7743,
+        "symbols_nonzero_size": 15028,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 810248
+    },
+    {
+      "repo": "JosephDuffy/Overamped",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          7743,
+          0
+        ],
+        "symbols_nonzero_size": [
+          15028,
+          15230
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          810248,
+          814348
+        ],
+        "symbols_total": [
+          16162,
+          16409
+        ],
+        "bytes_covered": [
+          1113478,
+          1120014
+        ],
+        "binary_bytes_before_strip": [
+          3096816,
+          3126144
+        ]
+      },
+      "base_abs": {
+        "object_files": 91,
+        "dead_stripped": 7743,
+        "symbols_nonzero_size": 15028,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 91,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 15230,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 810248
+    },
+    {
+      "repo": "NiftyTreeStudios/Bean-Juice",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 1130,
+        "symbols_nonzero_size": 6042,
+        "units_seen": 31,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 108,
+        "dead_stripped": 1130,
+        "symbols_nonzero_size": 6042,
+        "units_seen": 31,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 212064
+    },
+    {
+      "repo": "NiftyTreeStudios/Bean-Juice",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          1130,
+          0
+        ],
+        "symbols_nonzero_size": [
+          6042,
+          6268
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          212064,
+          224912
+        ],
+        "symbols_total": [
+          6321,
+          6552
+        ],
+        "bytes_covered": [
+          366044,
+          406729
+        ],
+        "binary_bytes_before_strip": [
+          1361112,
+          1406272
+        ]
+      },
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 1130,
+        "symbols_nonzero_size": 6042,
+        "units_seen": 31,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 108,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 6268,
+        "units_seen": 31,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 212064
+    },
+    {
+      "repo": "Visual-Studio-Coder/Recap",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          105,
+          106
+        ],
+        "dead_stripped": [
+          8519,
+          8302
+        ],
+        "symbols_nonzero_size": [
+          32008,
+          31864
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1460184,
+          1464884
+        ],
+        "symbols_total": [
+          34827,
+          34647
+        ],
+        "bytes_covered": [
+          2171212,
+          2175697
+        ],
+        "binary_bytes_before_strip": [
+          10053816,
+          10023800
+        ]
+      },
+      "base_abs": {
+        "object_files": 105,
+        "dead_stripped": 8519,
+        "symbols_nonzero_size": 32008,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 106,
+        "dead_stripped": 8302,
+        "symbols_nonzero_size": 31864,
+        "units_seen": 52,
+        "lto_objects": 1,
+        "lto_symbols": 2567,
+        "lto_bytes": 25656,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 1460184
+    },
+    {
+      "repo": "Visual-Studio-Coder/Recap",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          8519,
+          0
+        ],
+        "symbols_nonzero_size": [
+          32008,
+          32529
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1460184,
+          1478976
+        ],
+        "symbols_total": [
+          34827,
+          35404
+        ],
+        "bytes_covered": [
+          2171212,
+          2196306
+        ],
+        "binary_bytes_before_strip": [
+          10053816,
+          10100280
+        ]
+      },
+      "base_abs": {
+        "object_files": 105,
+        "dead_stripped": 8519,
+        "symbols_nonzero_size": 32008,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 105,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 32529,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1460184
+    },
+    {
+      "repo": "XunMengWinter/PetNote-oss",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 16862,
+        "symbols_nonzero_size": 44590,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 180,
+        "dead_stripped": 16862,
+        "symbols_nonzero_size": 44590,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 2466376
+    },
+    {
+      "repo": "XunMengWinter/PetNote-oss",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          16862,
+          0
+        ],
+        "symbols_nonzero_size": [
+          44590,
+          44954
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2466376,
+          2471760
+        ],
+        "symbols_total": [
+          50901,
+          51386
+        ],
+        "bytes_covered": [
+          3372621,
+          3383878
+        ],
+        "binary_bytes_before_strip": [
+          9352368,
+          9394616
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 16862,
+        "symbols_nonzero_size": 44590,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 180,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 44954,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2466376
+    },
+    {
+      "repo": "airbnb/HorizonCalendar",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 44,
+        "dead_stripped": 2230,
+        "symbols_nonzero_size": 2452,
+        "units_seen": 14,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 44,
+        "dead_stripped": 2230,
+        "symbols_nonzero_size": 2452,
+        "units_seen": 14,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 94140
+    },
+    {
+      "repo": "airbnb/HorizonCalendar",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          2230,
+          0
+        ],
+        "symbols_nonzero_size": [
+          2452,
+          2466
+        ]
+      },
+      "noisy_deltas": {
+        "symbols_total": [
+          2530,
+          2545
+        ],
+        "bytes_covered": [
+          145635,
+          146056
+        ],
+        "binary_bytes_before_strip": [
+          356512,
+          356600
+        ]
+      },
+      "base_abs": {
+        "object_files": 44,
+        "dead_stripped": 2230,
+        "symbols_nonzero_size": 2452,
+        "units_seen": 14,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 44,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 2466,
+        "units_seen": 14,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 94140
+    },
+    {
+      "repo": "analogcode/Swift-Radio-Pro",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 8310,
+        "symbols_nonzero_size": 9731,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 108,
+        "dead_stripped": 8310,
+        "symbols_nonzero_size": 9731,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 421564
+    },
+    {
+      "repo": "analogcode/Swift-Radio-Pro",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          8310,
+          0
+        ],
+        "symbols_nonzero_size": [
+          9731,
+          9904
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          421564,
+          423872
+        ],
+        "symbols_total": [
+          10794,
+          11088
+        ],
+        "bytes_covered": [
+          616048,
+          621369
+        ],
+        "binary_bytes_before_strip": [
+          1454240,
+          1471408
+        ]
+      },
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 8310,
+        "symbols_nonzero_size": 9731,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 108,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 9904,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 421564
+    },
+    {
+      "repo": "awaseem/foqos",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 253,
+        "dead_stripped": 20681,
+        "symbols_nonzero_size": 44306,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 253,
+        "dead_stripped": 20681,
+        "symbols_nonzero_size": 44306,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 2173424
+    },
+    {
+      "repo": "awaseem/foqos",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          20681,
+          0
+        ],
+        "symbols_nonzero_size": [
+          44306,
+          44689
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2173424,
+          2187088
+        ],
+        "symbols_total": [
+          47460,
+          47878
+        ],
+        "bytes_covered": [
+          3480043,
+          3523633
+        ],
+        "binary_bytes_before_strip": [
+          12933664,
+          13000120
+        ]
+      },
+      "base_abs": {
+        "object_files": 253,
+        "dead_stripped": 20681,
+        "symbols_nonzero_size": 44306,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 253,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 44689,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2173424
+    },
+    {
+      "repo": "b5i/Atwy",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 329,
+        "dead_stripped": 34951,
+        "symbols_nonzero_size": 57878,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 329,
+        "dead_stripped": 34951,
+        "symbols_nonzero_size": 57878,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3732912
+    },
+    {
+      "repo": "b5i/Atwy",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          34951,
+          0
+        ],
+        "symbols_nonzero_size": [
+          57878,
+          58324
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3732912,
+          3741024
+        ],
+        "symbols_total": [
+          66369,
+          66933
+        ],
+        "bytes_covered": [
+          4913050,
+          4926535
+        ],
+        "binary_bytes_before_strip": [
+          13412176,
+          13453704
+        ]
+      },
+      "base_abs": {
+        "object_files": 329,
+        "dead_stripped": 34951,
+        "symbols_nonzero_size": 57878,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 329,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 58324,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3732912
+    },
+    {
+      "repo": "cranci1/Sora",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 189,
+        "dead_stripped": 35176,
+        "symbols_nonzero_size": 49007,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 189,
+        "dead_stripped": 35176,
+        "symbols_nonzero_size": 49007,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3749200
+    },
+    {
+      "repo": "cranci1/Sora",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          35176,
+          0
+        ],
+        "symbols_nonzero_size": [
+          49007,
+          49285
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3749200,
+          3752584
+        ],
+        "symbols_total": [
+          53512,
+          53895
+        ],
+        "bytes_covered": [
+          5025501,
+          5031582
+        ],
+        "binary_bytes_before_strip": [
+          14852168,
+          14873224
+        ]
+      },
+      "base_abs": {
+        "object_files": 189,
+        "dead_stripped": 35176,
+        "symbols_nonzero_size": 49007,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 189,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 49285,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3749200
+    },
+    {
+      "repo": "freesuraj/TLDR",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          99,
+          100
+        ],
+        "dead_stripped": [
+          22540,
+          18477
+        ],
+        "symbols_nonzero_size": [
+          172480,
+          157740
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7136284,
+          6942096
+        ],
+        "symbols_total": [
+          176693,
+          159939
+        ],
+        "bytes_covered": [
+          18629315,
+          18101357
+        ],
+        "binary_bytes_before_strip": [
+          34371704,
+          31749608
+        ]
+      },
+      "base_abs": {
+        "object_files": 99,
+        "dead_stripped": 22540,
+        "symbols_nonzero_size": 172480,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 100,
+        "dead_stripped": 18477,
+        "symbols_nonzero_size": 157740,
+        "units_seen": 46,
+        "lto_objects": 1,
+        "lto_symbols": 38187,
+        "lto_bytes": 4791965,
+        "lto_text_bytes": 140120
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 7136284
+    },
+    {
+      "repo": "freesuraj/TLDR",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          22540,
+          0
+        ],
+        "symbols_nonzero_size": [
+          172480,
+          185355
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7136284,
+          7893460
+        ],
+        "symbols_total": [
+          176693,
+          190578
+        ],
+        "bytes_covered": [
+          18629315,
+          21870685
+        ],
+        "binary_bytes_before_strip": [
+          34371704,
+          38900280
+        ]
+      },
+      "base_abs": {
+        "object_files": 99,
+        "dead_stripped": 22540,
+        "symbols_nonzero_size": 172480,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 99,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 185355,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 7136284
+    },
+    {
+      "repo": "fulldecent/vowel-practice",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          94,
+          95
+        ]
+      },
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 94,
+        "dead_stripped": 1215,
+        "symbols_nonzero_size": 7146,
+        "units_seen": 43,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 95,
+        "dead_stripped": 1215,
+        "symbols_nonzero_size": 7146,
+        "units_seen": 43,
+        "lto_objects": 1,
+        "lto_symbols": 2,
+        "lto_bytes": 399,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 282868
+    },
+    {
+      "repo": "fulldecent/vowel-practice",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          1215,
+          0
+        ],
+        "symbols_nonzero_size": [
+          7146,
+          7369
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          282868,
+          294876
+        ],
+        "symbols_total": [
+          7443,
+          7676
+        ],
+        "bytes_covered": [
+          473690,
+          513542
+        ],
+        "binary_bytes_before_strip": [
+          1533872,
+          1580144
+        ]
+      },
+      "base_abs": {
+        "object_files": 94,
+        "dead_stripped": 1215,
+        "symbols_nonzero_size": 7146,
+        "units_seen": 43,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 94,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 7369,
+        "units_seen": 43,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 282868
+    },
+    {
+      "repo": "gluonfield/enchanted",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          180,
+          181
+        ],
+        "dead_stripped": [
+          13692,
+          13448
+        ],
+        "symbols_nonzero_size": [
+          61116,
+          60957
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3835260,
+          3837376
+        ],
+        "symbols_total": [
+          70119,
+          69918
+        ],
+        "bytes_covered": [
+          4941876,
+          4943786
+        ],
+        "binary_bytes_before_strip": [
+          11967360,
+          11935520
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 13692,
+        "symbols_nonzero_size": 61116,
+        "units_seen": 71,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 181,
+        "dead_stripped": 13448,
+        "symbols_nonzero_size": 60957,
+        "units_seen": 71,
+        "lto_objects": 1,
+        "lto_symbols": 2583,
+        "lto_bytes": 25933,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3835260
+    },
+    {
+      "repo": "gluonfield/enchanted",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          13692,
+          0
+        ],
+        "symbols_nonzero_size": [
+          61116,
+          61817
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3835260,
+          3855464
+        ],
+        "symbols_total": [
+          70119,
+          70934
+        ],
+        "bytes_covered": [
+          4941876,
+          4970505
+        ],
+        "binary_bytes_before_strip": [
+          11967360,
+          12038776
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 13692,
+        "symbols_nonzero_size": 61116,
+        "units_seen": 71,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 180,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 61817,
+        "units_seen": 71,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3835260
+    },
+    {
+      "repo": "glushchenko/fsnotes",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 10,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 222,
+        "units_seen": 6,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 10,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 222,
+        "units_seen": 6,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 7932
+    },
+    {
+      "repo": "glushchenko/fsnotes",
+      "config": "no_deadstrip",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 10,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 222,
+        "units_seen": 6,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 10,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 222,
+        "units_seen": 6,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": false,
+      "text_size_base": 7932
+    },
+    {
+      "repo": "jasudev/FabulaItemsProvider",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          98,
+          99
+        ],
+        "dead_stripped": [
+          28533,
+          32038
+        ],
+        "symbols_nonzero_size": [
+          98513,
+          98369
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4821420,
+          4818108
+        ],
+        "symbols_total": [
+          113045,
+          112892
+        ],
+        "bytes_covered": [
+          6875826,
+          6871646
+        ],
+        "binary_bytes_before_strip": [
+          22086192,
+          22043344
+        ]
+      },
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 28533,
+        "symbols_nonzero_size": 98513,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 99,
+        "dead_stripped": 32038,
+        "symbols_nonzero_size": 98369,
+        "units_seen": 64,
+        "lto_objects": 1,
+        "lto_symbols": 1971,
+        "lto_bytes": 47072,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 4821420
+    },
+    {
+      "repo": "jasudev/FabulaItemsProvider",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          28533,
+          0
+        ],
+        "symbols_nonzero_size": [
+          98513,
+          99533
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4821420,
+          4836408
+        ],
+        "symbols_total": [
+          113045,
+          114196
+        ],
+        "bytes_covered": [
+          6875826,
+          6936498
+        ],
+        "binary_bytes_before_strip": [
+          22086192,
+          22199696
+        ]
+      },
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 28533,
+        "symbols_nonzero_size": 98513,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 98,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 99533,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 4821420
+    },
+    {
+      "repo": "jeffreybergier/Hipstapaper",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          82,
+          83
+        ]
+      },
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 82,
+        "dead_stripped": 6657,
+        "symbols_nonzero_size": 24277,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 83,
+        "dead_stripped": 6657,
+        "symbols_nonzero_size": 24277,
+        "units_seen": 55,
+        "lto_objects": 1,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 1313608
+    },
+    {
+      "repo": "jeffreybergier/Hipstapaper",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          6657,
+          0
+        ],
+        "symbols_nonzero_size": [
+          24277,
+          24577
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1313608,
+          1323864
+        ],
+        "symbols_total": [
+          27671,
+          28034
+        ],
+        "bytes_covered": [
+          1724465,
+          1738641
+        ],
+        "binary_bytes_before_strip": [
+          4557208,
+          4589568
+        ]
+      },
+      "base_abs": {
+        "object_files": 82,
+        "dead_stripped": 6657,
+        "symbols_nonzero_size": 24277,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 82,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 24577,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1313608
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          61,
+          62
+        ]
+      },
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 61,
+        "dead_stripped": 459,
+        "symbols_nonzero_size": 2987,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 62,
+        "dead_stripped": 459,
+        "symbols_nonzero_size": 2987,
+        "units_seen": 30,
+        "lto_objects": 1,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 77052
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          459,
+          0
+        ],
+        "symbols_nonzero_size": [
+          2987,
+          3104
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          77052,
+          79540
+        ],
+        "symbols_total": [
+          3089,
+          3209
+        ],
+        "bytes_covered": [
+          132860,
+          137743
+        ],
+        "binary_bytes_before_strip": [
+          490112,
+          511328
+        ]
+      },
+      "base_abs": {
+        "object_files": 61,
+        "dead_stripped": 459,
+        "symbols_nonzero_size": 2987,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 61,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 3104,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 77052
+    },
+    {
+      "repo": "joreilly/PeopleInSpace",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 39,
+        "dead_stripped": 177,
+        "symbols_nonzero_size": 1755,
+        "units_seen": 18,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 39,
+        "dead_stripped": 177,
+        "symbols_nonzero_size": 1755,
+        "units_seen": 18,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 49880
+    },
+    {
+      "repo": "joreilly/PeopleInSpace",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          177,
+          0
+        ],
+        "symbols_nonzero_size": [
+          1755,
+          1763
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          49880,
+          50056
+        ],
+        "symbols_total": [
+          1799,
+          1808
+        ],
+        "bytes_covered": [
+          86952,
+          87330
+        ],
+        "binary_bytes_before_strip": [
+          501968,
+          502056
+        ]
+      },
+      "base_abs": {
+        "object_files": 39,
+        "dead_stripped": 177,
+        "symbols_nonzero_size": 1755,
+        "units_seen": 18,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 39,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 1763,
+        "units_seen": 18,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 49880
+    },
+    {
+      "repo": "joreilly/StarWars",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 67,
+        "dead_stripped": 313,
+        "symbols_nonzero_size": 1844,
+        "units_seen": 28,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 67,
+        "dead_stripped": 313,
+        "symbols_nonzero_size": 1844,
+        "units_seen": 28,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 57952
+    },
+    {
+      "repo": "joreilly/StarWars",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          313,
+          0
+        ],
+        "symbols_nonzero_size": [
+          1844,
+          2036
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          57952,
+          69736
+        ],
+        "symbols_total": [
+          1941,
+          2139
+        ],
+        "bytes_covered": [
+          105944,
+          145189
+        ],
+        "binary_bytes_before_strip": [
+          370736,
+          414216
+        ]
+      },
+      "base_abs": {
+        "object_files": 67,
+        "dead_stripped": 313,
+        "symbols_nonzero_size": 1844,
+        "units_seen": 28,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 67,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 2036,
+        "units_seen": 28,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 57952
+    },
+    {
+      "repo": "joreilly/WordMasterKMP",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 56,
+        "dead_stripped": 265,
+        "symbols_nonzero_size": 2170,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 56,
+        "dead_stripped": 265,
+        "symbols_nonzero_size": 2170,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 68992
+    },
+    {
+      "repo": "joreilly/WordMasterKMP",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          265,
+          0
+        ],
+        "symbols_nonzero_size": [
+          2170,
+          2273
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          68992,
+          71324
+        ],
+        "symbols_total": [
+          2280,
+          2388
+        ],
+        "bytes_covered": [
+          105131,
+          108921
+        ],
+        "binary_bytes_before_strip": [
+          383632,
+          387888
+        ]
+      },
+      "base_abs": {
+        "object_files": 56,
+        "dead_stripped": 265,
+        "symbols_nonzero_size": 2170,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 56,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 2273,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 68992
+    },
+    {
+      "repo": "jpsim/Milestones",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          49,
+          50
+        ]
+      },
+      "noisy_deltas": {
+        "binary_bytes_before_strip": [
+          133400,
+          133392
+        ]
+      },
+      "base_abs": {
+        "object_files": 49,
+        "dead_stripped": 830,
+        "symbols_nonzero_size": 820,
+        "units_seen": 19,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 50,
+        "dead_stripped": 830,
+        "symbols_nonzero_size": 820,
+        "units_seen": 19,
+        "lto_objects": 1,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 10000
+    },
+    {
+      "repo": "jpsim/Milestones",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          830,
+          0
+        ],
+        "symbols_nonzero_size": [
+          820,
+          928
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          10000,
+          12152
+        ],
+        "symbols_total": [
+          838,
+          948
+        ],
+        "bytes_covered": [
+          28752,
+          32387
+        ],
+        "binary_bytes_before_strip": [
+          133400,
+          137520
+        ]
+      },
+      "base_abs": {
+        "object_files": 49,
+        "dead_stripped": 830,
+        "symbols_nonzero_size": 820,
+        "units_seen": 19,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 49,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 928,
+        "units_seen": 19,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 10000
+    },
+    {
+      "repo": "keepassium/KeePassium",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          447,
+          448
+        ],
+        "dead_stripped": [
+          52561,
+          53446
+        ],
+        "symbols_nonzero_size": [
+          69429,
+          69267
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2806432,
+          2802796
+        ],
+        "symbols_total": [
+          73263,
+          73067
+        ],
+        "bytes_covered": [
+          4985106,
+          4979864
+        ],
+        "binary_bytes_before_strip": [
+          12580800,
+          12544288
+        ]
+      },
+      "base_abs": {
+        "object_files": 447,
+        "dead_stripped": 52561,
+        "symbols_nonzero_size": 69429,
+        "units_seen": 49,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 448,
+        "dead_stripped": 53446,
+        "symbols_nonzero_size": 69267,
+        "units_seen": 49,
+        "lto_objects": 1,
+        "lto_symbols": 2480,
+        "lto_bytes": 86006,
+        "lto_text_bytes": 108
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 2806432
+    },
+    {
+      "repo": "keepassium/KeePassium",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          52561,
+          0
+        ],
+        "symbols_nonzero_size": [
+          69429,
+          70390
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2806432,
+          2825968
+        ],
+        "symbols_total": [
+          73263,
+          74332
+        ],
+        "bytes_covered": [
+          4985106,
+          5111684
+        ],
+        "binary_bytes_before_strip": [
+          12580800,
+          12773096
+        ]
+      },
+      "base_abs": {
+        "object_files": 447,
+        "dead_stripped": 52561,
+        "symbols_nonzero_size": 69429,
+        "units_seen": 49,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 447,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 70390,
+        "units_seen": 49,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2806432
+    },
+    {
+      "repo": "kudoleh/iOS-Modular-Architecture",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 58,
+        "dead_stripped": 971,
+        "symbols_nonzero_size": 1092,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 58,
+        "dead_stripped": 971,
+        "symbols_nonzero_size": 1092,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 18728
+    },
+    {
+      "repo": "kudoleh/iOS-Modular-Architecture",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          971,
+          0
+        ],
+        "symbols_nonzero_size": [
+          1092,
+          1225
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          18728,
+          21012
+        ],
+        "symbols_total": [
+          1121,
+          1256
+        ],
+        "bytes_covered": [
+          43753,
+          47783
+        ],
+        "binary_bytes_before_strip": [
+          146744,
+          151064
+        ]
+      },
+      "base_abs": {
+        "object_files": 58,
+        "dead_stripped": 971,
+        "symbols_nonzero_size": 1092,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 58,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 1225,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 18728
+    },
+    {
+      "repo": "ldakhoa/GistHub",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          230,
+          231
+        ],
+        "dead_stripped": [
+          34932,
+          30278
+        ],
+        "symbols_nonzero_size": [
+          84167,
+          83835
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7115232,
+          7108644
+        ],
+        "symbols_total": [
+          95845,
+          95455
+        ],
+        "bytes_covered": [
+          38300891,
+          38293381
+        ],
+        "binary_bytes_before_strip": [
+          48160248,
+          48067216
+        ]
+      },
+      "base_abs": {
+        "object_files": 230,
+        "dead_stripped": 34932,
+        "symbols_nonzero_size": 84167,
+        "units_seen": 188,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 231,
+        "dead_stripped": 30278,
+        "symbols_nonzero_size": 83835,
+        "units_seen": 188,
+        "lto_objects": 1,
+        "lto_symbols": 8429,
+        "lto_bytes": 31921771,
+        "lto_text_bytes": 2346672
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 7115232
+    },
+    {
+      "repo": "ldakhoa/GistHub",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          34932,
+          0
+        ],
+        "symbols_nonzero_size": [
+          84167,
+          85182
+        ],
+        "units_seen": [
+          188,
+          189
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7115232,
+          7148000
+        ],
+        "symbols_total": [
+          95845,
+          97207
+        ],
+        "bytes_covered": [
+          38300891,
+          38344050
+        ],
+        "binary_bytes_before_strip": [
+          48160248,
+          48271056
+        ]
+      },
+      "base_abs": {
+        "object_files": 230,
+        "dead_stripped": 34932,
+        "symbols_nonzero_size": 84167,
+        "units_seen": 188,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 230,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 85182,
+        "units_seen": 189,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 7115232
+    },
+    {
+      "repo": "lokii49/mirror",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 199,
+        "dead_stripped": 61551,
+        "symbols_nonzero_size": 189066,
+        "units_seen": 67,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 199,
+        "dead_stripped": 61551,
+        "symbols_nonzero_size": 189066,
+        "units_seen": 67,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 10800456
+    },
+    {
+      "repo": "lokii49/mirror",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          61551,
+          0
+        ],
+        "symbols_nonzero_size": [
+          189066,
+          190081
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          10800456,
+          10824984
+        ],
+        "symbols_total": [
+          204955,
+          206267
+        ],
+        "bytes_covered": [
+          16792099,
+          16861361
+        ],
+        "binary_bytes_before_strip": [
+          53332648,
+          53504472
+        ]
+      },
+      "base_abs": {
+        "object_files": 199,
+        "dead_stripped": 61551,
+        "symbols_nonzero_size": 189066,
+        "units_seen": 67,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 199,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 190081,
+        "units_seen": 67,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 10800456
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 55,
+        "dead_stripped": 145,
+        "symbols_nonzero_size": 1217,
+        "units_seen": 15,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 55,
+        "dead_stripped": 145,
+        "symbols_nonzero_size": 1217,
+        "units_seen": 15,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 30884
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          145,
+          0
+        ],
+        "symbols_nonzero_size": [
+          1217,
+          1313
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          30884,
+          40412
+        ],
+        "symbols_total": [
+          1251,
+          1348
+        ],
+        "bytes_covered": [
+          63966,
+          99559
+        ],
+        "binary_bytes_before_strip": [
+          268288,
+          308080
+        ]
+      },
+      "base_abs": {
+        "object_files": 55,
+        "dead_stripped": 145,
+        "symbols_nonzero_size": 1217,
+        "units_seen": 15,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 55,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 1313,
+        "units_seen": 15,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 30884
+    },
+    {
+      "repo": "ml-explore/mlx-swift-examples",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          71,
+          72
+        ],
+        "dead_stripped": [
+          22028,
+          3739
+        ],
+        "symbols_nonzero_size": [
+          48417,
+          45491
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7552460,
+          8087404
+        ],
+        "symbols_total": [
+          67777,
+          47673
+        ],
+        "bytes_covered": [
+          9967865,
+          10250481
+        ],
+        "binary_bytes_before_strip": [
+          20830360,
+          17135104
+        ]
+      },
+      "base_abs": {
+        "object_files": 71,
+        "dead_stripped": 22028,
+        "symbols_nonzero_size": 48417,
+        "units_seen": 39,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 72,
+        "dead_stripped": 3739,
+        "symbols_nonzero_size": 45491,
+        "units_seen": 39,
+        "lto_objects": 1,
+        "lto_symbols": 9862,
+        "lto_bytes": 1444336,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 7552460
+    },
+    {
+      "repo": "ml-explore/mlx-swift-examples",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          22028,
+          0
+        ],
+        "symbols_nonzero_size": [
+          48417,
+          50278
+        ],
+        "units_seen": [
+          39,
+          41
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7552460,
+          7697864
+        ],
+        "symbols_total": [
+          67777,
+          70054
+        ],
+        "bytes_covered": [
+          9967865,
+          10220518
+        ],
+        "binary_bytes_before_strip": [
+          20830360,
+          21410384
+        ]
+      },
+      "base_abs": {
+        "object_files": 71,
+        "dead_stripped": 22028,
+        "symbols_nonzero_size": 48417,
+        "units_seen": 39,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 71,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 50278,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 7552460
+    },
+    {
+      "repo": "mozilla-mobile/firefox-ios",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 121,
+        "dead_stripped": 45559,
+        "symbols_nonzero_size": 48073,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 121,
+        "dead_stripped": 45559,
+        "symbols_nonzero_size": 48073,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 2743988
+    },
+    {
+      "repo": "mozilla-mobile/firefox-ios",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          45559,
+          0
+        ],
+        "symbols_nonzero_size": [
+          48073,
+          48477
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2743988,
+          2747800
+        ],
+        "symbols_total": [
+          56792,
+          57473
+        ],
+        "bytes_covered": [
+          3783960,
+          3793582
+        ],
+        "binary_bytes_before_strip": [
+          8535552,
+          8571248
+        ]
+      },
+      "base_abs": {
+        "object_files": 121,
+        "dead_stripped": 45559,
+        "symbols_nonzero_size": 48073,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 121,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 48477,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2743988
+    },
+    {
+      "repo": "rafsoh/dimeApp",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 21901,
+        "symbols_nonzero_size": 57015,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 192,
+        "dead_stripped": 21901,
+        "symbols_nonzero_size": 57015,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3627772
+    },
+    {
+      "repo": "rafsoh/dimeApp",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          21901,
+          0
+        ],
+        "symbols_nonzero_size": [
+          57015,
+          57369
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3627772,
+          3634976
+        ],
+        "symbols_total": [
+          63518,
+          63982
+        ],
+        "bytes_covered": [
+          5022911,
+          5034448
+        ],
+        "binary_bytes_before_strip": [
+          19269144,
+          19315936
+        ]
+      },
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 21901,
+        "symbols_nonzero_size": 57015,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 192,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 57369,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3627772
+    },
+    {
+      "repo": "rajdeep/proton",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 92,
+        "dead_stripped": 4141,
+        "symbols_nonzero_size": 4029,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 92,
+        "dead_stripped": 4141,
+        "symbols_nonzero_size": 4029,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 149696
+    },
+    {
+      "repo": "rajdeep/proton",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          4141,
+          0
+        ],
+        "symbols_nonzero_size": [
+          4029,
+          4194
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          149696,
+          152112
+        ],
+        "symbols_total": [
+          4518,
+          4699
+        ],
+        "bytes_covered": [
+          239923,
+          244436
+        ],
+        "binary_bytes_before_strip": [
+          661352,
+          668584
+        ]
+      },
+      "base_abs": {
+        "object_files": 92,
+        "dead_stripped": 4141,
+        "symbols_nonzero_size": 4029,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 92,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 4194,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 149696
+    },
+    {
+      "repo": "richardtop/CalendarApp",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 57,
+        "dead_stripped": 2637,
+        "symbols_nonzero_size": 4775,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 57,
+        "dead_stripped": 2637,
+        "symbols_nonzero_size": 4775,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 241676
+    },
+    {
+      "repo": "richardtop/CalendarApp",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          2637,
+          0
+        ],
+        "symbols_nonzero_size": [
+          4775,
+          4945
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          241676,
+          244036
+        ],
+        "symbols_total": [
+          5428,
+          5613
+        ],
+        "bytes_covered": [
+          328889,
+          333452
+        ],
+        "binary_bytes_before_strip": [
+          813816,
+          820104
+        ]
+      },
+      "base_abs": {
+        "object_files": 57,
+        "dead_stripped": 2637,
+        "symbols_nonzero_size": 4775,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 57,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 4945,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 241676
+    },
+    {
+      "repo": "saxobroko/SaxWeather",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 236,
+        "dead_stripped": 41357,
+        "symbols_nonzero_size": 77742,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 236,
+        "dead_stripped": 41357,
+        "symbols_nonzero_size": 77742,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3462272
+    },
+    {
+      "repo": "saxobroko/SaxWeather",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          41357,
+          0
+        ],
+        "symbols_nonzero_size": [
+          77742,
+          78190
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3462272,
+          3479520
+        ],
+        "symbols_total": [
+          87349,
+          87953
+        ],
+        "bytes_covered": [
+          5651056,
+          5698027
+        ],
+        "binary_bytes_before_strip": [
+          23267184,
+          23364664
+        ]
+      },
+      "base_abs": {
+        "object_files": 236,
+        "dead_stripped": 41357,
+        "symbols_nonzero_size": 77742,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 236,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 78190,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3462272
+    },
+    {
+      "repo": "sigfault-byte/LegitURL",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 212,
+        "dead_stripped": 11682,
+        "symbols_nonzero_size": 15873,
+        "units_seen": 44,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 212,
+        "dead_stripped": 11682,
+        "symbols_nonzero_size": 15873,
+        "units_seen": 44,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 1180876
+    },
+    {
+      "repo": "sigfault-byte/LegitURL",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          11682,
+          0
+        ],
+        "symbols_nonzero_size": [
+          15873,
+          16072
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1180876,
+          1184156
+        ],
+        "symbols_total": [
+          17506,
+          17730
+        ],
+        "bytes_covered": [
+          1510468,
+          1517818
+        ],
+        "binary_bytes_before_strip": [
+          3539432,
+          3564096
+        ]
+      },
+      "base_abs": {
+        "object_files": 212,
+        "dead_stripped": 11682,
+        "symbols_nonzero_size": 15873,
+        "units_seen": 44,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 212,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 16072,
+        "units_seen": 44,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1180876
+    },
+    {
+      "repo": "simple-login/Simple-Login-iOS",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 206,
+        "dead_stripped": 22289,
+        "symbols_nonzero_size": 51200,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 206,
+        "dead_stripped": 22289,
+        "symbols_nonzero_size": 51200,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 2278684
+    },
+    {
+      "repo": "simple-login/Simple-Login-iOS",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          22289,
+          0
+        ],
+        "symbols_nonzero_size": [
+          51200,
+          51605
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2278684,
+          2283924
+        ],
+        "symbols_total": [
+          58587,
+          59109
+        ],
+        "bytes_covered": [
+          3301258,
+          3313507
+        ],
+        "binary_bytes_before_strip": [
+          10281808,
+          10317800
+        ]
+      },
+      "base_abs": {
+        "object_files": 206,
+        "dead_stripped": 22289,
+        "symbols_nonzero_size": 51200,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 206,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 51605,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 2278684
+    },
+    {
+      "repo": "timfraedrich/OutRun",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 213,
+        "dead_stripped": 9475,
+        "symbols_nonzero_size": 13755,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 213,
+        "dead_stripped": 9475,
+        "symbols_nonzero_size": 13755,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 555700
+    },
+    {
+      "repo": "timfraedrich/OutRun",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9475,
+          0
+        ],
+        "symbols_nonzero_size": [
+          13755,
+          13983
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          555700,
+          558316
+        ],
+        "symbols_total": [
+          16118,
+          16357
+        ],
+        "bytes_covered": [
+          838080,
+          843289
+        ],
+        "binary_bytes_before_strip": [
+          2324480,
+          2347936
+        ]
+      },
+      "base_abs": {
+        "object_files": 213,
+        "dead_stripped": 9475,
+        "symbols_nonzero_size": 13755,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 213,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 13983,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 555700
+    },
+    {
+      "repo": "vincode-io/Zavala",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          254,
+          255
+        ],
+        "dead_stripped": [
+          41122,
+          40747
+        ],
+        "symbols_nonzero_size": [
+          69702,
+          69559
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4857472,
+          4857484
+        ],
+        "symbols_total": [
+          78851,
+          78666
+        ],
+        "bytes_covered": [
+          6235980,
+          6235786
+        ],
+        "binary_bytes_before_strip": [
+          12911304,
+          12882928
+        ]
+      },
+      "base_abs": {
+        "object_files": 254,
+        "dead_stripped": 41122,
+        "symbols_nonzero_size": 69702,
+        "units_seen": 73,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 255,
+        "dead_stripped": 40747,
+        "symbols_nonzero_size": 69559,
+        "units_seen": 73,
+        "lto_objects": 1,
+        "lto_symbols": 2492,
+        "lto_bytes": 25035,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 4857472
+    },
+    {
+      "repo": "vincode-io/Zavala",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          41122,
+          0
+        ],
+        "symbols_nonzero_size": [
+          69702,
+          70925
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4857472,
+          4896604
+        ],
+        "symbols_total": [
+          78851,
+          80366
+        ],
+        "bytes_covered": [
+          6235980,
+          6352946
+        ],
+        "binary_bytes_before_strip": [
+          12911304,
+          13123136
+        ]
+      },
+      "base_abs": {
+        "object_files": 254,
+        "dead_stripped": 41122,
+        "symbols_nonzero_size": 69702,
+        "units_seen": 73,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 254,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 70925,
+        "units_seen": 73,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 4857472
+    },
+    {
+      "repo": "wikimedia/wikipedia-ios",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          640,
+          641
+        ],
+        "dead_stripped": [
+          119529,
+          119354
+        ],
+        "symbols_nonzero_size": [
+          84393,
+          84394
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4903844,
+          4902928
+        ],
+        "symbols_total": [
+          93559,
+          93560
+        ],
+        "bytes_covered": [
+          6922747,
+          6921858
+        ],
+        "binary_bytes_before_strip": [
+          14421640,
+          14403544
+        ]
+      },
+      "base_abs": {
+        "object_files": 640,
+        "dead_stripped": 119529,
+        "symbols_nonzero_size": 84393,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 641,
+        "dead_stripped": 119354,
+        "symbols_nonzero_size": 84394,
+        "units_seen": 48,
+        "lto_objects": 1,
+        "lto_symbols": 1979,
+        "lto_bytes": 52825,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 4903844
+    },
+    {
+      "repo": "wikimedia/wikipedia-ios",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          119529,
+          0
+        ],
+        "symbols_nonzero_size": [
+          84393,
+          85995
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4903844,
+          4908020
+        ],
+        "symbols_total": [
+          93559,
+          95438
+        ],
+        "bytes_covered": [
+          6922747,
+          7109853
+        ],
+        "binary_bytes_before_strip": [
+          14421640,
+          14745312
+        ]
+      },
+      "base_abs": {
+        "object_files": 640,
+        "dead_stripped": 119529,
+        "symbols_nonzero_size": 84393,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 640,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 85995,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 4903844
+    },
+    {
+      "repo": "yattee/yattee",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          4146,
+          4147
+        ],
+        "dead_stripped": [
+          191247,
+          191244
+        ],
+        "symbols_nonzero_size": [
+          365949,
+          365948
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          39517076,
+          39516968
+        ],
+        "symbols_total": [
+          381760,
+          381759
+        ],
+        "bytes_covered": [
+          60211328,
+          60211267
+        ],
+        "binary_bytes_before_strip": [
+          102631288,
+          102630888
+        ]
+      },
+      "base_abs": {
+        "object_files": 4146,
+        "dead_stripped": 191247,
+        "symbols_nonzero_size": 365949,
+        "units_seen": 100,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 4147,
+        "dead_stripped": 191244,
+        "symbols_nonzero_size": 365948,
+        "units_seen": 100,
+        "lto_objects": 1,
+        "lto_symbols": 59,
+        "lto_bytes": 3336,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 39517076
+    },
+    {
+      "repo": "yattee/yattee",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          191247,
+          0
+        ],
+        "symbols_nonzero_size": [
+          365949,
+          420255
+        ],
+        "units_seen": [
+          100,
+          102
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          39517076,
+          45765212
+        ],
+        "symbols_total": [
+          381760,
+          437475
+        ],
+        "bytes_covered": [
+          60211328,
+          68327448
+        ],
+        "binary_bytes_before_strip": [
+          102631288,
+          112927368
+        ]
+      },
+      "base_abs": {
+        "object_files": 4146,
+        "dead_stripped": 191247,
+        "symbols_nonzero_size": 365949,
+        "units_seen": 100,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 4146,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 420255,
+        "units_seen": 102,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 39517076
+    },
+    {
+      "repo": "youstanzr/YouTag",
+      "config": "lto",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 109,
+        "dead_stripped": 14416,
+        "symbols_nonzero_size": 30410,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 109,
+        "dead_stripped": 14416,
+        "symbols_nonzero_size": 30410,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 1547768
+    },
+    {
+      "repo": "youstanzr/YouTag",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          14416,
+          0
+        ],
+        "symbols_nonzero_size": [
+          30410,
+          30696
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1547768,
+          1560976
+        ],
+        "symbols_total": [
+          33241,
+          33703
+        ],
+        "bytes_covered": [
+          2392302,
+          2434051
+        ],
+        "binary_bytes_before_strip": [
+          5836920,
+          5910904
+        ]
+      },
+      "base_abs": {
+        "object_files": 109,
+        "dead_stripped": 14416,
+        "symbols_nonzero_size": 30410,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 109,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 30696,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1547768
+    },
+    {
+      "repo": "zizicici/Off-Day",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          188,
+          189
+        ],
+        "dead_stripped": [
+          33619,
+          33376
+        ],
+        "symbols_nonzero_size": [
+          76935,
+          76818
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3765756,
+          3760576
+        ],
+        "symbols_total": [
+          83453,
+          83336
+        ],
+        "bytes_covered": [
+          6160774,
+          6154062
+        ],
+        "binary_bytes_before_strip": [
+          14644032,
+          14609576
+        ]
+      },
+      "base_abs": {
+        "object_files": 188,
+        "dead_stripped": 33619,
+        "symbols_nonzero_size": 76935,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 189,
+        "dead_stripped": 33376,
+        "symbols_nonzero_size": 76818,
+        "units_seen": 51,
+        "lto_objects": 1,
+        "lto_symbols": 725,
+        "lto_bytes": 41744,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 3765756
+    },
+    {
+      "repo": "zizicici/Off-Day",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          33619,
+          0
+        ],
+        "symbols_nonzero_size": [
+          76935,
+          78281
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3765756,
+          3822560
+        ],
+        "symbols_total": [
+          83453,
+          85010
+        ],
+        "bytes_covered": [
+          6160774,
+          6273785
+        ],
+        "binary_bytes_before_strip": [
+          14644032,
+          14824616
+        ]
+      },
+      "base_abs": {
+        "object_files": 188,
+        "dead_stripped": 33619,
+        "symbols_nonzero_size": 76935,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 188,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 78281,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 3765756
+    },
+    {
+      "repo": "zzanehip/The-OldOS-Project",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          201,
+          202
+        ],
+        "dead_stripped": [
+          80920,
+          82219
+        ],
+        "symbols_nonzero_size": [
+          138584,
+          136438
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9651584,
+          9567760
+        ],
+        "symbols_total": [
+          154814,
+          152674
+        ],
+        "bytes_covered": [
+          13272427,
+          13170914
+        ],
+        "binary_bytes_before_strip": [
+          38112936,
+          37507032
+        ]
+      },
+      "base_abs": {
+        "object_files": 201,
+        "dead_stripped": 80920,
+        "symbols_nonzero_size": 138584,
+        "units_seen": 97,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 202,
+        "dead_stripped": 82219,
+        "symbols_nonzero_size": 136438,
+        "units_seen": 97,
+        "lto_objects": 1,
+        "lto_symbols": 6973,
+        "lto_bytes": 146613,
+        "lto_text_bytes": 360
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 9651584
+    },
+    {
+      "repo": "zzanehip/The-OldOS-Project",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          80920,
+          0
+        ],
+        "symbols_nonzero_size": [
+          138584,
+          143580
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9651584,
+          9960980
+        ],
+        "symbols_total": [
+          154814,
+          160177
+        ],
+        "bytes_covered": [
+          13272427,
+          13710968
+        ],
+        "binary_bytes_before_strip": [
+          38112936,
+          39026632
+        ]
+      },
+      "base_abs": {
+        "object_files": 201,
+        "dead_stripped": 80920,
+        "symbols_nonzero_size": 138584,
+        "units_seen": 97,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 201,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 143580,
+        "units_seen": 97,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 9651584
+    }
+  ]
+}

@@ -65,6 +65,29 @@ nohup python3 tools/fetch_run.py \
 `xcodebuild -target` 不需要 scheme 就能查、能编。这条只对 `-project` 有效 ——
 workspace 没有 targets 那一层，只能如实记。
 
+### 变体清单（`tools/inventory_variants.py`）
+
+```bash
+python3 tools/inventory_variants.py ~/autodl-tmp/gt/batch01 ~/autodl-tmp/gt/rerun01 \
+  --out ~/autodl-tmp/gt/variants.json
+```
+
+除了逐档样本数，它还给出**全档齐全的仓库子集**。这不是锦上添花：P/R 要按配置
+分档报，如果 `base/none` 有 21 个仓库而 `lto/all` 只有 19 个，那「LTO 让 P/R
+掉了多少」这句话里就混进了**样本构成的差异** —— 掉的那部分可能只是因为两档
+评的不是同一批 app。
+
+两个数都要报，它们回答不同的问题：
+
+| 数 | 回答什么 |
+|---|---|
+| 逐档样本数 | 各档**各自**的 P/R 有多少样本支撑 |
+| 全档齐全子集 | **跨档比较**（strip 的影响、LTO 的影响）唯一合法的分母 |
+
+缺档的仓库逐个列出，连同它在那一档卡在哪 —— 「这一档少两个样本」和「少的是
+哪两个、为什么」不是一回事。成因报的是**真正卡住它的那一步**：scheme 判定
+成功却没样本，报的是构建那一档，不是 `APP_SCHEME_FOUND`。
+
 ### 重跑（`tools/make_rerun.py`）
 
 把一批里没产出可评分变体的仓库凑成新 batch。默认**全部重跑**：不可构建的那些
@@ -131,14 +154,20 @@ curl -X POST -H "Authorization: Bearer $GITHUB_TOKEN" \
 
 ## 构建配置
 
-每一项对应归属算法的一个具体依赖面：
+每一项对应归属算法的一个具体依赖面。这个依据是**论证性**的，不是统计性的——
+真实应用用了哪些 build setting 从 IPA 里量不出来。所以每一档都必须带一个
+**产物级的生效判据**，跑完就量；判据不成立的仓库，那一档的 P/R 不进平均。
 
-| id | 设置 | 打什么 |
-|---|---|---|
-| `base` | Release / -Os | 基线。**产 `none` + `all` 两个变体** |
-| `no_deadstrip` | `DEAD_CODE_STRIPPING=NO` | 哪些桩还在（路线 B 的导入面也依赖它） |
-| `lto` | `LLVM_LTO=YES` | 跨 .o 内联。**会让 ground truth 本身变弱**，单独报 |
-| `wholemodule` | `SWIFT_COMPILATION_MODE=wholemodule` | 模块内跨文件内联 |
+| id | 设置 | 组 | 打什么 | 产物级判据 | 实测（48 仓库） |
+|---|---|---|---|---|---|
+| `base` | Release / -Os | — | 基线。**产 `none` + `all` 两个变体**；`none` 是诊断上界 | — | — |
+| `no_deadstrip` | `DEAD_CODE_STRIPPING=NO` | 真实性 | 哪些桩还在（路线 B 的导入面也依赖它） | map 的 dead-stripped 归零 | 47/48 |
+| `lto` | `LLVM_LTO=YES` | 真实性 | 被吸收的符号改指向 `<T>_lto.o`，**真值变偏**（全归第一方）；解析器记为 `LTO_MERGED`/单元 None，排除出分母 | `_lto.o` 出现且吸收 `__text` 字节 | 22/48 出现 |
+| `singlefile` | `SWIFT_COMPILATION_MODE=singlefile` | 诊断 | 关掉 Swift 模块内跨文件优化，往 Release 默认的反方向拨 | **未定**，探针后定 | 待跑 |
+
+已撤销：`wholemodule`（48/48 产物零变化——Release 默认就是它）、`strip_all`
+（见下）。`make_matrix.py` 对撤销的 id 报明确错误，不是"未知配置"。
+判据由 `tools/compare_configs.py` 计算，它只比"四个配置全齐"的仓库。
 
 strip 不是配置，是**变体**：由收集阶段在链接之后执行，一次链接可产多份二进制、
 共用一份 map。`none` = 未 strip（诊断用），`all` = 全 strip（与语料库形态一致）。
@@ -171,6 +200,7 @@ map 由 `tools/parse_link_map.py` 解析成「地址 → 归属单元」。单�
 | `POD_BUILT_FROM_SOURCE` | `Build/Products/<cfg>/<Pod>/lib<Pod>.a(Y.o)` | `<Pod>` |
 | `BUILT_PRODUCT_ARCHIVE` | `Build/Products/<cfg>/<D>/lib*.a(Y.o)`，库名对不上 | `<D>`，并记下不一致 |
 | `ARCHIVE_MEMBER` | 其余 `libX.a(Y.o)` | `libX`（系统库、工具链库） |
+| `LTO_OUTPUT` | `.../<T>.build/Objects-normal/<arch>/<X>_lto.o` | **无**（`LTO_MERGED`：链接器自己也说不清，评分时排除出分母）。必须先于下一条，否则全归 `<T>` |
 | `TARGET_INTERMEDIATE` | `Intermediates.noindex/<P>.build/<C>/<T>.build/.../y.o` | `<T>` |
 | `TBD` / `DYLIB` / `FRAMEWORK_BINARY` | 系统库 | 库名 |
 | `BUILD_PRODUCT_OBJECT` | `Build/Products/**/X.o` | `X`（SwiftPM 走这条） |

@@ -87,6 +87,19 @@ RE_BUILT_SUBDIR = re.compile(r"/Build/Products/[^/]+/(?P<dir>[^/]+)/[^/]+\.a$")
 RE_TARGET_OBJ = re.compile(
     r"/Intermediates\.noindex/(?P<project>[^/]+)\.build/(?P<config>[^/]+)/"
     r"(?P<target>[^/]+)\.build/.*?/(?P<obj>[^/]+\.o)$")
+#: ld64 / ld_prime 的 LTO 输出对象。实测三个仓库的 `lto` 档 map：
+#:
+#:   [103] .../IceCubesApp.build/Objects-normal/arm64/Ice Cubes_lto.o
+#:   [ 63] .../TLDR.build/Objects-normal/arm64/TLDR_lto.o
+#:   [132] .../FiveCalls.build/Objects-normal/arm64/FiveCalls_lto.o
+#:
+#: 它落在 RE_TARGET_OBJ 的模式里，所以以前被判成 TARGET_INTERMEDIATE、单元 =
+#: app target —— 把所有被 LTO 吸收的代码静默记成第一方，包括第三方 C 库
+#: （5calls 里 cmark 的 `_cmark_utf8proc_case_fold` 就进了 FiveCalls_lto.o）。
+#: 真值不是变糊，是变**偏**：算法答对反而被判错。TLDR 里 24% 的符号 / 26%
+#: 的字节走了这条路。所以它必须先于 RE_TARGET_OBJ 匹配，单元记为 None：
+#: 「链接器自己也说不清」，评分时排除出分母，而不是记成某个单元。
+RE_LTO_OBJ = re.compile(r"/Objects-normal/[^/]+/(?P<stem>[^/]+)_lto\.o$")
 
 
 def derive_unit(index, path):
@@ -130,6 +143,12 @@ def derive_unit(index, path):
         return {"unit": name, "kind": "STATIC_ARCHIVE",
                 "rule": "ARCHIVE_MEMBER",
                 "archive": name, "member": member}
+
+    m = RE_LTO_OBJ.search(path)
+    if m:
+        t = RE_TARGET_OBJ.search(path)
+        return {"unit": None, "kind": "LTO_MERGED", "rule": "LTO_OUTPUT",
+                "target": t.group("target") if t else m.group("stem")}
 
     m = RE_TARGET_OBJ.search(path)
     if m:
@@ -312,6 +331,16 @@ def summarize(lm, src=None):
         lo, hi = text["addr"], text["addr"] + text["size"]
         text_covered = sum(min(e, hi) - max(b, lo)
                            for b, e, _ in lm._ranges if e > lo and b < hi)
+    # LTO 吸收量。RRA 调用点都在 __text，所以 __text 里的那部分才动真值；
+    # 实测 _lto.o 里最大的符号是 __profc_ / __llvm_prf_nm / JTI —— 计数器、
+    # 名字表、跳转表，不是代码。只报总字节会把元数据算成代码。
+    lto_idx = {i for i, o in lm.objects.items() if o.get("kind") == "LTO_MERGED"}
+    lto_syms = [(a, s) for a, s, i, _n in nz if i in lto_idx]
+    lto_text = 0
+    if text and lto_syms:
+        lo, hi = text["addr"], text["addr"] + text["size"]
+        lto_text = sum(min(a + s, hi) - max(a, lo)
+                       for a, s in lto_syms if a + s > lo and a < hi)
     return {
         "source": src,
         "output_path": lm.path,
@@ -334,8 +363,12 @@ def summarize(lm, src=None):
         "object_rules": dict(by_rule),
         "object_kinds": dict(by_kind),
         "units_seen": len([u for u in sym_by_unit if u]),
+        "lto_objects": len(lto_idx),
+        "lto_symbols": len(lto_syms),
+        "lto_bytes": sum(s for _a, s in lto_syms),
+        "lto_text_bytes": lto_text,
         "top_units": [{"unit": u, "symbols": n, "bytes": bytes_by_unit[u]}
-                      for u, n in sym_by_unit.most_common(15)],
+                      for u, n in sym_by_unit.most_common(16) if u][:15],
     }
 
 
