@@ -1,0 +1,2767 @@
+{
+  "configs": {
+    "base": [
+      "none",
+      "all"
+    ],
+    "no_deadstrip": [
+      "all"
+    ],
+    "lto": [
+      "all"
+    ],
+    "singlefile": [
+      "all"
+    ]
+  },
+  "required": [
+    "base",
+    "no_deadstrip",
+    "lto",
+    "singlefile"
+  ],
+  "retired_seen": [
+    "wholemodule"
+  ],
+  "criteria": {
+    "no_deadstrip": "dead_stripped 归零",
+    "lto": "_lto.o 出现且吸收了 __text 字节",
+    "singlefile": "未定 —— 探针后从四个稳定量里挑"
+  },
+  "stable_metrics": [
+    "object_files",
+    "dead_stripped",
+    "symbols_nonzero_size",
+    "units_seen"
+  ],
+  "noisy_metrics": [
+    "text_size",
+    "symbols_total",
+    "bytes_covered"
+  ],
+  "repos_seen": 181,
+  "repos_complete": 2,
+  "repos_excluded": 179,
+  "excluded": {
+    "0xCUB3/wBlock": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "AdguardTeam/AdguardForiOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Automattic/pocket-casts-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Dimillian/IceCubesApp": {
+      "singlefile": "BUILD_FAILED"
+    },
+    "EhPanda-Team/EhPanda": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "ExistOrLive/GithubClient": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "HabitRPG/habitica-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Jaennaet/pISSStream": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "ProtonVPN/ios-mac-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Ranchero-Software/NetNewsWire": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Swiftgram/Telegram-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "TelegramMessenger/Telegram-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "TortugaPower/BookPlayer": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "airbnb/HorizonCalendar": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "analogcode/Swift-Radio-Pro": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "automattic/simplenote-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "awaseem/foqos": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "belm/BaiduFM-Swift": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "bither/bither-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "bitwarden/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "blinksh/blink": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "cagnulein/qdomyos-zwift": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "claration/Feather": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "denissimon/distributed-model-training": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "eerimoq/moblin": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "element-hq/element-x-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "gluonfield/enchanted": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "glushchenko/fsnotes": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "herzbube/littlego": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "holzschu/a-shell": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "home-assistant/iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "jasudev/FabulaItemsProvider": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "jellyfin/Swiftfin": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/BikeShare": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/PeopleInSpace": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "keepassium/KeePassium": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "kickstarter/ios-oss": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "migueldeicaza/SwiftTerm": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mikelikesdesign/SwiftUI-experiments": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "ml-explore/mlx-swift-examples": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "moonlight-stream/moonlight-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mozilla-mobile/firefox-ios": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "mssun/passforios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mullvad/mullvadvpn-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "nextcloud/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "partout-io/passepartout": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "pointfreeco/swift-composable-architecture": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "rafsoh/dimeApp": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "rainbow-me/rainbow": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "rajdeep/proton": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "rrroyal/Harbour": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "rudrankriyam/Foundation-Models-Framework-Lab": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "simplex-chat/simplex-chat": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "splinesoft/MUDRammer": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "tnantoka/edhita": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "twostraws/Unwrap": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "utmapp/UTM": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "weiran/Hackers": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "wikimedia/wikipedia-ios": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "wordpress-mobile/WordPress-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "yattee/yattee": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "yichengchen/ATV-Bilibili-demo": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "zzanehip/The-OldOS-Project": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "AnderGoig/github-contributions-ios": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "AnthonyH93/GoCycling": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "DeluxeAlonso/UpcomingMovies": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Dimillian/FoundationChat": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Dimillian/IcySky": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "EmergeTools/hackernews": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "Finb/Bark": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "OnionBrowser/OnionBrowser": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "ProtonDriveApps/ios-drive": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Provenance-Emu/Provenance": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Say-Their-Name/say-their-names-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "StepicOrg/stepik-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "altstoreio/AltStore": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "artsy/eigen": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "asuc-octo/berkeley-mobile-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "bigjermaine/SwiftTracker": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "chunkyguy/PhotoApp": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "cinderella-project/iMast": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "cranci1/Sora": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "criticalmaps/criticalmaps-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "daneden/Zeitgeist": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "deltachat/deltachat-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "duckduckgo/apple-browsers": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "element-hq/element-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "gdombiak/OctoPod": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "guardianproject/orbot-apple": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "iBurnApp/iBurn-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/StarWars": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "jpsim/Milestones": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "kudoleh/iOS-Modular-Architecture": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "leathalman/Jotify": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "lionheart/Pushpin": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "lukeswitz/DragonSync-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mateusz-bak/openreads": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "miataru/miataru-ios-client": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mikaelacaron/Basic-Car-Maintenance": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mlemgroup/mlem": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "monal-im/Monal": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "netless-io/flat-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "nightscout/nightguard": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "niochat/nio": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "ooni/probe-multiplatform": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "openhab/openhab-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "owntracks/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "peterfriese/MakeItSo": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "pia-foss/mobile-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "richardtop/CalendarApp": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "rileytestut/Delta": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "signalapp/Signal-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "simple-login/Simple-Login-iOS": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "soramitsu/fearless-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "suicidesafetyplan/safetyplan-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "threema-ch/threema-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "timfraedrich/OutRun": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "tinode/ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "tls-inspector/tls-inspector": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "vincode-io/Zavala": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "vinhnx/Clendar": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "walktalkmeditate/pilgrim-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "wireapp/wire-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "woocommerce/woocommerce-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "youstanzr/YouTag": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "zizicici/Off-Day": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "zulip/zulip-mobile": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "256Arts/Sprite-Catalog": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "256Arts/Sprite-Pencil": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "AlexCatch/Oak": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "AnthonyH93/HexaCalc": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "EvgenyKarkan/Feeds4U": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "FlineDev/Prayer": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "GigaDuckAI/conduck": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "JosephDuffy/Overamped": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "Keith-43/MuVis-Experimentation": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Loriage/Minidisc": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "NiftyTreeStudios/Bean-Juice": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "Piecelet/neodb-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "SwissCovid/swisscovid-app-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "TICESoftware/tice-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Thomvis/Construct": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "VishwaiOSDev/Loadify-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "Visual-Studio-Coder/Recap": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "WWDCScholars/iOS-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "WezSieTato/ScanNow": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "XunMengWinter/PetNote-oss": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "amikhaylin/pompaddo": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "apps-fab/exercism-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "b5i/Atwy": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "catrobat/catty": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "daneden/Solstice": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "denissimon/Cryptocurrency-Info": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "dl-alexandre/SymbolGrid": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "eugenepyvovarov/CodeAgentsMobile": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "freesuraj/TLDR": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "frostland/GPS-Stone": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "fulldecent/vowel-practice": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "gematik/E-Rezept-App-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "hishd/RicketyRick-iOS": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "hishd/SkyWizard-SwiftUI": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "jeffreybergier/Hipstapaper": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "joeldavidw/Chronos": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/WordMasterKMP": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "krazywarez/hutch": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "kurozora/kurozora-app": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "ldakhoa/GistHub": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "lokii49/mirror": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "marcusraitner/pulse": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mathieudutour/TimeLines": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "misteu/VocabularyTraining": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "robertwtucker/kfinderapp-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "saxobroko/SaxWeather": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "sigfault-byte/LegitURL": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "strumswell/oscar-weather": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "vermont42/Conjugar": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "willowtreeapps/vocable-ios": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "writingmate/aidictation": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "wvabrinskas/PokePal": {
+      "base": "BUILD_FAILED",
+      "no_deadstrip": "BUILD_FAILED",
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    }
+  },
+  "duplicates": [
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-AdguardTeam-AdguardForiOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-AdguardTeam-AdguardForiOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Automattic-pocket-casts-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Automattic-pocket-casts-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-EhPanda-Team-EhPanda-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-EhPanda-Team-EhPanda-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ExistOrLive-GithubClient-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ExistOrLive-GithubClient-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-HabitRPG-habitica-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-HabitRPG-habitica-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-ProtonVPN-ios-mac-app-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-ProtonVPN-ios-mac-app-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Ranchero-Software-NetNewsWire-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Ranchero-Software-NetNewsWire-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-Swiftgram-Telegram-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-Swiftgram-Telegram-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TelegramMessenger-Telegram-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TelegramMessenger-Telegram-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-TortugaPower-BookPlayer-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-TortugaPower-BookPlayer-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-automattic-simplenote-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-automattic-simplenote-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-belm-BaiduFM-Swift-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-belm-BaiduFM-Swift-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bither-bither-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bither-bither-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-bitwarden-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-bitwarden-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "blinksh/blink",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-blinksh-blink-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-blinksh-blink-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-cagnulein-qdomyos-zwift-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-cagnulein-qdomyos-zwift-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "claration/Feather",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-claration-Feather-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-claration-Feather-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-denissimon-distributed-model-training-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-denissimon-distributed-model-training-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-eerimoq-moblin-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-eerimoq-moblin-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-element-hq-element-x-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-element-hq-element-x-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-herzbube-littlego-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-herzbube-littlego-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-holzschu-a-shell-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-holzschu-a-shell-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-home-assistant-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-home-assistant-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-jellyfin-Swiftfin-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-jellyfin-Swiftfin-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-base",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-lto",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-no_deadstrip",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-joreilly-BikeShare-wholemodule",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-joreilly-BikeShare-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-kickstarter-ios-oss-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-kickstarter-ios-oss-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-migueldeicaza-SwiftTerm-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-migueldeicaza-SwiftTerm-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-base",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-lto",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-no_deadstrip",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mikelikesdesign-SwiftUI-experiments-wholemodule",
+      "kept_reason": "OK",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mikelikesdesign-SwiftUI-experiments-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-moonlight-stream-moonlight-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-moonlight-stream-moonlight-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mssun/passforios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mssun-passforios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mssun-passforios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mssun/passforios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mssun-passforios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mssun-passforios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mssun/passforios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mssun-passforios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mssun-passforios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-mullvad-mullvadvpn-app-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-mullvad-mullvadvpn-app-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-nextcloud-ios-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-nextcloud-ios-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-partout-io-passepartout-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-partout-io-passepartout-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-pointfreeco-swift-composable-architecture-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-pointfreeco-swift-composable-architecture-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rainbow-me/rainbow",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rainbow-me-rainbow-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rainbow-me-rainbow-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rrroyal-Harbour-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rrroyal-Harbour-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-rudrankriyam-Foundation-Models-Framework-Lab-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-rudrankriyam-Foundation-Models-Framework-Lab-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-simplex-chat-simplex-chat-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-simplex-chat-simplex-chat-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-splinesoft-MUDRammer-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-splinesoft-MUDRammer-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-tnantoka-edhita-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-tnantoka-edhita-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-twostraws-Unwrap-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-twostraws-Unwrap-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-utmapp-UTM-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-utmapp-UTM-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-weiran-Hackers-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-weiran-Hackers-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-wordpress-mobile-WordPress-iOS-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-wordpress-mobile-WordPress-iOS-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "base",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-base",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-base",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "lto",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-lto",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-lto",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "no_deadstrip",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-no_deadstrip",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-no_deadstrip",
+      "dropped_reason": "BUILD_FAILED"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "config": "wholemodule",
+      "kept": "/root/autodl-tmp/gt/rerun01/gt-yichengchen-ATV-Bilibili-demo-wholemodule",
+      "kept_reason": "BUILD_FAILED",
+      "dropped": "/root/autodl-tmp/gt/batch01/gt-yichengchen-ATV-Bilibili-demo-wholemodule",
+      "dropped_reason": "BUILD_FAILED"
+    }
+  ],
+  "rows": [
+    {
+      "repo": "5calls/ios",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          180,
+          181
+        ],
+        "dead_stripped": [
+          9256,
+          9024
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          36779
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1607760
+        ],
+        "symbols_total": [
+          39345,
+          39172
+        ],
+        "bytes_covered": [
+          3566192,
+          3571114
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          8606400
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 181,
+        "dead_stripped": 9024,
+        "symbols_nonzero_size": 36779,
+        "units_seen": 46,
+        "lto_objects": 1,
+        "lto_symbols": 3379,
+        "lto_bytes": 146592,
+        "lto_text_bytes": 0
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": false,
+      "text_size_base": 1602684
+    },
+    {
+      "repo": "5calls/ios",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9256,
+          0
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          37732
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1643280
+        ],
+        "symbols_total": [
+          39345,
+          40233
+        ],
+        "bytes_covered": [
+          3566192,
+          3653206
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          8738032
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 180,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 37732,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1602684
+    },
+    {
+      "repo": "5calls/ios",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9256,
+          13499
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          38472
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1695564
+        ],
+        "symbols_total": [
+          39345,
+          41181
+        ],
+        "bytes_covered": [
+          3566192,
+          3690596
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          9009832
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 180,
+        "dead_stripped": 13499,
+        "symbols_nonzero_size": 38472,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "未定 —— 探针后从四个稳定量里挑",
+      "criterion_holds": null,
+      "text_size_base": 1602684
+    },
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "lto",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          330,
+          331
+        ],
+        "dead_stripped": [
+          24827,
+          24594
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34340
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1306332
+        ],
+        "symbols_total": [
+          34431,
+          34422
+        ],
+        "bytes_covered": [
+          2150170,
+          2149530
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3478616
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 331,
+        "dead_stripped": 24594,
+        "symbols_nonzero_size": 34340,
+        "units_seen": 42,
+        "lto_objects": 1,
+        "lto_symbols": 1610,
+        "lto_bytes": 43796,
+        "lto_text_bytes": 96
+      },
+      "criterion": "_lto.o 出现且吸收了 __text 字节",
+      "criterion_holds": true,
+      "text_size_base": 1306812
+    },
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "no_deadstrip",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          24827,
+          0
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34993
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1316732
+        ],
+        "symbols_total": [
+          34431,
+          35078
+        ],
+        "bytes_covered": [
+          2150170,
+          2215882
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3586856
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 330,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 34993,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 归零",
+      "criterion_holds": true,
+      "text_size_base": 1306812
+    },
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          330,
+          331
+        ],
+        "dead_stripped": [
+          24827,
+          25040
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34426
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1315244
+        ],
+        "symbols_total": [
+          34431,
+          34522
+        ],
+        "bytes_covered": [
+          2150170,
+          2158346
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3532504
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 331,
+        "dead_stripped": 25040,
+        "symbols_nonzero_size": 34426,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "未定 —— 探针后从四个稳定量里挑",
+      "criterion_holds": null,
+      "text_size_base": 1306812
+    }
+  ]
+}

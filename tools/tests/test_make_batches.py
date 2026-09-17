@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+"""make_batches on the scanner test fixtures: unit order, --exclude-units, the source supplement,
+dedup ignoring line numbers, and the header fields the annotator relies on."""
+import io
+import json
+import pathlib
+import shutil
+import sys
+import tempfile
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import make_batches as M  # noqa: E402
+import scan_source_rra as S  # noqa: E402
+import test_scan_source_rra as T  # noqa: E402
+
+
+def main():
+    tmp = pathlib.Path(tempfile.mkdtemp(prefix="mb_"))
+    try:
+        src = tmp / "src"; ws = tmp / "ws"; out = tmp / "batches"
+        T.build(src)
+        # a second revision of swift-nio with the same System.swift plus a trailing comment (outside every site's
+        # context window): its sites are duplicates of the first revision's
+        nio2 = src / "deps" / "swift-nio@aaaaaaaaaaaa" / "Sources" / "NIOPosix"
+        nio2.mkdir(parents=True)
+        orig = (src / "deps" / "swift-nio@558f24a46471" / "Sources" / "NIOPosix" / "System.swift").read_text(encoding="utf-8")
+        (nio2 / "System.swift").write_text(orig + "\n" * 20 + "// trailing change far below the sites\n", encoding="utf-8")
+        shutil.copy(src / "deps" / "swift-nio@558f24a46471" / "Sources" / "NIOPosix" / "PrivacyInfo.xcprivacy", nio2 / "PrivacyInfo.xcprivacy")
+        buf = io.StringIO(); old = sys.stdout; sys.stdout = buf
+        try:
+            assert S.main(["--rules", str(T.RULES), "--src", str(src), "--out-dir", str(ws)]) == 0
+            assert M.main(["--worksheets", str(ws), "--out", str(out), "--src", str(src), "--size", "5",
+                           "--exclude-units", "repos/saxobroko-SaxWeather"]) == 0
+        finally:
+            sys.stdout = old
+        man = json.loads((out / "MANIFEST.json").read_text(encoding="utf-8"))
+        names = [b["file"] for b in man["batches"]]
+        trees = [n.split("__")[1] for n in names]
+        assert trees == sorted(trees, key=lambda t: {"repos": 0, "deps": 1, "pods": 2}[t]), trees          # repos, then deps, then pods
+        assert not any("saxobroko" in n for n in names) and man["excluded_units"] == ["repos/saxobroko-SaxWeather"]
+        # dedup: the shifted copy is mapped to the representative, not batched
+        dups = [d for d in man["duplicates"] if d["dup_unit"] == "deps/swift-nio@aaaaaaaaaaaa"]
+        assert len(dups) == 4 and all(d["same_declared_reasons"] and d["same_guard"] for d in dups), man["duplicates"]
+        assert not any("aaaaaaaaaaaa" in n for n in names)
+        assert all(d["dup_unit"] != d["rep_unit"] for d in man["duplicates"]), man["duplicates"]   # never within one unit
+        # header: build facts, member names, source supplement with sha1, unit files
+        wiki = [n for n in names if "wikimedia" in n]
+        h = json.loads(io.open(out / wiki[0], encoding="utf-8").readline())
+        assert h["source_dir"] == "src/repos/wikimedia-wikipedia-ios" and h["ud_members"] and "wmf_dateForKey" in h["ud_members"]
+        sf = {f["path"]: f for f in h["source_files"]}
+        assert all("sha1" in f and f["n_lines"] > 0 for f in sf.values()), sf
+        allsf = {f["path"] for n in wiki for f in json.loads(io.open(out / n, encoding="utf-8").readline())["source_files"]}
+        caller_batch = [n for n in wiki if "Caller.swift" in json.loads(io.open(out / n, encoding="utf-8").readline())["source_dir"] or
+                        any(f["path"].endswith("Caller.swift") for f in json.loads(io.open(out / n, encoding="utf-8").readline())["source_files"])]
+        hc = json.loads(io.open(out / caller_batch[0], encoding="utf-8").readline())
+        assert any(f["path"].endswith("NSUserDefaults+WMFExtensions.swift") for f in hc["source_files"]), hc["source_files"]   # wrapper definitions travel with the batch that calls them
+        assert "Wikipedia/Code/NSUserDefaults+WMFExtensions.swift" in allsf
+        assert "Wikipedia/Resources/PrivacyInfo.xcprivacy" in {f["path"] for f in h["unit_files"]}
+        for f in sf.values():
+            assert (out / "src" / "repos" / "wikimedia-wikipedia-ios" / f["path"]).is_file(), f
+        acme = [n for n in names if "acme" in n]
+        h = json.loads(io.open(out / acme[0], encoding="utf-8").readline())
+        assert h["build_facts"]["primary_app_target"] == ["Demo.xcodeproj", "Demo"]
+        assert h["build_facts"]["projects"][0]["targets"][0]["app_groups"] == ["group.com.acme.demo"]
+        assert "Demo.xcodeproj/project.pbxproj" in {f["path"] for f in h["unit_files"]}
+        # site records: constraints stripped, links kept, context numbered
+        rows = [json.loads(l) for l in io.open(out / wiki[0], encoding="utf-8")][1:]
+        assert all("reason_constraints" not in r and "hosts" not in r for r in rows)
+        assert all(any(l.startswith(f"{r['line']:5d}>>") for l in r["context"]["lines"]) for r in rows)
+        print(f"PASS  {len(names)} 个批次：顺序 repos→deps→pods / --exclude-units / 去重忽略行号 / 源码补充目录 / 批次头工程事实")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+if __name__ == "__main__":
+    main()

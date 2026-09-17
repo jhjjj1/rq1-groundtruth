@@ -17,7 +17,8 @@
   "required": [
     "base",
     "no_deadstrip",
-    "lto"
+    "lto",
+    "singlefile"
   ],
   "retired_seen": [
     "wholemodule"
@@ -34,43 +35,7 @@
     "JosephDuffy/Overamped",
     "NiftyTreeStudios/Bean-Juice",
     "Visual-Studio-Coder/Recap",
-    "XunMengWinter/PetNote-oss",
-    "airbnb/HorizonCalendar",
-    "analogcode/Swift-Radio-Pro",
-    "awaseem/foqos",
-    "b5i/Atwy",
-    "cranci1/Sora",
-    "freesuraj/TLDR",
-    "fulldecent/vowel-practice",
-    "gluonfield/enchanted",
-    "glushchenko/fsnotes",
-    "jasudev/FabulaItemsProvider",
-    "jeffreybergier/Hipstapaper",
-    "joreilly/BikeShare",
-    "joreilly/PeopleInSpace",
-    "joreilly/StarWars",
-    "joreilly/WordMasterKMP",
-    "jpsim/Milestones",
-    "keepassium/KeePassium",
-    "kudoleh/iOS-Modular-Architecture",
-    "ldakhoa/GistHub",
-    "lokii49/mirror",
-    "mikelikesdesign/SwiftUI-experiments",
-    "ml-explore/mlx-swift-examples",
-    "mozilla-mobile/firefox-ios",
-    "rafsoh/dimeApp",
-    "rajdeep/proton",
-    "richardtop/CalendarApp",
-    "saxobroko/SaxWeather",
-    "sigfault-byte/LegitURL",
-    "simple-login/Simple-Login-iOS",
-    "timfraedrich/OutRun",
-    "vincode-io/Zavala",
-    "wikimedia/wikipedia-ios",
-    "yattee/yattee",
-    "youstanzr/YouTag",
-    "zizicici/Off-Day",
-    "zzanehip/The-OldOS-Project"
+    "XunMengWinter/PetNote-oss"
   ],
   "effects": {
     "no_deadstrip": "base 里被 dead-strip 的符号数 / base 非零符号数",
@@ -94,673 +59,914 @@
     "bytes_covered"
   ],
   "repos_seen": 181,
-  "repos_complete": 48,
-  "repos_excluded": 133,
+  "repos_complete": 12,
+  "repos_excluded": 169,
   "excluded": {
     "AdguardTeam/AdguardForiOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Automattic/pocket-casts-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "EhPanda-Team/EhPanda": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ExistOrLive/GithubClient": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "HabitRPG/habitica-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ProtonVPN/ios-mac-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Ranchero-Software/NetNewsWire": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Swiftgram/Telegram-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "TelegramMessenger/Telegram-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "TortugaPower/BookPlayer": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "airbnb/HorizonCalendar": {
+      "singlefile": "BUILD_FAILED"
+    },
+    "analogcode/Swift-Radio-Pro": {
+      "singlefile": "NO_MANIFEST"
     },
     "automattic/simplenote-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "awaseem/foqos": {
+      "singlefile": "NO_MANIFEST"
     },
     "belm/BaiduFM-Swift": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "bither/bither-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "bitwarden/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "blinksh/blink": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "cagnulein/qdomyos-zwift": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "claration/Feather": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "denissimon/distributed-model-training": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "eerimoq/moblin": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "element-hq/element-x-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "gluonfield/enchanted": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "glushchenko/fsnotes": {
+      "singlefile": "NO_MANIFEST"
     },
     "herzbube/littlego": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "holzschu/a-shell": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "home-assistant/iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "jasudev/FabulaItemsProvider": {
+      "singlefile": "NO_MANIFEST"
     },
     "jellyfin/Swiftfin": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/BikeShare": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/PeopleInSpace": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "keepassium/KeePassium": {
+      "singlefile": "NO_MANIFEST"
     },
     "kickstarter/ios-oss": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "migueldeicaza/SwiftTerm": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mikelikesdesign/SwiftUI-experiments": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "ml-explore/mlx-swift-examples": {
+      "singlefile": "NO_MANIFEST"
     },
     "moonlight-stream/moonlight-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mozilla-mobile/firefox-ios": {
+      "singlefile": "NO_MANIFEST"
     },
     "mssun/passforios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mullvad/mullvadvpn-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "nextcloud/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "partout-io/passepartout": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "pointfreeco/swift-composable-architecture": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "rafsoh/dimeApp": {
+      "singlefile": "NO_MANIFEST"
     },
     "rainbow-me/rainbow": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "rajdeep/proton": {
+      "singlefile": "NO_MANIFEST"
     },
     "rrroyal/Harbour": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "rudrankriyam/Foundation-Models-Framework-Lab": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "simplex-chat/simplex-chat": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "splinesoft/MUDRammer": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "tnantoka/edhita": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "twostraws/Unwrap": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "utmapp/UTM": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "weiran/Hackers": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "wikimedia/wikipedia-ios": {
+      "singlefile": "NO_MANIFEST"
     },
     "wordpress-mobile/WordPress-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "yattee/yattee": {
+      "singlefile": "NO_MANIFEST"
     },
     "yichengchen/ATV-Bilibili-demo": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "zzanehip/The-OldOS-Project": {
+      "singlefile": "NO_MANIFEST"
     },
     "AnthonyH93/GoCycling": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "DeluxeAlonso/UpcomingMovies": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Dimillian/FoundationChat": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Dimillian/IcySky": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "OnionBrowser/OnionBrowser": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ProtonDriveApps/ios-drive": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Provenance-Emu/Provenance": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Say-Their-Name/say-their-names-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "StepicOrg/stepik-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "altstoreio/AltStore": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "artsy/eigen": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "asuc-octo/berkeley-mobile-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "bigjermaine/SwiftTracker": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "chunkyguy/PhotoApp": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "cinderella-project/iMast": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "cranci1/Sora": {
+      "singlefile": "NO_MANIFEST"
     },
     "criticalmaps/criticalmaps-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "daneden/Zeitgeist": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "deltachat/deltachat-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "duckduckgo/apple-browsers": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "element-hq/element-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "gdombiak/OctoPod": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "guardianproject/orbot-apple": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "iBurnApp/iBurn-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/StarWars": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "jpsim/Milestones": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "kudoleh/iOS-Modular-Architecture": {
+      "singlefile": "NO_MANIFEST"
     },
     "leathalman/Jotify": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "lionheart/Pushpin": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "lukeswitz/DragonSync-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mateusz-bak/openreads": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "miataru/miataru-ios-client": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mikaelacaron/Basic-Car-Maintenance": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mlemgroup/mlem": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "monal-im/Monal": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "netless-io/flat-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "nightscout/nightguard": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "niochat/nio": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ooni/probe-multiplatform": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "openhab/openhab-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "owntracks/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "peterfriese/MakeItSo": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "pia-foss/mobile-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "richardtop/CalendarApp": {
+      "singlefile": "NO_MANIFEST"
     },
     "rileytestut/Delta": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "signalapp/Signal-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "simple-login/Simple-Login-iOS": {
+      "singlefile": "NO_MANIFEST"
     },
     "soramitsu/fearless-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "suicidesafetyplan/safetyplan-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "threema-ch/threema-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "timfraedrich/OutRun": {
+      "singlefile": "NO_MANIFEST"
     },
     "tinode/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "tls-inspector/tls-inspector": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "vincode-io/Zavala": {
+      "singlefile": "NO_MANIFEST"
     },
     "vinhnx/Clendar": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "walktalkmeditate/pilgrim-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "wireapp/wire-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "woocommerce/woocommerce-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "youstanzr/YouTag": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "zizicici/Off-Day": {
+      "singlefile": "NO_MANIFEST"
     },
     "zulip/zulip-mobile": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "256Arts/Sprite-Catalog": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "256Arts/Sprite-Pencil": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "AlexCatch/Oak": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "AnthonyH93/HexaCalc": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "EvgenyKarkan/Feeds4U": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "FlineDev/Prayer": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "GigaDuckAI/conduck": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Keith-43/MuVis-Experimentation": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Loriage/Minidisc": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Piecelet/neodb-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "SwissCovid/swisscovid-app-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "TICESoftware/tice-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Thomvis/Construct": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "VishwaiOSDev/Loadify-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "WWDCScholars/iOS-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "WezSieTato/ScanNow": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "amikhaylin/pompaddo": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "apps-fab/exercism-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "b5i/Atwy": {
+      "singlefile": "NO_MANIFEST"
     },
     "catrobat/catty": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "daneden/Solstice": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "denissimon/Cryptocurrency-Info": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "dl-alexandre/SymbolGrid": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "eugenepyvovarov/CodeAgentsMobile": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "freesuraj/TLDR": {
+      "singlefile": "NO_MANIFEST"
     },
     "frostland/GPS-Stone": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "fulldecent/vowel-practice": {
+      "singlefile": "NO_MANIFEST"
     },
     "gematik/E-Rezept-App-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "hishd/RicketyRick-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "hishd/SkyWizard-SwiftUI": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "jeffreybergier/Hipstapaper": {
+      "singlefile": "NO_MANIFEST"
     },
     "joeldavidw/Chronos": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "joreilly/WordMasterKMP": {
+      "singlefile": "NO_MANIFEST"
     },
     "krazywarez/hutch": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "kurozora/kurozora-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "ldakhoa/GistHub": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "lokii49/mirror": {
+      "singlefile": "NO_MANIFEST"
     },
     "marcusraitner/pulse": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mathieudutour/TimeLines": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "misteu/VocabularyTraining": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "robertwtucker/kfinderapp-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "saxobroko/SaxWeather": {
+      "singlefile": "NO_MANIFEST"
+    },
+    "sigfault-byte/LegitURL": {
+      "singlefile": "NO_MANIFEST"
     },
     "strumswell/oscar-weather": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "vermont42/Conjugar": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "willowtreeapps/vocable-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "writingmate/aidictation": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "wvabrinskas/PokePal": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     }
   },
   "duplicates": [
@@ -2289,6 +2495,64 @@
       "text_size_base": 3082024
     },
     {
+      "repo": "0xCUB3/wBlock",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          20634,
+          25756
+        ],
+        "symbols_nonzero_size": [
+          39221,
+          38024
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3082024,
+          2953968
+        ],
+        "symbols_total": [
+          41668,
+          40517
+        ],
+        "bytes_covered": [
+          4168891,
+          3946708
+        ],
+        "binary_bytes_before_strip": [
+          12705248,
+          11386928
+        ]
+      },
+      "base_abs": {
+        "object_files": 135,
+        "dead_stripped": 20634,
+        "symbols_nonzero_size": 39221,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 135,
+        "dead_stripped": 25756,
+        "symbols_nonzero_size": 38024,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": false,
+      "effect": -0.030519,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 3082024
+    },
+    {
       "repo": "5calls/ios",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2409,6 +2673,72 @@
       "text_size_base": 1602684
     },
     {
+      "repo": "5calls/ios",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          180,
+          181
+        ],
+        "dead_stripped": [
+          9256,
+          13748
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          38248
+        ],
+        "units_seen": [
+          46,
+          47
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1672268
+        ],
+        "symbols_total": [
+          39345,
+          40954
+        ],
+        "bytes_covered": [
+          3566192,
+          3660707
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          8957520
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 181,
+        "dead_stripped": 13748,
+        "symbols_nonzero_size": 38248,
+        "units_seen": 47,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.035885,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 1602684
+    },
+    {
       "repo": "AnderGoig/github-contributions-ios",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2510,6 +2840,64 @@
       "criterion_holds": true,
       "effect": 0.309559,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 3426688
+    },
+    {
+      "repo": "AnderGoig/github-contributions-ios",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9119,
+          9750
+        ],
+        "symbols_nonzero_size": [
+          29458,
+          29518
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3426688,
+          3426572
+        ],
+        "symbols_total": [
+          34595,
+          34665
+        ],
+        "bytes_covered": [
+          4016447,
+          4016742
+        ],
+        "binary_bytes_before_strip": [
+          7292616,
+          7291464
+        ]
+      },
+      "base_abs": {
+        "object_files": 101,
+        "dead_stripped": 9119,
+        "symbols_nonzero_size": 29458,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 101,
+        "dead_stripped": 9750,
+        "symbols_nonzero_size": 29518,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.002037,
+      "effect_def": "非零符号数增量 / base 非零符号数",
       "text_size_base": 3426688
     },
     {
@@ -2633,6 +3021,68 @@
       "text_size_base": 1306812
     },
     {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          330,
+          331
+        ],
+        "dead_stripped": [
+          24827,
+          25120
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34500
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1312084
+        ],
+        "symbols_total": [
+          34431,
+          34598
+        ],
+        "bytes_covered": [
+          2150170,
+          2157279
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3530576
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 331,
+        "dead_stripped": 25120,
+        "symbols_nonzero_size": 34500,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.004396,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 1306812
+    },
+    {
       "repo": "Dimillian/IceCubesApp",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2753,6 +3203,64 @@
       "text_size_base": 17316124
     },
     {
+      "repo": "Dimillian/IceCubesApp",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          135037,
+          136801
+        ],
+        "symbols_nonzero_size": [
+          280437,
+          280633
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          17316124,
+          17321324
+        ],
+        "symbols_total": [
+          315059,
+          315319
+        ],
+        "bytes_covered": [
+          23160362,
+          23027742
+        ],
+        "binary_bytes_before_strip": [
+          62702680,
+          60839152
+        ]
+      },
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 135037,
+        "symbols_nonzero_size": 280437,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 192,
+        "dead_stripped": 136801,
+        "symbols_nonzero_size": 280633,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.000699,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 17316124
+    },
+    {
       "repo": "EmergeTools/hackernews",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2849,6 +3357,64 @@
       "criterion_holds": true,
       "effect": 0.615438,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 2125456
+    },
+    {
+      "repo": "EmergeTools/hackernews",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          37074,
+          38882
+        ],
+        "symbols_nonzero_size": [
+          60240,
+          61483
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2125456,
+          2155472
+        ],
+        "symbols_total": [
+          64951,
+          66367
+        ],
+        "bytes_covered": [
+          3707597,
+          3767954
+        ],
+        "binary_bytes_before_strip": [
+          4112664,
+          4165696
+        ]
+      },
+      "base_abs": {
+        "object_files": 525,
+        "dead_stripped": 37074,
+        "symbols_nonzero_size": 60240,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 525,
+        "dead_stripped": 38882,
+        "symbols_nonzero_size": 61483,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.020634,
+      "effect_def": "非零符号数增量 / base 非零符号数",
       "text_size_base": 2125456
     },
     {
@@ -2972,6 +3538,68 @@
       "text_size_base": 9982300
     },
     {
+      "repo": "Finb/Bark",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          1277,
+          1301
+        ],
+        "dead_stripped": [
+          120438,
+          148312
+        ],
+        "symbols_nonzero_size": [
+          147601,
+          146909
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9982300,
+          9623064
+        ],
+        "symbols_total": [
+          169152,
+          167685
+        ],
+        "bytes_covered": [
+          13239111,
+          12854433
+        ],
+        "binary_bytes_before_strip": [
+          27596216,
+          27067024
+        ]
+      },
+      "base_abs": {
+        "object_files": 1277,
+        "dead_stripped": 120438,
+        "symbols_nonzero_size": 147601,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 1301,
+        "dead_stripped": 148312,
+        "symbols_nonzero_size": 146909,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": false,
+      "effect": -0.004688,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 9982300
+    },
+    {
       "repo": "Jaennaet/pISSStream",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3059,6 +3687,72 @@
       "criterion_holds": true,
       "effect": 0.246875,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 2034012
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          98,
+          100
+        ],
+        "dead_stripped": [
+          10131,
+          10627
+        ],
+        "symbols_nonzero_size": [
+          41037,
+          41301
+        ],
+        "units_seen": [
+          46,
+          47
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2034012,
+          2040332
+        ],
+        "symbols_total": [
+          46102,
+          46385
+        ],
+        "bytes_covered": [
+          3274094,
+          3284633
+        ],
+        "binary_bytes_before_strip": [
+          8540080,
+          8591936
+        ]
+      },
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 10131,
+        "symbols_nonzero_size": 41037,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 100,
+        "dead_stripped": 10627,
+        "symbols_nonzero_size": 41301,
+        "units_seen": 47,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.006433,
+      "effect_def": "非零符号数增量 / base 非零符号数",
       "text_size_base": 2034012
     },
     {
@@ -3152,6 +3846,72 @@
       "text_size_base": 810248
     },
     {
+      "repo": "JosephDuffy/Overamped",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          91,
+          92
+        ],
+        "dead_stripped": [
+          7743,
+          8723
+        ],
+        "symbols_nonzero_size": [
+          15028,
+          15604
+        ],
+        "units_seen": [
+          35,
+          37
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          810248,
+          817444
+        ],
+        "symbols_total": [
+          16162,
+          16737
+        ],
+        "bytes_covered": [
+          1113478,
+          1132353
+        ],
+        "binary_bytes_before_strip": [
+          3096816,
+          3139912
+        ]
+      },
+      "base_abs": {
+        "object_files": 91,
+        "dead_stripped": 7743,
+        "symbols_nonzero_size": 15028,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 92,
+        "dead_stripped": 8723,
+        "symbols_nonzero_size": 15604,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.038328,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 810248
+    },
+    {
       "repo": "NiftyTreeStudios/Bean-Juice",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3239,6 +3999,72 @@
       "criterion_holds": true,
       "effect": 0.187024,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 212064
+    },
+    {
+      "repo": "NiftyTreeStudios/Bean-Juice",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          108,
+          111
+        ],
+        "dead_stripped": [
+          1130,
+          2782
+        ],
+        "symbols_nonzero_size": [
+          6042,
+          7271
+        ],
+        "units_seen": [
+          31,
+          35
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          212064,
+          244348
+        ],
+        "symbols_total": [
+          6321,
+          7586
+        ],
+        "bytes_covered": [
+          366044,
+          419342
+        ],
+        "binary_bytes_before_strip": [
+          1361112,
+          1554976
+        ]
+      },
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 1130,
+        "symbols_nonzero_size": 6042,
+        "units_seen": 31,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 111,
+        "dead_stripped": 2782,
+        "symbols_nonzero_size": 7271,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": true,
+      "effect": 0.203409,
+      "effect_def": "非零符号数增量 / base 非零符号数",
       "text_size_base": 212064
     },
     {
@@ -3362,6 +4188,64 @@
       "text_size_base": 1460184
     },
     {
+      "repo": "Visual-Studio-Coder/Recap",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          8519,
+          9570
+        ],
+        "symbols_nonzero_size": [
+          32008,
+          31984
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1460184,
+          1460292
+        ],
+        "symbols_total": [
+          34827,
+          34809
+        ],
+        "bytes_covered": [
+          2171212,
+          2172233
+        ],
+        "binary_bytes_before_strip": [
+          10053816,
+          9682360
+        ]
+      },
+      "base_abs": {
+        "object_files": 105,
+        "dead_stripped": 8519,
+        "symbols_nonzero_size": 32008,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 105,
+        "dead_stripped": 9570,
+        "symbols_nonzero_size": 31984,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
+      "criterion_holds": false,
+      "effect": -0.00075,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 1460184
+    },
+    {
       "repo": "XunMengWinter/PetNote-oss",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3452,765 +4336,42 @@
       "text_size_base": 2466376
     },
     {
-      "repo": "airbnb/HorizonCalendar",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 44,
-        "dead_stripped": 2230,
-        "symbols_nonzero_size": 2452,
-        "units_seen": 14,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 44,
-        "dead_stripped": 2230,
-        "symbols_nonzero_size": 2452,
-        "units_seen": 14,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 94140
-    },
-    {
-      "repo": "airbnb/HorizonCalendar",
-      "config": "no_deadstrip",
+      "repo": "XunMengWinter/PetNote-oss",
+      "config": "singlefile",
       "verdict": "DIFFERS",
       "deltas": {
         "dead_stripped": [
-          2230,
-          0
+          16862,
+          21765
         ],
         "symbols_nonzero_size": [
-          2452,
-          2466
-        ]
-      },
-      "noisy_deltas": {
-        "symbols_total": [
-          2530,
-          2545
-        ],
-        "bytes_covered": [
-          145635,
-          146056
-        ],
-        "binary_bytes_before_strip": [
-          356512,
-          356600
-        ]
-      },
-      "base_abs": {
-        "object_files": 44,
-        "dead_stripped": 2230,
-        "symbols_nonzero_size": 2452,
-        "units_seen": 14,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 44,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 2466,
-        "units_seen": 14,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.909462,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 94140
-    },
-    {
-      "repo": "analogcode/Swift-Radio-Pro",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 108,
-        "dead_stripped": 8310,
-        "symbols_nonzero_size": 9731,
-        "units_seen": 41,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 108,
-        "dead_stripped": 8310,
-        "symbols_nonzero_size": 9731,
-        "units_seen": 41,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 421564
-    },
-    {
-      "repo": "analogcode/Swift-Radio-Pro",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          8310,
-          0
-        ],
-        "symbols_nonzero_size": [
-          9731,
-          9904
+          44590,
+          45781
         ]
       },
       "noisy_deltas": {
         "text_size": [
-          421564,
-          423872
+          2466376,
+          2519588
         ],
         "symbols_total": [
-          10794,
-          11088
+          50901,
+          52367
         ],
         "bytes_covered": [
-          616048,
-          621369
+          3372621,
+          3452888
         ],
         "binary_bytes_before_strip": [
-          1454240,
-          1471408
-        ]
-      },
-      "base_abs": {
-        "object_files": 108,
-        "dead_stripped": 8310,
-        "symbols_nonzero_size": 9731,
-        "units_seen": 41,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 108,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 9904,
-        "units_seen": 41,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.853972,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 421564
-    },
-    {
-      "repo": "awaseem/foqos",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 253,
-        "dead_stripped": 20681,
-        "symbols_nonzero_size": 44306,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 253,
-        "dead_stripped": 20681,
-        "symbols_nonzero_size": 44306,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 2173424
-    },
-    {
-      "repo": "awaseem/foqos",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          20681,
-          0
-        ],
-        "symbols_nonzero_size": [
-          44306,
-          44689
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          2173424,
-          2187088
-        ],
-        "symbols_total": [
-          47460,
-          47878
-        ],
-        "bytes_covered": [
-          3480043,
-          3523633
-        ],
-        "binary_bytes_before_strip": [
-          12933664,
-          13000120
-        ]
-      },
-      "base_abs": {
-        "object_files": 253,
-        "dead_stripped": 20681,
-        "symbols_nonzero_size": 44306,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 253,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 44689,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.466777,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 2173424
-    },
-    {
-      "repo": "b5i/Atwy",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 329,
-        "dead_stripped": 34951,
-        "symbols_nonzero_size": 57878,
-        "units_seen": 57,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 329,
-        "dead_stripped": 34951,
-        "symbols_nonzero_size": 57878,
-        "units_seen": 57,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 3732912
-    },
-    {
-      "repo": "b5i/Atwy",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          34951,
-          0
-        ],
-        "symbols_nonzero_size": [
-          57878,
-          58324
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3732912,
-          3741024
-        ],
-        "symbols_total": [
-          66369,
-          66933
-        ],
-        "bytes_covered": [
-          4913050,
-          4926535
-        ],
-        "binary_bytes_before_strip": [
-          13412176,
-          13453704
-        ]
-      },
-      "base_abs": {
-        "object_files": 329,
-        "dead_stripped": 34951,
-        "symbols_nonzero_size": 57878,
-        "units_seen": 57,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 329,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 58324,
-        "units_seen": 57,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.603874,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 3732912
-    },
-    {
-      "repo": "cranci1/Sora",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 189,
-        "dead_stripped": 35176,
-        "symbols_nonzero_size": 49007,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 189,
-        "dead_stripped": 35176,
-        "symbols_nonzero_size": 49007,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 3749200
-    },
-    {
-      "repo": "cranci1/Sora",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          35176,
-          0
-        ],
-        "symbols_nonzero_size": [
-          49007,
-          49285
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3749200,
-          3752584
-        ],
-        "symbols_total": [
-          53512,
-          53895
-        ],
-        "bytes_covered": [
-          5025501,
-          5031582
-        ],
-        "binary_bytes_before_strip": [
-          14852168,
-          14873224
-        ]
-      },
-      "base_abs": {
-        "object_files": 189,
-        "dead_stripped": 35176,
-        "symbols_nonzero_size": 49007,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 189,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 49285,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.717775,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 3749200
-    },
-    {
-      "repo": "freesuraj/TLDR",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          99,
-          100
-        ],
-        "dead_stripped": [
-          22540,
-          18477
-        ],
-        "symbols_nonzero_size": [
-          172480,
-          157740
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          7136284,
-          6942096
-        ],
-        "symbols_total": [
-          176693,
-          159939
-        ],
-        "bytes_covered": [
-          18629315,
-          18101357
-        ],
-        "binary_bytes_before_strip": [
-          34371704,
-          31749608
-        ]
-      },
-      "base_abs": {
-        "object_files": 99,
-        "dead_stripped": 22540,
-        "symbols_nonzero_size": 172480,
-        "units_seen": 46,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 100,
-        "dead_stripped": 18477,
-        "symbols_nonzero_size": 157740,
-        "units_seen": 46,
-        "lto_objects": 1,
-        "lto_symbols": 38187,
-        "lto_bytes": 4791965,
-        "lto_text_bytes": 140120
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": true,
-      "effect": 0.019635,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 7136284
-    },
-    {
-      "repo": "freesuraj/TLDR",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          22540,
-          0
-        ],
-        "symbols_nonzero_size": [
-          172480,
-          185355
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          7136284,
-          7893460
-        ],
-        "symbols_total": [
-          176693,
-          190578
-        ],
-        "bytes_covered": [
-          18629315,
-          21870685
-        ],
-        "binary_bytes_before_strip": [
-          34371704,
-          38900280
-        ]
-      },
-      "base_abs": {
-        "object_files": 99,
-        "dead_stripped": 22540,
-        "symbols_nonzero_size": 172480,
-        "units_seen": 46,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 99,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 185355,
-        "units_seen": 46,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.130682,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 7136284
-    },
-    {
-      "repo": "fulldecent/vowel-practice",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          94,
-          95
-        ]
-      },
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 94,
-        "dead_stripped": 1215,
-        "symbols_nonzero_size": 7146,
-        "units_seen": 43,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 95,
-        "dead_stripped": 1215,
-        "symbols_nonzero_size": 7146,
-        "units_seen": 43,
-        "lto_objects": 1,
-        "lto_symbols": 2,
-        "lto_bytes": 399,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 282868
-    },
-    {
-      "repo": "fulldecent/vowel-practice",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          1215,
-          0
-        ],
-        "symbols_nonzero_size": [
-          7146,
-          7369
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          282868,
-          294876
-        ],
-        "symbols_total": [
-          7443,
-          7676
-        ],
-        "bytes_covered": [
-          473690,
-          513542
-        ],
-        "binary_bytes_before_strip": [
-          1533872,
-          1580144
-        ]
-      },
-      "base_abs": {
-        "object_files": 94,
-        "dead_stripped": 1215,
-        "symbols_nonzero_size": 7146,
-        "units_seen": 43,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 94,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 7369,
-        "units_seen": 43,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.170025,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 282868
-    },
-    {
-      "repo": "gluonfield/enchanted",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          180,
-          181
-        ],
-        "dead_stripped": [
-          13692,
-          13448
-        ],
-        "symbols_nonzero_size": [
-          61116,
-          60957
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3835260,
-          3837376
-        ],
-        "symbols_total": [
-          70119,
-          69918
-        ],
-        "bytes_covered": [
-          4941876,
-          4943786
-        ],
-        "binary_bytes_before_strip": [
-          11967360,
-          11935520
+          9352368,
+          9511280
         ]
       },
       "base_abs": {
         "object_files": 180,
-        "dead_stripped": 13692,
-        "symbols_nonzero_size": 61116,
-        "units_seen": 71,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 181,
-        "dead_stripped": 13448,
-        "symbols_nonzero_size": 60957,
-        "units_seen": 71,
-        "lto_objects": 1,
-        "lto_symbols": 2583,
-        "lto_bytes": 25933,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 3835260
-    },
-    {
-      "repo": "gluonfield/enchanted",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          13692,
-          0
-        ],
-        "symbols_nonzero_size": [
-          61116,
-          61817
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3835260,
-          3855464
-        ],
-        "symbols_total": [
-          70119,
-          70934
-        ],
-        "bytes_covered": [
-          4941876,
-          4970505
-        ],
-        "binary_bytes_before_strip": [
-          11967360,
-          12038776
-        ]
-      },
-      "base_abs": {
-        "object_files": 180,
-        "dead_stripped": 13692,
-        "symbols_nonzero_size": 61116,
-        "units_seen": 71,
+        "dead_stripped": 16862,
+        "symbols_nonzero_size": 44590,
+        "units_seen": 64,
         "lto_objects": 0,
         "lto_symbols": 0,
         "lto_bytes": 0,
@@ -4218,2815 +4379,19 @@
       },
       "config_abs": {
         "object_files": 180,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 61817,
-        "units_seen": 71,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.224033,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 3835260
-    },
-    {
-      "repo": "glushchenko/fsnotes",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 10,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 222,
-        "units_seen": 6,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 10,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 222,
-        "units_seen": 6,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 7932
-    },
-    {
-      "repo": "glushchenko/fsnotes",
-      "config": "no_deadstrip",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 10,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 222,
-        "units_seen": 6,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 10,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 222,
-        "units_seen": 6,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 7932
-    },
-    {
-      "repo": "jasudev/FabulaItemsProvider",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          98,
-          99
-        ],
-        "dead_stripped": [
-          28533,
-          32038
-        ],
-        "symbols_nonzero_size": [
-          98513,
-          98369
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          4821420,
-          4818108
-        ],
-        "symbols_total": [
-          113045,
-          112892
-        ],
-        "bytes_covered": [
-          6875826,
-          6871646
-        ],
-        "binary_bytes_before_strip": [
-          22086192,
-          22043344
-        ]
-      },
-      "base_abs": {
-        "object_files": 98,
-        "dead_stripped": 28533,
-        "symbols_nonzero_size": 98513,
+        "dead_stripped": 21765,
+        "symbols_nonzero_size": 45781,
         "units_seen": 64,
         "lto_objects": 0,
         "lto_symbols": 0,
         "lto_bytes": 0,
         "lto_text_bytes": 0
       },
-      "config_abs": {
-        "object_files": 99,
-        "dead_stripped": 32038,
-        "symbols_nonzero_size": 98369,
-        "units_seen": 64,
-        "lto_objects": 1,
-        "lto_symbols": 1971,
-        "lto_bytes": 47072,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 4821420
-    },
-    {
-      "repo": "jasudev/FabulaItemsProvider",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          28533,
-          0
-        ],
-        "symbols_nonzero_size": [
-          98513,
-          99533
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          4821420,
-          4836408
-        ],
-        "symbols_total": [
-          113045,
-          114196
-        ],
-        "bytes_covered": [
-          6875826,
-          6936498
-        ],
-        "binary_bytes_before_strip": [
-          22086192,
-          22199696
-        ]
-      },
-      "base_abs": {
-        "object_files": 98,
-        "dead_stripped": 28533,
-        "symbols_nonzero_size": 98513,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 98,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 99533,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
+      "criterion": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
       "criterion_holds": true,
-      "effect": 0.289637,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 4821420
-    },
-    {
-      "repo": "jeffreybergier/Hipstapaper",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          82,
-          83
-        ]
-      },
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 82,
-        "dead_stripped": 6657,
-        "symbols_nonzero_size": 24277,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 83,
-        "dead_stripped": 6657,
-        "symbols_nonzero_size": 24277,
-        "units_seen": 55,
-        "lto_objects": 1,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 1313608
-    },
-    {
-      "repo": "jeffreybergier/Hipstapaper",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          6657,
-          0
-        ],
-        "symbols_nonzero_size": [
-          24277,
-          24577
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          1313608,
-          1323864
-        ],
-        "symbols_total": [
-          27671,
-          28034
-        ],
-        "bytes_covered": [
-          1724465,
-          1738641
-        ],
-        "binary_bytes_before_strip": [
-          4557208,
-          4589568
-        ]
-      },
-      "base_abs": {
-        "object_files": 82,
-        "dead_stripped": 6657,
-        "symbols_nonzero_size": 24277,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 82,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 24577,
-        "units_seen": 55,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.27421,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 1313608
-    },
-    {
-      "repo": "joreilly/BikeShare",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          61,
-          62
-        ]
-      },
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 61,
-        "dead_stripped": 459,
-        "symbols_nonzero_size": 2987,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 62,
-        "dead_stripped": 459,
-        "symbols_nonzero_size": 2987,
-        "units_seen": 30,
-        "lto_objects": 1,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 77052
-    },
-    {
-      "repo": "joreilly/BikeShare",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          459,
-          0
-        ],
-        "symbols_nonzero_size": [
-          2987,
-          3104
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          77052,
-          79540
-        ],
-        "symbols_total": [
-          3089,
-          3209
-        ],
-        "bytes_covered": [
-          132860,
-          137743
-        ],
-        "binary_bytes_before_strip": [
-          490112,
-          511328
-        ]
-      },
-      "base_abs": {
-        "object_files": 61,
-        "dead_stripped": 459,
-        "symbols_nonzero_size": 2987,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 61,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 3104,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.153666,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 77052
-    },
-    {
-      "repo": "joreilly/PeopleInSpace",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 39,
-        "dead_stripped": 177,
-        "symbols_nonzero_size": 1755,
-        "units_seen": 18,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 39,
-        "dead_stripped": 177,
-        "symbols_nonzero_size": 1755,
-        "units_seen": 18,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 49880
-    },
-    {
-      "repo": "joreilly/PeopleInSpace",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          177,
-          0
-        ],
-        "symbols_nonzero_size": [
-          1755,
-          1763
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          49880,
-          50056
-        ],
-        "symbols_total": [
-          1799,
-          1808
-        ],
-        "bytes_covered": [
-          86952,
-          87330
-        ],
-        "binary_bytes_before_strip": [
-          501968,
-          502056
-        ]
-      },
-      "base_abs": {
-        "object_files": 39,
-        "dead_stripped": 177,
-        "symbols_nonzero_size": 1755,
-        "units_seen": 18,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 39,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 1763,
-        "units_seen": 18,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.100855,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 49880
-    },
-    {
-      "repo": "joreilly/StarWars",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 67,
-        "dead_stripped": 313,
-        "symbols_nonzero_size": 1844,
-        "units_seen": 28,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 67,
-        "dead_stripped": 313,
-        "symbols_nonzero_size": 1844,
-        "units_seen": 28,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 57952
-    },
-    {
-      "repo": "joreilly/StarWars",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          313,
-          0
-        ],
-        "symbols_nonzero_size": [
-          1844,
-          2036
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          57952,
-          69736
-        ],
-        "symbols_total": [
-          1941,
-          2139
-        ],
-        "bytes_covered": [
-          105944,
-          145189
-        ],
-        "binary_bytes_before_strip": [
-          370736,
-          414216
-        ]
-      },
-      "base_abs": {
-        "object_files": 67,
-        "dead_stripped": 313,
-        "symbols_nonzero_size": 1844,
-        "units_seen": 28,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 67,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 2036,
-        "units_seen": 28,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.16974,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 57952
-    },
-    {
-      "repo": "joreilly/WordMasterKMP",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 56,
-        "dead_stripped": 265,
-        "symbols_nonzero_size": 2170,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 56,
-        "dead_stripped": 265,
-        "symbols_nonzero_size": 2170,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 68992
-    },
-    {
-      "repo": "joreilly/WordMasterKMP",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          265,
-          0
-        ],
-        "symbols_nonzero_size": [
-          2170,
-          2273
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          68992,
-          71324
-        ],
-        "symbols_total": [
-          2280,
-          2388
-        ],
-        "bytes_covered": [
-          105131,
-          108921
-        ],
-        "binary_bytes_before_strip": [
-          383632,
-          387888
-        ]
-      },
-      "base_abs": {
-        "object_files": 56,
-        "dead_stripped": 265,
-        "symbols_nonzero_size": 2170,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 56,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 2273,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.12212,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 68992
-    },
-    {
-      "repo": "jpsim/Milestones",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          49,
-          50
-        ]
-      },
-      "noisy_deltas": {
-        "binary_bytes_before_strip": [
-          133400,
-          133392
-        ]
-      },
-      "base_abs": {
-        "object_files": 49,
-        "dead_stripped": 830,
-        "symbols_nonzero_size": 820,
-        "units_seen": 19,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 50,
-        "dead_stripped": 830,
-        "symbols_nonzero_size": 820,
-        "units_seen": 19,
-        "lto_objects": 1,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 10000
-    },
-    {
-      "repo": "jpsim/Milestones",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          830,
-          0
-        ],
-        "symbols_nonzero_size": [
-          820,
-          928
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          10000,
-          12152
-        ],
-        "symbols_total": [
-          838,
-          948
-        ],
-        "bytes_covered": [
-          28752,
-          32387
-        ],
-        "binary_bytes_before_strip": [
-          133400,
-          137520
-        ]
-      },
-      "base_abs": {
-        "object_files": 49,
-        "dead_stripped": 830,
-        "symbols_nonzero_size": 820,
-        "units_seen": 19,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 49,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 928,
-        "units_seen": 19,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 1.012195,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 10000
-    },
-    {
-      "repo": "keepassium/KeePassium",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          447,
-          448
-        ],
-        "dead_stripped": [
-          52561,
-          53446
-        ],
-        "symbols_nonzero_size": [
-          69429,
-          69267
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          2806432,
-          2802796
-        ],
-        "symbols_total": [
-          73263,
-          73067
-        ],
-        "bytes_covered": [
-          4985106,
-          4979864
-        ],
-        "binary_bytes_before_strip": [
-          12580800,
-          12544288
-        ]
-      },
-      "base_abs": {
-        "object_files": 447,
-        "dead_stripped": 52561,
-        "symbols_nonzero_size": 69429,
-        "units_seen": 49,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 448,
-        "dead_stripped": 53446,
-        "symbols_nonzero_size": 69267,
-        "units_seen": 49,
-        "lto_objects": 1,
-        "lto_symbols": 2480,
-        "lto_bytes": 86006,
-        "lto_text_bytes": 108
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": true,
-      "effect": 3.8e-05,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 2806432
-    },
-    {
-      "repo": "keepassium/KeePassium",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          52561,
-          0
-        ],
-        "symbols_nonzero_size": [
-          69429,
-          70390
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          2806432,
-          2825968
-        ],
-        "symbols_total": [
-          73263,
-          74332
-        ],
-        "bytes_covered": [
-          4985106,
-          5111684
-        ],
-        "binary_bytes_before_strip": [
-          12580800,
-          12773096
-        ]
-      },
-      "base_abs": {
-        "object_files": 447,
-        "dead_stripped": 52561,
-        "symbols_nonzero_size": 69429,
-        "units_seen": 49,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 447,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 70390,
-        "units_seen": 49,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.757047,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 2806432
-    },
-    {
-      "repo": "kudoleh/iOS-Modular-Architecture",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 58,
-        "dead_stripped": 971,
-        "symbols_nonzero_size": 1092,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 58,
-        "dead_stripped": 971,
-        "symbols_nonzero_size": 1092,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 18728
-    },
-    {
-      "repo": "kudoleh/iOS-Modular-Architecture",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          971,
-          0
-        ],
-        "symbols_nonzero_size": [
-          1092,
-          1225
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          18728,
-          21012
-        ],
-        "symbols_total": [
-          1121,
-          1256
-        ],
-        "bytes_covered": [
-          43753,
-          47783
-        ],
-        "binary_bytes_before_strip": [
-          146744,
-          151064
-        ]
-      },
-      "base_abs": {
-        "object_files": 58,
-        "dead_stripped": 971,
-        "symbols_nonzero_size": 1092,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 58,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 1225,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.889194,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 18728
-    },
-    {
-      "repo": "ldakhoa/GistHub",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          230,
-          231
-        ],
-        "dead_stripped": [
-          34932,
-          30278
-        ],
-        "symbols_nonzero_size": [
-          84167,
-          83835
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          7115232,
-          7108644
-        ],
-        "symbols_total": [
-          95845,
-          95455
-        ],
-        "bytes_covered": [
-          38300891,
-          38293381
-        ],
-        "binary_bytes_before_strip": [
-          48160248,
-          48067216
-        ]
-      },
-      "base_abs": {
-        "object_files": 230,
-        "dead_stripped": 34932,
-        "symbols_nonzero_size": 84167,
-        "units_seen": 188,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 231,
-        "dead_stripped": 30278,
-        "symbols_nonzero_size": 83835,
-        "units_seen": 188,
-        "lto_objects": 1,
-        "lto_symbols": 8429,
-        "lto_bytes": 31921771,
-        "lto_text_bytes": 2346672
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": true,
-      "effect": 0.32981,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 7115232
-    },
-    {
-      "repo": "ldakhoa/GistHub",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          34932,
-          0
-        ],
-        "symbols_nonzero_size": [
-          84167,
-          85182
-        ],
-        "units_seen": [
-          188,
-          189
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          7115232,
-          7148000
-        ],
-        "symbols_total": [
-          95845,
-          97207
-        ],
-        "bytes_covered": [
-          38300891,
-          38344050
-        ],
-        "binary_bytes_before_strip": [
-          48160248,
-          48271056
-        ]
-      },
-      "base_abs": {
-        "object_files": 230,
-        "dead_stripped": 34932,
-        "symbols_nonzero_size": 84167,
-        "units_seen": 188,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 230,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 85182,
-        "units_seen": 189,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.415032,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 7115232
-    },
-    {
-      "repo": "lokii49/mirror",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 199,
-        "dead_stripped": 61551,
-        "symbols_nonzero_size": 189066,
-        "units_seen": 67,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 199,
-        "dead_stripped": 61551,
-        "symbols_nonzero_size": 189066,
-        "units_seen": 67,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 10800456
-    },
-    {
-      "repo": "lokii49/mirror",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          61551,
-          0
-        ],
-        "symbols_nonzero_size": [
-          189066,
-          190081
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          10800456,
-          10824984
-        ],
-        "symbols_total": [
-          204955,
-          206267
-        ],
-        "bytes_covered": [
-          16792099,
-          16861361
-        ],
-        "binary_bytes_before_strip": [
-          53332648,
-          53504472
-        ]
-      },
-      "base_abs": {
-        "object_files": 199,
-        "dead_stripped": 61551,
-        "symbols_nonzero_size": 189066,
-        "units_seen": 67,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 199,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 190081,
-        "units_seen": 67,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.325553,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 10800456
-    },
-    {
-      "repo": "mikelikesdesign/SwiftUI-experiments",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 55,
-        "dead_stripped": 145,
-        "symbols_nonzero_size": 1217,
-        "units_seen": 15,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 55,
-        "dead_stripped": 145,
-        "symbols_nonzero_size": 1217,
-        "units_seen": 15,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 30884
-    },
-    {
-      "repo": "mikelikesdesign/SwiftUI-experiments",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          145,
-          0
-        ],
-        "symbols_nonzero_size": [
-          1217,
-          1313
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          30884,
-          40412
-        ],
-        "symbols_total": [
-          1251,
-          1348
-        ],
-        "bytes_covered": [
-          63966,
-          99559
-        ],
-        "binary_bytes_before_strip": [
-          268288,
-          308080
-        ]
-      },
-      "base_abs": {
-        "object_files": 55,
-        "dead_stripped": 145,
-        "symbols_nonzero_size": 1217,
-        "units_seen": 15,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 55,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 1313,
-        "units_seen": 15,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.119145,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 30884
-    },
-    {
-      "repo": "ml-explore/mlx-swift-examples",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          71,
-          72
-        ],
-        "dead_stripped": [
-          22028,
-          3739
-        ],
-        "symbols_nonzero_size": [
-          48417,
-          45491
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          7552460,
-          8087404
-        ],
-        "symbols_total": [
-          67777,
-          47673
-        ],
-        "bytes_covered": [
-          9967865,
-          10250481
-        ],
-        "binary_bytes_before_strip": [
-          20830360,
-          17135104
-        ]
-      },
-      "base_abs": {
-        "object_files": 71,
-        "dead_stripped": 22028,
-        "symbols_nonzero_size": 48417,
-        "units_seen": 39,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 72,
-        "dead_stripped": 3739,
-        "symbols_nonzero_size": 45491,
-        "units_seen": 39,
-        "lto_objects": 1,
-        "lto_symbols": 9862,
-        "lto_bytes": 1444336,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 7552460
-    },
-    {
-      "repo": "ml-explore/mlx-swift-examples",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          22028,
-          0
-        ],
-        "symbols_nonzero_size": [
-          48417,
-          50278
-        ],
-        "units_seen": [
-          39,
-          41
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          7552460,
-          7697864
-        ],
-        "symbols_total": [
-          67777,
-          70054
-        ],
-        "bytes_covered": [
-          9967865,
-          10220518
-        ],
-        "binary_bytes_before_strip": [
-          20830360,
-          21410384
-        ]
-      },
-      "base_abs": {
-        "object_files": 71,
-        "dead_stripped": 22028,
-        "symbols_nonzero_size": 48417,
-        "units_seen": 39,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 71,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 50278,
-        "units_seen": 41,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.454964,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 7552460
-    },
-    {
-      "repo": "mozilla-mobile/firefox-ios",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 121,
-        "dead_stripped": 45559,
-        "symbols_nonzero_size": 48073,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 121,
-        "dead_stripped": 45559,
-        "symbols_nonzero_size": 48073,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 2743988
-    },
-    {
-      "repo": "mozilla-mobile/firefox-ios",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          45559,
-          0
-        ],
-        "symbols_nonzero_size": [
-          48073,
-          48477
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          2743988,
-          2747800
-        ],
-        "symbols_total": [
-          56792,
-          57473
-        ],
-        "bytes_covered": [
-          3783960,
-          3793582
-        ],
-        "binary_bytes_before_strip": [
-          8535552,
-          8571248
-        ]
-      },
-      "base_abs": {
-        "object_files": 121,
-        "dead_stripped": 45559,
-        "symbols_nonzero_size": 48073,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 121,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 48477,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.947705,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 2743988
-    },
-    {
-      "repo": "rafsoh/dimeApp",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 192,
-        "dead_stripped": 21901,
-        "symbols_nonzero_size": 57015,
-        "units_seen": 56,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 192,
-        "dead_stripped": 21901,
-        "symbols_nonzero_size": 57015,
-        "units_seen": 56,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 3627772
-    },
-    {
-      "repo": "rafsoh/dimeApp",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          21901,
-          0
-        ],
-        "symbols_nonzero_size": [
-          57015,
-          57369
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3627772,
-          3634976
-        ],
-        "symbols_total": [
-          63518,
-          63982
-        ],
-        "bytes_covered": [
-          5022911,
-          5034448
-        ],
-        "binary_bytes_before_strip": [
-          19269144,
-          19315936
-        ]
-      },
-      "base_abs": {
-        "object_files": 192,
-        "dead_stripped": 21901,
-        "symbols_nonzero_size": 57015,
-        "units_seen": 56,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 192,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 57369,
-        "units_seen": 56,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.384127,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 3627772
-    },
-    {
-      "repo": "rajdeep/proton",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 92,
-        "dead_stripped": 4141,
-        "symbols_nonzero_size": 4029,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 92,
-        "dead_stripped": 4141,
-        "symbols_nonzero_size": 4029,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 149696
-    },
-    {
-      "repo": "rajdeep/proton",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          4141,
-          0
-        ],
-        "symbols_nonzero_size": [
-          4029,
-          4194
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          149696,
-          152112
-        ],
-        "symbols_total": [
-          4518,
-          4699
-        ],
-        "bytes_covered": [
-          239923,
-          244436
-        ],
-        "binary_bytes_before_strip": [
-          661352,
-          668584
-        ]
-      },
-      "base_abs": {
-        "object_files": 92,
-        "dead_stripped": 4141,
-        "symbols_nonzero_size": 4029,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 92,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 4194,
-        "units_seen": 25,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 1.027798,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 149696
-    },
-    {
-      "repo": "richardtop/CalendarApp",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 57,
-        "dead_stripped": 2637,
-        "symbols_nonzero_size": 4775,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 57,
-        "dead_stripped": 2637,
-        "symbols_nonzero_size": 4775,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 241676
-    },
-    {
-      "repo": "richardtop/CalendarApp",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          2637,
-          0
-        ],
-        "symbols_nonzero_size": [
-          4775,
-          4945
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          241676,
-          244036
-        ],
-        "symbols_total": [
-          5428,
-          5613
-        ],
-        "bytes_covered": [
-          328889,
-          333452
-        ],
-        "binary_bytes_before_strip": [
-          813816,
-          820104
-        ]
-      },
-      "base_abs": {
-        "object_files": 57,
-        "dead_stripped": 2637,
-        "symbols_nonzero_size": 4775,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 57,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 4945,
-        "units_seen": 30,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.552251,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 241676
-    },
-    {
-      "repo": "saxobroko/SaxWeather",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 236,
-        "dead_stripped": 41357,
-        "symbols_nonzero_size": 77742,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 236,
-        "dead_stripped": 41357,
-        "symbols_nonzero_size": 77742,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 3462272
-    },
-    {
-      "repo": "saxobroko/SaxWeather",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          41357,
-          0
-        ],
-        "symbols_nonzero_size": [
-          77742,
-          78190
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3462272,
-          3479520
-        ],
-        "symbols_total": [
-          87349,
-          87953
-        ],
-        "bytes_covered": [
-          5651056,
-          5698027
-        ],
-        "binary_bytes_before_strip": [
-          23267184,
-          23364664
-        ]
-      },
-      "base_abs": {
-        "object_files": 236,
-        "dead_stripped": 41357,
-        "symbols_nonzero_size": 77742,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 236,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 78190,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.531978,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 3462272
-    },
-    {
-      "repo": "sigfault-byte/LegitURL",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 212,
-        "dead_stripped": 11682,
-        "symbols_nonzero_size": 15873,
-        "units_seen": 44,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 212,
-        "dead_stripped": 11682,
-        "symbols_nonzero_size": 15873,
-        "units_seen": 44,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 1180876
-    },
-    {
-      "repo": "sigfault-byte/LegitURL",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          11682,
-          0
-        ],
-        "symbols_nonzero_size": [
-          15873,
-          16072
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          1180876,
-          1184156
-        ],
-        "symbols_total": [
-          17506,
-          17730
-        ],
-        "bytes_covered": [
-          1510468,
-          1517818
-        ],
-        "binary_bytes_before_strip": [
-          3539432,
-          3564096
-        ]
-      },
-      "base_abs": {
-        "object_files": 212,
-        "dead_stripped": 11682,
-        "symbols_nonzero_size": 15873,
-        "units_seen": 44,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 212,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 16072,
-        "units_seen": 44,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.735967,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 1180876
-    },
-    {
-      "repo": "simple-login/Simple-Login-iOS",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 206,
-        "dead_stripped": 22289,
-        "symbols_nonzero_size": 51200,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 206,
-        "dead_stripped": 22289,
-        "symbols_nonzero_size": 51200,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 2278684
-    },
-    {
-      "repo": "simple-login/Simple-Login-iOS",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          22289,
-          0
-        ],
-        "symbols_nonzero_size": [
-          51200,
-          51605
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          2278684,
-          2283924
-        ],
-        "symbols_total": [
-          58587,
-          59109
-        ],
-        "bytes_covered": [
-          3301258,
-          3313507
-        ],
-        "binary_bytes_before_strip": [
-          10281808,
-          10317800
-        ]
-      },
-      "base_abs": {
-        "object_files": 206,
-        "dead_stripped": 22289,
-        "symbols_nonzero_size": 51200,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 206,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 51605,
-        "units_seen": 54,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.435332,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 2278684
-    },
-    {
-      "repo": "timfraedrich/OutRun",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 213,
-        "dead_stripped": 9475,
-        "symbols_nonzero_size": 13755,
-        "units_seen": 35,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 213,
-        "dead_stripped": 9475,
-        "symbols_nonzero_size": 13755,
-        "units_seen": 35,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 555700
-    },
-    {
-      "repo": "timfraedrich/OutRun",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          9475,
-          0
-        ],
-        "symbols_nonzero_size": [
-          13755,
-          13983
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          555700,
-          558316
-        ],
-        "symbols_total": [
-          16118,
-          16357
-        ],
-        "bytes_covered": [
-          838080,
-          843289
-        ],
-        "binary_bytes_before_strip": [
-          2324480,
-          2347936
-        ]
-      },
-      "base_abs": {
-        "object_files": 213,
-        "dead_stripped": 9475,
-        "symbols_nonzero_size": 13755,
-        "units_seen": 35,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 213,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 13983,
-        "units_seen": 35,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.68884,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 555700
-    },
-    {
-      "repo": "vincode-io/Zavala",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          254,
-          255
-        ],
-        "dead_stripped": [
-          41122,
-          40747
-        ],
-        "symbols_nonzero_size": [
-          69702,
-          69559
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          4857472,
-          4857484
-        ],
-        "symbols_total": [
-          78851,
-          78666
-        ],
-        "bytes_covered": [
-          6235980,
-          6235786
-        ],
-        "binary_bytes_before_strip": [
-          12911304,
-          12882928
-        ]
-      },
-      "base_abs": {
-        "object_files": 254,
-        "dead_stripped": 41122,
-        "symbols_nonzero_size": 69702,
-        "units_seen": 73,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 255,
-        "dead_stripped": 40747,
-        "symbols_nonzero_size": 69559,
-        "units_seen": 73,
-        "lto_objects": 1,
-        "lto_symbols": 2492,
-        "lto_bytes": 25035,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 4857472
-    },
-    {
-      "repo": "vincode-io/Zavala",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          41122,
-          0
-        ],
-        "symbols_nonzero_size": [
-          69702,
-          70925
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          4857472,
-          4896604
-        ],
-        "symbols_total": [
-          78851,
-          80366
-        ],
-        "bytes_covered": [
-          6235980,
-          6352946
-        ],
-        "binary_bytes_before_strip": [
-          12911304,
-          13123136
-        ]
-      },
-      "base_abs": {
-        "object_files": 254,
-        "dead_stripped": 41122,
-        "symbols_nonzero_size": 69702,
-        "units_seen": 73,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 254,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 70925,
-        "units_seen": 73,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.589969,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 4857472
-    },
-    {
-      "repo": "wikimedia/wikipedia-ios",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          640,
-          641
-        ],
-        "dead_stripped": [
-          119529,
-          119354
-        ],
-        "symbols_nonzero_size": [
-          84393,
-          84394
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          4903844,
-          4902928
-        ],
-        "symbols_total": [
-          93559,
-          93560
-        ],
-        "bytes_covered": [
-          6922747,
-          6921858
-        ],
-        "binary_bytes_before_strip": [
-          14421640,
-          14403544
-        ]
-      },
-      "base_abs": {
-        "object_files": 640,
-        "dead_stripped": 119529,
-        "symbols_nonzero_size": 84393,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 641,
-        "dead_stripped": 119354,
-        "symbols_nonzero_size": 84394,
-        "units_seen": 48,
-        "lto_objects": 1,
-        "lto_symbols": 1979,
-        "lto_bytes": 52825,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 4903844
-    },
-    {
-      "repo": "wikimedia/wikipedia-ios",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          119529,
-          0
-        ],
-        "symbols_nonzero_size": [
-          84393,
-          85995
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          4903844,
-          4908020
-        ],
-        "symbols_total": [
-          93559,
-          95438
-        ],
-        "bytes_covered": [
-          6922747,
-          7109853
-        ],
-        "binary_bytes_before_strip": [
-          14421640,
-          14745312
-        ]
-      },
-      "base_abs": {
-        "object_files": 640,
-        "dead_stripped": 119529,
-        "symbols_nonzero_size": 84393,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 640,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 85995,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 1.416338,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 4903844
-    },
-    {
-      "repo": "yattee/yattee",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          4146,
-          4147
-        ],
-        "dead_stripped": [
-          191247,
-          191244
-        ],
-        "symbols_nonzero_size": [
-          365949,
-          365948
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          39517076,
-          39516968
-        ],
-        "symbols_total": [
-          381760,
-          381759
-        ],
-        "bytes_covered": [
-          60211328,
-          60211267
-        ],
-        "binary_bytes_before_strip": [
-          102631288,
-          102630888
-        ]
-      },
-      "base_abs": {
-        "object_files": 4146,
-        "dead_stripped": 191247,
-        "symbols_nonzero_size": 365949,
-        "units_seen": 100,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 4147,
-        "dead_stripped": 191244,
-        "symbols_nonzero_size": 365948,
-        "units_seen": 100,
-        "lto_objects": 1,
-        "lto_symbols": 59,
-        "lto_bytes": 3336,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 39517076
-    },
-    {
-      "repo": "yattee/yattee",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          191247,
-          0
-        ],
-        "symbols_nonzero_size": [
-          365949,
-          420255
-        ],
-        "units_seen": [
-          100,
-          102
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          39517076,
-          45765212
-        ],
-        "symbols_total": [
-          381760,
-          437475
-        ],
-        "bytes_covered": [
-          60211328,
-          68327448
-        ],
-        "binary_bytes_before_strip": [
-          102631288,
-          112927368
-        ]
-      },
-      "base_abs": {
-        "object_files": 4146,
-        "dead_stripped": 191247,
-        "symbols_nonzero_size": 365949,
-        "units_seen": 100,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 4146,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 420255,
-        "units_seen": 102,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.522606,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 39517076
-    },
-    {
-      "repo": "youstanzr/YouTag",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 109,
-        "dead_stripped": 14416,
-        "symbols_nonzero_size": 30410,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 109,
-        "dead_stripped": 14416,
-        "symbols_nonzero_size": 30410,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 1547768
-    },
-    {
-      "repo": "youstanzr/YouTag",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          14416,
-          0
-        ],
-        "symbols_nonzero_size": [
-          30410,
-          30696
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          1547768,
-          1560976
-        ],
-        "symbols_total": [
-          33241,
-          33703
-        ],
-        "bytes_covered": [
-          2392302,
-          2434051
-        ],
-        "binary_bytes_before_strip": [
-          5836920,
-          5910904
-        ]
-      },
-      "base_abs": {
-        "object_files": 109,
-        "dead_stripped": 14416,
-        "symbols_nonzero_size": 30410,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 109,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 30696,
-        "units_seen": 48,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.474055,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 1547768
-    },
-    {
-      "repo": "zizicici/Off-Day",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          188,
-          189
-        ],
-        "dead_stripped": [
-          33619,
-          33376
-        ],
-        "symbols_nonzero_size": [
-          76935,
-          76818
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3765756,
-          3760576
-        ],
-        "symbols_total": [
-          83453,
-          83336
-        ],
-        "bytes_covered": [
-          6160774,
-          6154062
-        ],
-        "binary_bytes_before_strip": [
-          14644032,
-          14609576
-        ]
-      },
-      "base_abs": {
-        "object_files": 188,
-        "dead_stripped": 33619,
-        "symbols_nonzero_size": 76935,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 189,
-        "dead_stripped": 33376,
-        "symbols_nonzero_size": 76818,
-        "units_seen": 51,
-        "lto_objects": 1,
-        "lto_symbols": 725,
-        "lto_bytes": 41744,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 3765756
-    },
-    {
-      "repo": "zizicici/Off-Day",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          33619,
-          0
-        ],
-        "symbols_nonzero_size": [
-          76935,
-          78281
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          3765756,
-          3822560
-        ],
-        "symbols_total": [
-          83453,
-          85010
-        ],
-        "bytes_covered": [
-          6160774,
-          6273785
-        ],
-        "binary_bytes_before_strip": [
-          14644032,
-          14824616
-        ]
-      },
-      "base_abs": {
-        "object_files": 188,
-        "dead_stripped": 33619,
-        "symbols_nonzero_size": 76935,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 188,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 78281,
-        "units_seen": 51,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.436979,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 3765756
-    },
-    {
-      "repo": "zzanehip/The-OldOS-Project",
-      "config": "lto",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "object_files": [
-          201,
-          202
-        ],
-        "dead_stripped": [
-          80920,
-          82219
-        ],
-        "symbols_nonzero_size": [
-          138584,
-          136438
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          9651584,
-          9567760
-        ],
-        "symbols_total": [
-          154814,
-          152674
-        ],
-        "bytes_covered": [
-          13272427,
-          13170914
-        ],
-        "binary_bytes_before_strip": [
-          38112936,
-          37507032
-        ]
-      },
-      "base_abs": {
-        "object_files": 201,
-        "dead_stripped": 80920,
-        "symbols_nonzero_size": 138584,
-        "units_seen": 97,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 202,
-        "dead_stripped": 82219,
-        "symbols_nonzero_size": 136438,
-        "units_seen": 97,
-        "lto_objects": 1,
-        "lto_symbols": 6973,
-        "lto_bytes": 146613,
-        "lto_text_bytes": 360
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": true,
-      "effect": 3.7e-05,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 9651584
-    },
-    {
-      "repo": "zzanehip/The-OldOS-Project",
-      "config": "no_deadstrip",
-      "verdict": "DIFFERS",
-      "deltas": {
-        "dead_stripped": [
-          80920,
-          0
-        ],
-        "symbols_nonzero_size": [
-          138584,
-          143580
-        ]
-      },
-      "noisy_deltas": {
-        "text_size": [
-          9651584,
-          9960980
-        ],
-        "symbols_total": [
-          154814,
-          160177
-        ],
-        "bytes_covered": [
-          13272427,
-          13710968
-        ],
-        "binary_bytes_before_strip": [
-          38112936,
-          39026632
-        ]
-      },
-      "base_abs": {
-        "object_files": 201,
-        "dead_stripped": 80920,
-        "symbols_nonzero_size": 138584,
-        "units_seen": 97,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 201,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 143580,
-        "units_seen": 97,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "dead_stripped 归零",
-      "criterion_holds": true,
-      "effect": 0.583906,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 9651584
+      "effect": 0.02671,
+      "effect_def": "非零符号数增量 / base 非零符号数",
+      "text_size_base": 2466376
     }
   ]
 }

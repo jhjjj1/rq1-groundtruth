@@ -474,3 +474,116 @@ App Store 包，带着大量 ObjC 第三方 SDK。也就是说 **ground truth �
 
 两者都被记成这一档工具链下的失败，计入构建可复现率的分母 —— 流水线没坏，
 这就是要报的数。
+
+## 源码站点枚举（`tools/scan_source_rra.py`）—— 标注工作表
+
+标注（`annot/ANNOTATION_PRINCIPLES.md`）不读仓库，只读工作表：每个站点一行 JSON，
+带稳定 `site_id`、前后 8 行原文、守卫链、别名回指、覆盖清单与理由约束。
+扫描器只做**枚举与身份**，不做判断——判断是标注方的事，它给的 `hint` /
+`operation_prefill` / `domain_hint` 都是提示。
+
+```bash
+# 三个试标单元
+python3 tools/scan_source_rra.py --rules ~/autodl-tmp/cross_rra_analyzer_<版本>/rra_rules.yaml \
+    --src ~/autodl-tmp/src --out-dir ~/autodl-tmp/worksheets_pilot \
+    --only wikimedia-wikipedia-ios,swift-nio@558f24a46471,Cache@6.0.0 2>&1 | tee ~/autodl-tmp/scan_pilot.log
+# 全语料（46 仓库 + 252 SwiftPM + 47 pods）
+python3 tools/scan_source_rra.py --rules … --src ~/autodl-tmp/src --out-dir ~/autodl-tmp/worksheets 2>&1 | tee ~/autodl-tmp/scan_all.log
+```
+
+输出：`<tree>__<unit>.jsonl`（每站点一行）与 `_units.json`（每个单元目录的
+文件数、排除数、站点数、清单、解出的工程宏、类别 × 单元类型矩阵；**零站点的
+单元也记录**——"扫了 N 个文件、0 站点"是观测，不是缺席）。
+
+在真实代码上量出来的召回缺口（都写进了 `tools/tests/test_scan_source_rra.py`，
+fixture 是这些仓库的原文行）：
+
+| 缺口 | 真实例子 | 现在怎么处理 |
+|---|---|---|
+| 别名 | `NSUserDefaults *ud = …; [ud boolForKey:]` | 文件内别名表，成员调用成为站点，`alias_of` 回指 |
+| 注入实例 | wikipedia-ios `WMFUserDefaultsStore(defaults:)`，一处 `.standard`、一处 app group | 单元内搜构造处，`instance_domains` 列出全部域 → `MIXED_DOMAINS` |
+| 扩展体 | `@objc public extension UserDefaults { bool(forKey:) }`（525 行文件，v2 零站点） | 扩展体内隐式 self 的家族成员成为站点 |
+| 守卫链 | swift-nio `CNIOLinux/shim.c` 整文件在 `#ifdef __linux__` 里 | 三值求值整条链；`guard_live_on_ios=false` |
+| 工程宏 | SDWebImage `SD_UIKIT` / `SD_MAC` 由 `TARGET_OS_*` 推出 | 单元头文件里的 `#define X 0|1` 按其守卫活性收集 |
+| 封装类型 | `NIODeadline.uptimeNanoseconds`（EventLoop.swift 23 处命中 22 处是它） | ALT 成员必须带接收者 |
+| 常量 suite | `initWithSuiteName:WMFApplicationGroupIdentifier` | 单元内简单字符串常量解析 |
+| 值别名（假站点） | SaxWeather `let stationID = UserDefaults.standard.string(forKey:) ?? ""` 后的 `stationID.isEmpty`（全量首跑 118 处） | 别名必须是实例表达式 |
+| 别名作用域 | 一个函数里的 `let defaults = …` 被后面所有函数的同名变量沿用 | 局部变量按块、参数按函数体、属性按文件定作用域 |
+| func 参数 | SaxWeather `static func bridge(_:, to defaults: UserDefaults = .standard)`，域由调用方决定（全量 484 处） | 按函数名 + 外部标签搜调用，缺省时取默认值 |
+| 封装闭包参数 | RevenueCat `self.userDefaults.write { $0.set(…) }` / `{ userDefaults in … }`（三个 identity 共 126 处，v3 靠同名 init 参数碰巧算上，作用域一收全丢） | 单元内找闭包参数类型为 `(UserDefaults) -> …` 的方法，`$0` / 具名参数在闭包体内成为别名 |
+| 多行构造 | foqos `private static let suite = UserDefaults(\n suiteName: …\n)!`（23 处） | 括号不平衡时拼接后续行再判实例表达式 |
+| 多子句 guard | wBlock `guard let defaults = UserDefaults(suiteName: g),` 下一行还有子句（7 处） | 实例表达式判定前去掉行尾逗号 |
+| 独占一行的末参数 | RevenueCat `static func f(\n _ userDefaults: UserDefaults\n) {`（6 处） | 参数模式接受行尾 |
+
+三轮全量之间都按 `site_id` 做了逐站点差分：掉的每一个都归到值别名 / 封装调用行 / 作用域三类，归不进去的就是 bug（上表最后三行就是这么找出来的）。
+
+守卫口径：Release、真机 SDK（`build.yml` 就是这么构建的）——`DEBUG` 假；工程自定义标志
+不靠约定，靠工程文件（下一节）。
+
+### v3.5：工程文件事实、封装链接、键解析、函数体窗口（试标 456 站点之后）
+
+试标（原则 1.8，b0001–b0013）456 站点全部通过契约校验，但 **306 个带 needs_context**，
+按请求内容数：164 条要"扩展成员 X 的定义与它读写的键"，104 条要"该成员的全部调用方及接收者实例"，
+其余 38 条是函数体剩余部分 / 常量与类型定义 / swift-nio 调用链。前两类是同一仓库里机器可算的
+封闭事实，让标注方逐条要上下文是浪费；另外几条 Opus 自己拿主意的地方（`#if TEST` 按"自定义
+标志默认为假"判、`WMFApplicationGroupIdentifier` 未解析）本应由工程文件回答。v3.5 加的都是事实，
+`site_id` 不变（review 样本 453 站点差分为 0）：
+
+| 事实 | 来源 | 站点字段 |
+|---|---|---|
+| 文件编进哪个 target、产品类型、bundle id、该 target 的清单与 entitlements（app group） | `tools/xcodeproj_facts.py` 解析 `project.pbxproj`（含 Xcode 16 同步文件夹）、xcconfig 链、`Package.swift` 的 `.define`、podspec | `target`、`declaring_unit_prefill`、`manifest_scope=TARGET_RESOURCE`、`_FALLBACK_EXTENSION_TARGET` |
+| Release 下定义的 Swift 条件编译标志与 C 宏 | 同上（`SWIFT_ACTIVE_COMPILATION_CONDITIONS` / `OTHER_SWIFT_FLAGS -D` / `GCC_PREPROCESSOR_DEFINITIONS`，`$(inherited)` 逐层展开） | `build_flags`；标志集完整时 Swift 文件封闭求值——wikipedia-ios 的 `TEST` 只在 Test 配置定义，`#if TEST` 假、`#else` 真（6 处由 null 变为定值） |
+| 从构建设置来的字符串常量 | `NSString *const X = @QUOTE(MACRO)` + `GCC_PREPROCESSOR_DEFINITIONS` 里 `MACRO=$(SETTING)` | `domain_hint` / `instance_domains[].note` 带出处：`SUITE_CONST:WMFApplicationGroupIdentifier='group.org.wikimedia.wikipedia' @ NSFileManager+WMFGroup.m:4 (build macro … from Wikipedia.xcodeproj:WMF:Release)` |
+| UserDefaults 扩展 / 分类成员索引：定义位置、getter/setter、体内读写的键、成员间调用、`@objc(...)` 选择子别名 | 单元目录全部文件 | WRAPPED 站点 `wrapper_ref`（access GET/SET/CALL）；扩展体站点 `callers`（按解析域汇总，含经别的成员间接到达）；`_units.json` 的 `ud_members` |
+| `forKey:` 实参解析 | 字面量 / `let` / `case x = "…"` / `#define` / `NSString *const` | `key {expr, value, source}` |
+| 上下文 = 包住站点的函数 | 签名行必在；站点前 12 行、后 36 行外截断并标记 | `context.function_lines` / `truncated`；每行带行号，站点行 `>>` |
+
+`Wikipedia/Code/NSUserDefaults+WMFExtensions.swift` 按路径像 App、按工程文件编进 `WMF` framework——
+`declaring_unit` 预填因此改为**target 名**（链接 map 的粒度），原则 §6 同步。`WMFSettingsViewController.m` 在仓库树里
+但不在任何 target 里（`target.note=NOT_IN_ANY_XCODE_TARGET`），它的两个站点不会进二进制——这类事实以前只能靠 map 反推。
+
+批次（`tools/make_batches.py`）随之带**源码补充目录** `src/<unit>/…`：站点所在的完整文件、封装定义、构造处、
+键常量所在文件、清单、`Package.swift` / podspec / pbxproj，批次头列出清单与 sha1。标注方可以打开这些文件
+（引用写 `<路径> L<n>`），清单之外的不存在——Opus 看过什么仍然有记录。`--exclude-units` 与 repos→deps→pods 顺序同时加上；
+去重键改为去掉行号的上下文，且同一单元内的站点永远不互为副本。
+
+## 试标第二轮（b0001–b0013，456 站点，Opus 5，原则 1.8）与原则 1.9
+
+契约校验 456 条 0 错误（b0003–b0013 校验数量 / 顺序 / 字段，b0001–b0002 只校验字段）；Cache 批与第一轮相比 7 站点除
+`value_fate` 一处随规则变更外全一致；b0001 两次独立标注 40 站点各字段 100% 一致。判定结果：384 YES / 72 NO；wikipedia-ios
+的 `R1C8F_C1` 229 处 CONFLICT 全部来自 `.standard`（App 只声明 1C8F.1）——§4.5 预期的结论。
+
+Opus 交回 22 条"原则没说清的地方"，1.9 逐条裁决（都写进了原则正文，附录例子对齐可见证据）：
+
+* 字段填法：B.9 例子里 NO 站点的 `applicable_reason` 是笔误，统一 `NA`；SYNC/ACQUIRE/REMOVE/OBSERVE 没有可追的值，
+  `value_fate: ["LOCAL_ONLY"]` + notes `NO_VALUE`；经封装 setter 的赋值 `WRAPPED` + `["PERSISTED_LOCAL"]`（赋 nil 仍是 WRAPPED）；
+  ALT 站点判 NO 时 `exceeds_all_reasons: null`。
+* 判定口径：函数引用绑定 `let sysStat = stat` 是 YES；**派生值（布尔、差值）离开函数也是逃逸**，`escape.value: DERIVED`——
+  记成 LOCAL_ONLY 是对下游的推测，且会把流层分析器的正确追踪算成误报；`NoReadFrom` 看解析出的键值不看常量名，
+  `dictionaryRepresentation()` 读的是整条搜索链 → CONFLICT；7D9E 的 `PurposeIs` 对"写入前查空间"是 CONFLICT（那是 E174 的语义）；
+  扩展体站点的域由 `callers` 决定；`AllIntendedParticipantsAreMembersOfSameAppGroup` 问的是参与者不是域（`.standard` 只有本 App
+  → SUPPORTED；suite 名不在该 target 的 entitlements 里 → CONFLICT）——与分析器 `reason_decidability.yaml` 的证否规则一致，
+  域不匹配只由 C1 记一次；EXCEPTION 条款未触发的 UNKNOWN 不触发 needs_context；传给仓库内另一个本地包 = `PASSED_OUT`
+  （单元按 target 划分）；`SELF_WRITTEN_VALUE` 是单元级覆盖，参数传入的聚合体也标。
+* 可见性：`needs_context` 改为结构化请求 `requests: [{kind: DEFINITION|CALLERS|BODY|TYPE|FILE, symbol, file}]`，工具按它抽取
+  补充批次；`declaring_unit` 照抄 target 名预填；vendored 第三方按补充目录里的文件头版权确认。
+
+全量标注用 1.9 + v3.5 批次；13 个试标批次一并重标，1.8 那遍作一致性参照。
+
+## 试标第一轮（b0001 swift-nio 40 站点 + b0003 Cache 7 站点，Opus 5，原则 1.6）
+
+`tools/annotate_validate.py` 校验：b0003 全过；b0001 的 60 处错误全是同一件事——原则没写 `is_api_use=NO` 时理由/约束字段填什么，
+Opus 填了已声明的 0A2A.1 加五个 UNKNOWN 并在 notes 里说明了。其余全过：40 进 40 出、顺序一致、词表一致、
+每个 SUPPORTED 都有 L<n> 证据行。抽了 12 处引用的行号对源码，全部一致。
+
+试标改了三样东西：
+
+* 原则 1.7：NO 站点的其余字段（全 NA / 空）+ `is_api_use_reason` 以代码开头（`NAME_COLLISION` / `WRAPPER_CALL` /
+  `DECLARATION` …，候选精度按代码分开报）；可见的网络 / UI / 日志 / 持久化是终点，`escape` 为 null；Apple 与 Swift
+  标准库 API 的公开语义算"看得到"。
+* 扫描器 v3.4：**函数引用**——swift-nio NIOPosix 用 `private let sysStat = stat` 绑定后经绑定调用，三处真实使用不是候选，
+  Opus 在 notes 里指出了"sysStat 的定义不在可见行内"。C 函数候选加了形态提示（`FUNCTION_DECLARATION` /
+  `QUALIFIED_MEMBER_CALL:Syscall` / `IMPLICIT_MEMBER_CALL` / `ZERO_ARG_INIT_OR_CALL` / `TYPE_REFERENCE` /
+  `FUNCTION_REFERENCE`）；守卫链保留全部分支文本（`#if os(Linux)`, `#elseif os(WASI)`, `#else`）。
+* 候选精度是类别相关的事实：swift-nio 的 stat 族 40 个候选 9 个 YES，噪声来自 C 的 `struct stat` 同名、自定义同名封装
+  和声明行；Cache 的 7 个 WEAK 裸成员 7 个 YES。

@@ -94,17 +94,21 @@ CRITERIA = {
     "lto":          ("_lto.o 出现且吸收了 __text 字节",
                      lambda b, c: (c.get("lto_objects") or 0) > 0
                      and (c.get("lto_text_bytes") or 0) > 0),
-    # 由 probe_sf 的两个仓库定下来的（第三个 IceCubesApp 在 singlefile 下构建
-    # 失败）。5calls: symbols_nonzero_size 36,923→38,472 (+4.2%)、dead_stripped
-    # 9,256→13,499；Dai-Hentai: 34,349→34,426 (+0.2%)、24,827→25,040。方向一致：
-    # 关掉模块内跨文件优化后，更多函数保留为独立符号、更多东西留给链接器去
-    # 剥。object_files 在 5calls 上纹丝不动（180→180），所以它**不是**判据 ——
-    # Xcode 的 whole-module 编译本来就每个源文件出一个 .o。
+    # 第一版判据是「symbols_nonzero_size 比 base 多」，来自 probe_sf 的两个
+    # 仓库 —— 那批后来发现跑在 Xcode 26.6 上，与 base 的 26.2 不同，数据作废；
+    # 而且 sf01 头 12 个（26.2）里它错了 3 个：wBlock -3.1%、Bark -0.5%、
+    # Recap -0.1%。符号总数是「少内联 → 变多」和「少特化 → 变少」的净值，
+    # 方向因仓库而异，不能当判据。
+    #
+    # 换成 dead_stripped：sf01 头 12 个全部为正（+1.2% ～ +146.2%）。机理是
+    # 硬的：没有 whole-module，编译器跨文件证明不了「这个函数没人用」，只能
+    # 都发出来交给链接器剥，所以链接器剥掉的数只会多不会少。
+    #
     # 噪声底：48 对 wholemodule-vs-base 独立重建，四个量全部零变化。所以这里
-    # 任何增量都是这个开关的，不需要阈值；效应大小另记在 effect 里，评分时分层。
-    "singlefile":   ("symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）",
-                     lambda b, c: (c.get("symbols_nonzero_size") or 0)
-                     > (b.get("symbols_nonzero_size") or 0)),
+    # 任何增量都是这个开关的，不需要阈值；效应大小记在 effect 里，评分时分层。
+    "singlefile":   ("dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+                     lambda b, c: (c.get("dead_stripped") or 0)
+                     > (b.get("dead_stripped") or 0)),
 }
 
 #: Effect magnitude per config, for stratifying P/R later.  Unitless ratios.
@@ -115,10 +119,10 @@ EFFECT = {
     "lto":          ("_lto.o 吸收的 __text 字节 / base __text 字节",
                      lambda b, c: (c.get("lto_text_bytes") or 0)
                      / max(b.get("text_size") or 0, 1)),
-    "singlefile":   ("非零符号数增量 / base 非零符号数",
-                     lambda b, c: ((c.get("symbols_nonzero_size") or 0)
-                                   - (b.get("symbols_nonzero_size") or 0))
-                     / max(b.get("symbols_nonzero_size") or 0, 1)),
+    # base 里一个都没剥过的仓库，这个比值没有定义 —— 记 None，不记 700%。
+    "singlefile":   ("dead_stripped 增量 / base dead_stripped",
+                     lambda b, c: None if not b.get("dead_stripped") else
+                     ((c.get("dead_stripped") or 0) - b["dead_stripped"]) / b["dead_stripped"]),
 }
 
 #: Decide the verdict.  Insensitive to address permutation.
@@ -304,7 +308,8 @@ def compare(complete, required):
             label, fn = CRITERIA.get(cfg, ("无", None))
             holds = None if fn is None else bool(fn(b, c))
             elabel, efn = EFFECT.get(cfg, ("无", None))
-            effect = None if efn is None else round(efn(b, c), 6)
+            effect = None if efn is None else efn(b, c)
+            effect = None if effect is None else round(effect, 6)
             rows.append({
                 "repo": repo, "config": cfg,
                 "verdict": "DIFFERS" if deltas else "NO_OBSERVED_DIFFERENCE",
@@ -386,6 +391,34 @@ def main(argv=None):
                       "  ".join(f"{r}={n}" for r, n in per.items()))
         print()
 
+    def write_json():
+        with io.open(a.out, "w", encoding="utf-8") as fh:
+            json.dump({"configs": {k: list(v) for k, v in CONFIGS.items()},
+                       "criteria": {k: v[0] for k, v in CRITERIA.items()},
+                       "required": required, "retired_seen": retired,
+                       "complete": sorted(complete),      # 基准集成员 = 过闸的仓库
+                       "effects": {k: v[0] for k, v in EFFECT.items()},
+                       "stable_metrics": list(STABLE), "noisy_metrics": list(NOISY),
+                       "repos_seen": len(table),
+                       "repos_complete": len(complete),
+                       "repos_excluded": len(excluded),
+                       "excluded": excluded, "duplicates": dup, "rows": rows},
+                      fh, ensure_ascii=False, indent=2)
+
+    if not complete:
+        # 0 个过闸时 excluded 里的原因就是全部信息，JSON 必须照写。
+        # 最常见的原因是某一档的产物还没拉回来（NO_MANIFEST = 该档全部仓库）。
+        write_json()
+        allmissing = [c for c in required
+                      if sum(1 for bad in excluded.values() if bad.get(c) == R_NO_MANIFEST) == len(table)]
+        if allmissing:
+            print(f"\n没有仓库过闸：{allmissing} 这几档**一份产物都没有** —— "
+                  f"多半是那批还没跑完/还没拉回来，或者 --artifacts-dir 给漏了。")
+        else:
+            print("\n没有仓库过闸。逐仓库原因在 excluded 字段。")
+        print(f"明细写入 {a.out}")
+        return 1
+
     print("判定只看对构建噪声不敏感的四个量：" + " / ".join(STABLE))
     print("（同设置两次独立构建曾测到 67.12% 同名符号地址不同，"
           "所以 text_size、binary_bytes 只报不判）\n")
@@ -444,18 +477,7 @@ def main(argv=None):
         print(f"\n{len(dup)} 个 (仓库, 配置) 在多个批次里都有产物，"
               f"按「OK 的优先」去重，明细在 duplicates 字段")
 
-    with io.open(a.out, "w", encoding="utf-8") as fh:
-        json.dump({"configs": {k: list(v) for k, v in CONFIGS.items()},
-                   "required": required, "retired_seen": retired,
-                   "complete": sorted(complete),      # 基准集成员 = 过闸的仓库
-                   "effects": {k: v[0] for k, v in EFFECT.items()},
-                   "criteria": {k: v[0] for k, v in CRITERIA.items()},
-                   "stable_metrics": list(STABLE), "noisy_metrics": list(NOISY),
-                   "repos_seen": len(table),
-                   "repos_complete": len(complete),
-                   "repos_excluded": len(excluded),
-                   "excluded": excluded, "duplicates": dup, "rows": rows},
-                  fh, ensure_ascii=False, indent=2)
+    write_json()
     print(f"\n逐仓库明细写入 {a.out}")
     return 0
 

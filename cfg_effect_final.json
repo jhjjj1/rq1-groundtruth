@@ -14,10 +14,16 @@
       "all"
     ]
   },
+  "criteria": {
+    "no_deadstrip": "dead_stripped 归零",
+    "lto": "_lto.o 出现且吸收了 __text 字节",
+    "singlefile": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）"
+  },
   "required": [
     "base",
     "no_deadstrip",
-    "lto"
+    "lto",
+    "singlefile"
   ],
   "retired_seen": [
     "wholemodule"
@@ -35,7 +41,6 @@
     "NiftyTreeStudios/Bean-Juice",
     "Visual-Studio-Coder/Recap",
     "XunMengWinter/PetNote-oss",
-    "airbnb/HorizonCalendar",
     "analogcode/Swift-Radio-Pro",
     "awaseem/foqos",
     "b5i/Atwy",
@@ -57,7 +62,6 @@
     "lokii49/mirror",
     "mikelikesdesign/SwiftUI-experiments",
     "ml-explore/mlx-swift-examples",
-    "mozilla-mobile/firefox-ios",
     "rafsoh/dimeApp",
     "rajdeep/proton",
     "richardtop/CalendarApp",
@@ -75,12 +79,7 @@
   "effects": {
     "no_deadstrip": "base 里被 dead-strip 的符号数 / base 非零符号数",
     "lto": "_lto.o 吸收的 __text 字节 / base __text 字节",
-    "singlefile": "非零符号数增量 / base 非零符号数"
-  },
-  "criteria": {
-    "no_deadstrip": "dead_stripped 归零",
-    "lto": "_lto.o 出现且吸收了 __text 字节",
-    "singlefile": "symbols_nonzero_size 比 base 多（跨文件优化关掉后函数保留为独立符号）"
+    "singlefile": "dead_stripped 增量 / base dead_stripped"
   },
   "stable_metrics": [
     "object_files",
@@ -94,673 +93,812 @@
     "bytes_covered"
   ],
   "repos_seen": 181,
-  "repos_complete": 48,
-  "repos_excluded": 133,
+  "repos_complete": 46,
+  "repos_excluded": 135,
   "excluded": {
     "AdguardTeam/AdguardForiOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Automattic/pocket-casts-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "EhPanda-Team/EhPanda": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ExistOrLive/GithubClient": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "HabitRPG/habitica-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ProtonVPN/ios-mac-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Ranchero-Software/NetNewsWire": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Swiftgram/Telegram-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "TelegramMessenger/Telegram-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "TortugaPower/BookPlayer": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "airbnb/HorizonCalendar": {
+      "singlefile": "BUILD_FAILED"
     },
     "automattic/simplenote-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "belm/BaiduFM-Swift": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "bither/bither-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "bitwarden/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "blinksh/blink": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "cagnulein/qdomyos-zwift": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "claration/Feather": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "denissimon/distributed-model-training": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "eerimoq/moblin": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "element-hq/element-x-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "herzbube/littlego": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "holzschu/a-shell": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "home-assistant/iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "jellyfin/Swiftfin": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "kickstarter/ios-oss": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "migueldeicaza/SwiftTerm": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "moonlight-stream/moonlight-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
+    },
+    "mozilla-mobile/firefox-ios": {
+      "singlefile": "BUILD_FAILED"
     },
     "mssun/passforios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mullvad/mullvadvpn-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "nextcloud/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "partout-io/passepartout": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "pointfreeco/swift-composable-architecture": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "rainbow-me/rainbow": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "rrroyal/Harbour": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "rudrankriyam/Foundation-Models-Framework-Lab": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "simplex-chat/simplex-chat": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "splinesoft/MUDRammer": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "tnantoka/edhita": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "twostraws/Unwrap": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "utmapp/UTM": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "weiran/Hackers": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "wordpress-mobile/WordPress-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "yichengchen/ATV-Bilibili-demo": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "AnthonyH93/GoCycling": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "DeluxeAlonso/UpcomingMovies": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Dimillian/FoundationChat": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Dimillian/IcySky": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "OnionBrowser/OnionBrowser": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ProtonDriveApps/ios-drive": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Provenance-Emu/Provenance": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Say-Their-Name/say-their-names-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "StepicOrg/stepik-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "altstoreio/AltStore": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "artsy/eigen": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "asuc-octo/berkeley-mobile-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "bigjermaine/SwiftTracker": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "chunkyguy/PhotoApp": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "cinderella-project/iMast": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "criticalmaps/criticalmaps-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "daneden/Zeitgeist": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "deltachat/deltachat-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "duckduckgo/apple-browsers": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "element-hq/element-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "gdombiak/OctoPod": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "guardianproject/orbot-apple": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "iBurnApp/iBurn-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "leathalman/Jotify": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "lionheart/Pushpin": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "lukeswitz/DragonSync-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mateusz-bak/openreads": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "miataru/miataru-ios-client": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mikaelacaron/Basic-Car-Maintenance": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mlemgroup/mlem": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "monal-im/Monal": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "netless-io/flat-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "nightscout/nightguard": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "niochat/nio": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "ooni/probe-multiplatform": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "openhab/openhab-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "owntracks/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "peterfriese/MakeItSo": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "pia-foss/mobile-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "rileytestut/Delta": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "signalapp/Signal-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "soramitsu/fearless-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "suicidesafetyplan/safetyplan-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "threema-ch/threema-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "tinode/ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "tls-inspector/tls-inspector": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "vinhnx/Clendar": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "walktalkmeditate/pilgrim-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "wireapp/wire-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "woocommerce/woocommerce-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "zulip/zulip-mobile": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "256Arts/Sprite-Catalog": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "256Arts/Sprite-Pencil": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "AlexCatch/Oak": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "AnthonyH93/HexaCalc": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "EvgenyKarkan/Feeds4U": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "FlineDev/Prayer": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "GigaDuckAI/conduck": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Keith-43/MuVis-Experimentation": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Loriage/Minidisc": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Piecelet/neodb-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "SwissCovid/swisscovid-app-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "TICESoftware/tice-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "Thomvis/Construct": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "VishwaiOSDev/Loadify-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "WWDCScholars/iOS-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "WezSieTato/ScanNow": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "amikhaylin/pompaddo": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "apps-fab/exercism-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "catrobat/catty": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "daneden/Solstice": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "denissimon/Cryptocurrency-Info": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "dl-alexandre/SymbolGrid": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "eugenepyvovarov/CodeAgentsMobile": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "frostland/GPS-Stone": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "gematik/E-Rezept-App-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "hishd/RicketyRick-iOS": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "hishd/SkyWizard-SwiftUI": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "joeldavidw/Chronos": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "krazywarez/hutch": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "kurozora/kurozora-app": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "marcusraitner/pulse": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "mathieudutour/TimeLines": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "misteu/VocabularyTraining": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "robertwtucker/kfinderapp-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "strumswell/oscar-weather": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "vermont42/Conjugar": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "willowtreeapps/vocable-ios": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "writingmate/aidictation": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     },
     "wvabrinskas/PokePal": {
       "base": "BUILD_FAILED",
       "no_deadstrip": "BUILD_FAILED",
-      "lto": "BUILD_FAILED"
+      "lto": "BUILD_FAILED",
+      "singlefile": "NO_MANIFEST"
     }
   },
   "duplicates": [
@@ -2289,6 +2427,64 @@
       "text_size_base": 3082024
     },
     {
+      "repo": "0xCUB3/wBlock",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          20634,
+          25756
+        ],
+        "symbols_nonzero_size": [
+          39221,
+          38024
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3082024,
+          2953968
+        ],
+        "symbols_total": [
+          41668,
+          40517
+        ],
+        "bytes_covered": [
+          4168891,
+          3946708
+        ],
+        "binary_bytes_before_strip": [
+          12705248,
+          11386928
+        ]
+      },
+      "base_abs": {
+        "object_files": 135,
+        "dead_stripped": 20634,
+        "symbols_nonzero_size": 39221,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 135,
+        "dead_stripped": 25756,
+        "symbols_nonzero_size": 38024,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.248231,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 3082024
+    },
+    {
       "repo": "5calls/ios",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2409,6 +2605,72 @@
       "text_size_base": 1602684
     },
     {
+      "repo": "5calls/ios",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          180,
+          181
+        ],
+        "dead_stripped": [
+          9256,
+          13748
+        ],
+        "symbols_nonzero_size": [
+          36923,
+          38248
+        ],
+        "units_seen": [
+          46,
+          47
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1602684,
+          1672268
+        ],
+        "symbols_total": [
+          39345,
+          40954
+        ],
+        "bytes_covered": [
+          3566192,
+          3660707
+        ],
+        "binary_bytes_before_strip": [
+          8620832,
+          8957520
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 9256,
+        "symbols_nonzero_size": 36923,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 181,
+        "dead_stripped": 13748,
+        "symbols_nonzero_size": 38248,
+        "units_seen": 47,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.485307,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 1602684
+    },
+    {
       "repo": "AnderGoig/github-contributions-ios",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2510,6 +2772,64 @@
       "criterion_holds": true,
       "effect": 0.309559,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 3426688
+    },
+    {
+      "repo": "AnderGoig/github-contributions-ios",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          9119,
+          9750
+        ],
+        "symbols_nonzero_size": [
+          29458,
+          29518
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3426688,
+          3426572
+        ],
+        "symbols_total": [
+          34595,
+          34665
+        ],
+        "bytes_covered": [
+          4016447,
+          4016742
+        ],
+        "binary_bytes_before_strip": [
+          7292616,
+          7291464
+        ]
+      },
+      "base_abs": {
+        "object_files": 101,
+        "dead_stripped": 9119,
+        "symbols_nonzero_size": 29458,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 101,
+        "dead_stripped": 9750,
+        "symbols_nonzero_size": 29518,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.069196,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 3426688
     },
     {
@@ -2633,6 +2953,68 @@
       "text_size_base": 1306812
     },
     {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          330,
+          331
+        ],
+        "dead_stripped": [
+          24827,
+          25120
+        ],
+        "symbols_nonzero_size": [
+          34349,
+          34500
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1306812,
+          1312084
+        ],
+        "symbols_total": [
+          34431,
+          34598
+        ],
+        "bytes_covered": [
+          2150170,
+          2157279
+        ],
+        "binary_bytes_before_strip": [
+          3516904,
+          3530576
+        ]
+      },
+      "base_abs": {
+        "object_files": 330,
+        "dead_stripped": 24827,
+        "symbols_nonzero_size": 34349,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 331,
+        "dead_stripped": 25120,
+        "symbols_nonzero_size": 34500,
+        "units_seen": 42,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.011802,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 1306812
+    },
+    {
       "repo": "Dimillian/IceCubesApp",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2753,6 +3135,64 @@
       "text_size_base": 17316124
     },
     {
+      "repo": "Dimillian/IceCubesApp",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          135037,
+          136801
+        ],
+        "symbols_nonzero_size": [
+          280437,
+          280633
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          17316124,
+          17321324
+        ],
+        "symbols_total": [
+          315059,
+          315319
+        ],
+        "bytes_covered": [
+          23160362,
+          23027742
+        ],
+        "binary_bytes_before_strip": [
+          62702680,
+          60839152
+        ]
+      },
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 135037,
+        "symbols_nonzero_size": 280437,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 192,
+        "dead_stripped": 136801,
+        "symbols_nonzero_size": 280633,
+        "units_seen": 119,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.013063,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 17316124
+    },
+    {
       "repo": "EmergeTools/hackernews",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -2849,6 +3289,64 @@
       "criterion_holds": true,
       "effect": 0.615438,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 2125456
+    },
+    {
+      "repo": "EmergeTools/hackernews",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          37074,
+          38882
+        ],
+        "symbols_nonzero_size": [
+          60240,
+          61483
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2125456,
+          2155472
+        ],
+        "symbols_total": [
+          64951,
+          66367
+        ],
+        "bytes_covered": [
+          3707597,
+          3767954
+        ],
+        "binary_bytes_before_strip": [
+          4112664,
+          4165696
+        ]
+      },
+      "base_abs": {
+        "object_files": 525,
+        "dead_stripped": 37074,
+        "symbols_nonzero_size": 60240,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 525,
+        "dead_stripped": 38882,
+        "symbols_nonzero_size": 61483,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.048767,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 2125456
     },
     {
@@ -2972,6 +3470,68 @@
       "text_size_base": 9982300
     },
     {
+      "repo": "Finb/Bark",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          1277,
+          1301
+        ],
+        "dead_stripped": [
+          120438,
+          148312
+        ],
+        "symbols_nonzero_size": [
+          147601,
+          146909
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9982300,
+          9623064
+        ],
+        "symbols_total": [
+          169152,
+          167685
+        ],
+        "bytes_covered": [
+          13239111,
+          12854433
+        ],
+        "binary_bytes_before_strip": [
+          27596216,
+          27067024
+        ]
+      },
+      "base_abs": {
+        "object_files": 1277,
+        "dead_stripped": 120438,
+        "symbols_nonzero_size": 147601,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 1301,
+        "dead_stripped": 148312,
+        "symbols_nonzero_size": 146909,
+        "units_seen": 103,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.231439,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 9982300
+    },
+    {
       "repo": "Jaennaet/pISSStream",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3059,6 +3619,72 @@
       "criterion_holds": true,
       "effect": 0.246875,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 2034012
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          98,
+          100
+        ],
+        "dead_stripped": [
+          10131,
+          10627
+        ],
+        "symbols_nonzero_size": [
+          41037,
+          41301
+        ],
+        "units_seen": [
+          46,
+          47
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2034012,
+          2040332
+        ],
+        "symbols_total": [
+          46102,
+          46385
+        ],
+        "bytes_covered": [
+          3274094,
+          3284633
+        ],
+        "binary_bytes_before_strip": [
+          8540080,
+          8591936
+        ]
+      },
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 10131,
+        "symbols_nonzero_size": 41037,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 100,
+        "dead_stripped": 10627,
+        "symbols_nonzero_size": 41301,
+        "units_seen": 47,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.048959,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 2034012
     },
     {
@@ -3152,6 +3778,72 @@
       "text_size_base": 810248
     },
     {
+      "repo": "JosephDuffy/Overamped",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          91,
+          92
+        ],
+        "dead_stripped": [
+          7743,
+          8723
+        ],
+        "symbols_nonzero_size": [
+          15028,
+          15604
+        ],
+        "units_seen": [
+          35,
+          37
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          810248,
+          817444
+        ],
+        "symbols_total": [
+          16162,
+          16737
+        ],
+        "bytes_covered": [
+          1113478,
+          1132353
+        ],
+        "binary_bytes_before_strip": [
+          3096816,
+          3139912
+        ]
+      },
+      "base_abs": {
+        "object_files": 91,
+        "dead_stripped": 7743,
+        "symbols_nonzero_size": 15028,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 92,
+        "dead_stripped": 8723,
+        "symbols_nonzero_size": 15604,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.126566,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 810248
+    },
+    {
       "repo": "NiftyTreeStudios/Bean-Juice",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3239,6 +3931,72 @@
       "criterion_holds": true,
       "effect": 0.187024,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 212064
+    },
+    {
+      "repo": "NiftyTreeStudios/Bean-Juice",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          108,
+          111
+        ],
+        "dead_stripped": [
+          1130,
+          2782
+        ],
+        "symbols_nonzero_size": [
+          6042,
+          7271
+        ],
+        "units_seen": [
+          31,
+          35
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          212064,
+          244348
+        ],
+        "symbols_total": [
+          6321,
+          7586
+        ],
+        "bytes_covered": [
+          366044,
+          419342
+        ],
+        "binary_bytes_before_strip": [
+          1361112,
+          1554976
+        ]
+      },
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 1130,
+        "symbols_nonzero_size": 6042,
+        "units_seen": 31,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 111,
+        "dead_stripped": 2782,
+        "symbols_nonzero_size": 7271,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 1.461947,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 212064
     },
     {
@@ -3362,6 +4120,64 @@
       "text_size_base": 1460184
     },
     {
+      "repo": "Visual-Studio-Coder/Recap",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          8519,
+          9570
+        ],
+        "symbols_nonzero_size": [
+          32008,
+          31984
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1460184,
+          1460292
+        ],
+        "symbols_total": [
+          34827,
+          34809
+        ],
+        "bytes_covered": [
+          2171212,
+          2172233
+        ],
+        "binary_bytes_before_strip": [
+          10053816,
+          9682360
+        ]
+      },
+      "base_abs": {
+        "object_files": 105,
+        "dead_stripped": 8519,
+        "symbols_nonzero_size": 32008,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 105,
+        "dead_stripped": 9570,
+        "symbols_nonzero_size": 31984,
+        "units_seen": 52,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.123371,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 1460184
+    },
+    {
       "repo": "XunMengWinter/PetNote-oss",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3452,90 +4268,62 @@
       "text_size_base": 2466376
     },
     {
-      "repo": "airbnb/HorizonCalendar",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 44,
-        "dead_stripped": 2230,
-        "symbols_nonzero_size": 2452,
-        "units_seen": 14,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 44,
-        "dead_stripped": 2230,
-        "symbols_nonzero_size": 2452,
-        "units_seen": 14,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 94140
-    },
-    {
-      "repo": "airbnb/HorizonCalendar",
-      "config": "no_deadstrip",
+      "repo": "XunMengWinter/PetNote-oss",
+      "config": "singlefile",
       "verdict": "DIFFERS",
       "deltas": {
         "dead_stripped": [
-          2230,
-          0
+          16862,
+          21765
         ],
         "symbols_nonzero_size": [
-          2452,
-          2466
+          44590,
+          45781
         ]
       },
       "noisy_deltas": {
+        "text_size": [
+          2466376,
+          2519588
+        ],
         "symbols_total": [
-          2530,
-          2545
+          50901,
+          52367
         ],
         "bytes_covered": [
-          145635,
-          146056
+          3372621,
+          3452888
         ],
         "binary_bytes_before_strip": [
-          356512,
-          356600
+          9352368,
+          9511280
         ]
       },
       "base_abs": {
-        "object_files": 44,
-        "dead_stripped": 2230,
-        "symbols_nonzero_size": 2452,
-        "units_seen": 14,
+        "object_files": 180,
+        "dead_stripped": 16862,
+        "symbols_nonzero_size": 44590,
+        "units_seen": 64,
         "lto_objects": 0,
         "lto_symbols": 0,
         "lto_bytes": 0,
         "lto_text_bytes": 0
       },
       "config_abs": {
-        "object_files": 44,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 2466,
-        "units_seen": 14,
+        "object_files": 180,
+        "dead_stripped": 21765,
+        "symbols_nonzero_size": 45781,
+        "units_seen": 64,
         "lto_objects": 0,
         "lto_symbols": 0,
         "lto_bytes": 0,
         "lto_text_bytes": 0
       },
-      "criterion": "dead_stripped 归零",
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
       "criterion_holds": true,
-      "effect": 0.909462,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 94140
+      "effect": 0.290772,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 2466376
     },
     {
       "repo": "analogcode/Swift-Radio-Pro",
@@ -3625,6 +4413,68 @@
       "criterion_holds": true,
       "effect": 0.853972,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 421564
+    },
+    {
+      "repo": "analogcode/Swift-Radio-Pro",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          108,
+          109
+        ],
+        "dead_stripped": [
+          8310,
+          10519
+        ],
+        "symbols_nonzero_size": [
+          9731,
+          10158
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          421564,
+          429412
+        ],
+        "symbols_total": [
+          10794,
+          11274
+        ],
+        "bytes_covered": [
+          616048,
+          628085
+        ],
+        "binary_bytes_before_strip": [
+          1454240,
+          1510768
+        ]
+      },
+      "base_abs": {
+        "object_files": 108,
+        "dead_stripped": 8310,
+        "symbols_nonzero_size": 9731,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 109,
+        "dead_stripped": 10519,
+        "symbols_nonzero_size": 10158,
+        "units_seen": 41,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.265824,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 421564
     },
     {
@@ -3718,6 +4568,72 @@
       "text_size_base": 2173424
     },
     {
+      "repo": "awaseem/foqos",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          253,
+          254
+        ],
+        "dead_stripped": [
+          20681,
+          30613
+        ],
+        "symbols_nonzero_size": [
+          44306,
+          47086
+        ],
+        "units_seen": [
+          55,
+          56
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2173424,
+          2291376
+        ],
+        "symbols_total": [
+          47460,
+          51234
+        ],
+        "bytes_covered": [
+          3480043,
+          3662407
+        ],
+        "binary_bytes_before_strip": [
+          12933664,
+          13857768
+        ]
+      },
+      "base_abs": {
+        "object_files": 253,
+        "dead_stripped": 20681,
+        "symbols_nonzero_size": 44306,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 254,
+        "dead_stripped": 30613,
+        "symbols_nonzero_size": 47086,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.480248,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 2173424
+    },
+    {
       "repo": "b5i/Atwy",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3808,6 +4724,72 @@
       "text_size_base": 3732912
     },
     {
+      "repo": "b5i/Atwy",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          329,
+          334
+        ],
+        "dead_stripped": [
+          34951,
+          44694
+        ],
+        "symbols_nonzero_size": [
+          57878,
+          58852
+        ],
+        "units_seen": [
+          57,
+          61
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3732912,
+          3787908
+        ],
+        "symbols_total": [
+          66369,
+          67774
+        ],
+        "bytes_covered": [
+          4913050,
+          4983175
+        ],
+        "binary_bytes_before_strip": [
+          13412176,
+          13627552
+        ]
+      },
+      "base_abs": {
+        "object_files": 329,
+        "dead_stripped": 34951,
+        "symbols_nonzero_size": 57878,
+        "units_seen": 57,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 334,
+        "dead_stripped": 44694,
+        "symbols_nonzero_size": 58852,
+        "units_seen": 61,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.278762,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 3732912
+    },
+    {
       "repo": "cranci1/Sora",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -3895,6 +4877,72 @@
       "criterion_holds": true,
       "effect": 0.717775,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 3749200
+    },
+    {
+      "repo": "cranci1/Sora",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          189,
+          190
+        ],
+        "dead_stripped": [
+          35176,
+          43830
+        ],
+        "symbols_nonzero_size": [
+          49007,
+          49900
+        ],
+        "units_seen": [
+          51,
+          53
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3749200,
+          3824660
+        ],
+        "symbols_total": [
+          53512,
+          54620
+        ],
+        "bytes_covered": [
+          5025501,
+          5128378
+        ],
+        "binary_bytes_before_strip": [
+          14852168,
+          14862328
+        ]
+      },
+      "base_abs": {
+        "object_files": 189,
+        "dead_stripped": 35176,
+        "symbols_nonzero_size": 49007,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 190,
+        "dead_stripped": 43830,
+        "symbols_nonzero_size": 49900,
+        "units_seen": 53,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.24602,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 3749200
     },
     {
@@ -4018,6 +5066,68 @@
       "text_size_base": 7136284
     },
     {
+      "repo": "freesuraj/TLDR",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          99,
+          101
+        ],
+        "dead_stripped": [
+          22540,
+          23073
+        ],
+        "symbols_nonzero_size": [
+          172480,
+          172622
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7136284,
+          7138624
+        ],
+        "symbols_total": [
+          176693,
+          176863
+        ],
+        "bytes_covered": [
+          18629315,
+          18634175
+        ],
+        "binary_bytes_before_strip": [
+          34371704,
+          34382704
+        ]
+      },
+      "base_abs": {
+        "object_files": 99,
+        "dead_stripped": 22540,
+        "symbols_nonzero_size": 172480,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 101,
+        "dead_stripped": 23073,
+        "symbols_nonzero_size": 172622,
+        "units_seen": 46,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.023647,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 7136284
+    },
+    {
       "repo": "fulldecent/vowel-practice",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -4110,6 +5220,72 @@
       "criterion_holds": true,
       "effect": 0.170025,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 282868
+    },
+    {
+      "repo": "fulldecent/vowel-practice",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          94,
+          95
+        ],
+        "dead_stripped": [
+          1215,
+          2164
+        ],
+        "symbols_nonzero_size": [
+          7146,
+          8183
+        ],
+        "units_seen": [
+          43,
+          44
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          282868,
+          336752
+        ],
+        "symbols_total": [
+          7443,
+          8534
+        ],
+        "bytes_covered": [
+          473690,
+          553540
+        ],
+        "binary_bytes_before_strip": [
+          1533872,
+          1886176
+        ]
+      },
+      "base_abs": {
+        "object_files": 94,
+        "dead_stripped": 1215,
+        "symbols_nonzero_size": 7146,
+        "units_seen": 43,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 95,
+        "dead_stripped": 2164,
+        "symbols_nonzero_size": 8183,
+        "units_seen": 44,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.78107,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 282868
     },
     {
@@ -4233,6 +5409,68 @@
       "text_size_base": 3835260
     },
     {
+      "repo": "gluonfield/enchanted",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          180,
+          181
+        ],
+        "dead_stripped": [
+          13692,
+          17795
+        ],
+        "symbols_nonzero_size": [
+          61116,
+          62450
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3835260,
+          3871516
+        ],
+        "symbols_total": [
+          70119,
+          71703
+        ],
+        "bytes_covered": [
+          4941876,
+          5008912
+        ],
+        "binary_bytes_before_strip": [
+          11967360,
+          12251768
+        ]
+      },
+      "base_abs": {
+        "object_files": 180,
+        "dead_stripped": 13692,
+        "symbols_nonzero_size": 61116,
+        "units_seen": 71,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 181,
+        "dead_stripped": 17795,
+        "symbols_nonzero_size": 62450,
+        "units_seen": 71,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.299664,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 3835260
+    },
+    {
       "repo": "glushchenko/fsnotes",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -4294,6 +5532,38 @@
       "criterion_holds": false,
       "effect": 0.0,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 7932
+    },
+    {
+      "repo": "glushchenko/fsnotes",
+      "config": "singlefile",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 10,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 222,
+        "units_seen": 6,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 10,
+        "dead_stripped": 0,
+        "symbols_nonzero_size": 222,
+        "units_seen": 6,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": false,
+      "effect": null,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 7932
     },
     {
@@ -4417,6 +5687,64 @@
       "text_size_base": 4821420
     },
     {
+      "repo": "jasudev/FabulaItemsProvider",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          28533,
+          28754
+        ],
+        "symbols_nonzero_size": [
+          98513,
+          98716
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4821420,
+          4823892
+        ],
+        "symbols_total": [
+          113045,
+          113270
+        ],
+        "bytes_covered": [
+          6875826,
+          6882139
+        ],
+        "binary_bytes_before_strip": [
+          22086192,
+          22107832
+        ]
+      },
+      "base_abs": {
+        "object_files": 98,
+        "dead_stripped": 28533,
+        "symbols_nonzero_size": 98513,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 98,
+        "dead_stripped": 28754,
+        "symbols_nonzero_size": 98716,
+        "units_seen": 64,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.007745,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 4821420
+    },
+    {
       "repo": "jeffreybergier/Hipstapaper",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -4509,6 +5837,52 @@
       "criterion_holds": true,
       "effect": 0.27421,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 1313608
+    },
+    {
+      "repo": "jeffreybergier/Hipstapaper",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          82,
+          83
+        ],
+        "dead_stripped": [
+          6657,
+          6693
+        ]
+      },
+      "noisy_deltas": {
+        "binary_bytes_before_strip": [
+          4557208,
+          4557200
+        ]
+      },
+      "base_abs": {
+        "object_files": 82,
+        "dead_stripped": 6657,
+        "symbols_nonzero_size": 24277,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 83,
+        "dead_stripped": 6693,
+        "symbols_nonzero_size": 24277,
+        "units_seen": 55,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.005408,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 1313608
     },
     {
@@ -4607,6 +5981,68 @@
       "text_size_base": 77052
     },
     {
+      "repo": "joreilly/BikeShare",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          61,
+          62
+        ],
+        "dead_stripped": [
+          459,
+          689
+        ],
+        "symbols_nonzero_size": [
+          2987,
+          2990
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          77052,
+          77516
+        ],
+        "symbols_total": [
+          3089,
+          3093
+        ],
+        "bytes_covered": [
+          132860,
+          133348
+        ],
+        "binary_bytes_before_strip": [
+          490112,
+          487320
+        ]
+      },
+      "base_abs": {
+        "object_files": 61,
+        "dead_stripped": 459,
+        "symbols_nonzero_size": 2987,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 62,
+        "dead_stripped": 689,
+        "symbols_nonzero_size": 2990,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.501089,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 77052
+    },
+    {
       "repo": "joreilly/PeopleInSpace",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -4694,6 +6130,64 @@
       "criterion_holds": true,
       "effect": 0.100855,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 49880
+    },
+    {
+      "repo": "joreilly/PeopleInSpace",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          177,
+          323
+        ],
+        "symbols_nonzero_size": [
+          1755,
+          1796
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          49880,
+          50180
+        ],
+        "symbols_total": [
+          1799,
+          1838
+        ],
+        "bytes_covered": [
+          86952,
+          88123
+        ],
+        "binary_bytes_before_strip": [
+          501968,
+          494144
+        ]
+      },
+      "base_abs": {
+        "object_files": 39,
+        "dead_stripped": 177,
+        "symbols_nonzero_size": 1755,
+        "units_seen": 18,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 39,
+        "dead_stripped": 323,
+        "symbols_nonzero_size": 1796,
+        "units_seen": 18,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.824859,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 49880
     },
     {
@@ -4787,6 +6281,68 @@
       "text_size_base": 57952
     },
     {
+      "repo": "joreilly/StarWars",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          313,
+          413
+        ],
+        "symbols_nonzero_size": [
+          1844,
+          1954
+        ],
+        "units_seen": [
+          28,
+          29
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          57952,
+          60628
+        ],
+        "symbols_total": [
+          1941,
+          2046
+        ],
+        "bytes_covered": [
+          105944,
+          110090
+        ],
+        "binary_bytes_before_strip": [
+          370736,
+          383648
+        ]
+      },
+      "base_abs": {
+        "object_files": 67,
+        "dead_stripped": 313,
+        "symbols_nonzero_size": 1844,
+        "units_seen": 28,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 67,
+        "dead_stripped": 413,
+        "symbols_nonzero_size": 1954,
+        "units_seen": 29,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.319489,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 57952
+    },
+    {
       "repo": "joreilly/WordMasterKMP",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -4874,6 +6430,64 @@
       "criterion_holds": true,
       "effect": 0.12212,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 68992
+    },
+    {
+      "repo": "joreilly/WordMasterKMP",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          265,
+          355
+        ],
+        "symbols_nonzero_size": [
+          2170,
+          2281
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          68992,
+          73272
+        ],
+        "symbols_total": [
+          2280,
+          2398
+        ],
+        "bytes_covered": [
+          105131,
+          110661
+        ],
+        "binary_bytes_before_strip": [
+          383632,
+          393432
+        ]
+      },
+      "base_abs": {
+        "object_files": 56,
+        "dead_stripped": 265,
+        "symbols_nonzero_size": 2170,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 56,
+        "dead_stripped": 355,
+        "symbols_nonzero_size": 2281,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.339623,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 68992
     },
     {
@@ -4974,6 +6588,68 @@
       "criterion_holds": true,
       "effect": 1.012195,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 10000
+    },
+    {
+      "repo": "jpsim/Milestones",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          830,
+          895
+        ],
+        "symbols_nonzero_size": [
+          820,
+          922
+        ],
+        "units_seen": [
+          19,
+          20
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          10000,
+          11232
+        ],
+        "symbols_total": [
+          838,
+          944
+        ],
+        "bytes_covered": [
+          28752,
+          31636
+        ],
+        "binary_bytes_before_strip": [
+          133400,
+          141704
+        ]
+      },
+      "base_abs": {
+        "object_files": 49,
+        "dead_stripped": 830,
+        "symbols_nonzero_size": 820,
+        "units_seen": 19,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 49,
+        "dead_stripped": 895,
+        "symbols_nonzero_size": 922,
+        "units_seen": 20,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.078313,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 10000
     },
     {
@@ -5097,6 +6773,72 @@
       "text_size_base": 2806432
     },
     {
+      "repo": "keepassium/KeePassium",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          447,
+          448
+        ],
+        "dead_stripped": [
+          52561,
+          65385
+        ],
+        "symbols_nonzero_size": [
+          69429,
+          69185
+        ],
+        "units_seen": [
+          49,
+          50
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2806432,
+          2628024
+        ],
+        "symbols_total": [
+          73263,
+          73233
+        ],
+        "bytes_covered": [
+          4985106,
+          4724975
+        ],
+        "binary_bytes_before_strip": [
+          12580800,
+          12383880
+        ]
+      },
+      "base_abs": {
+        "object_files": 447,
+        "dead_stripped": 52561,
+        "symbols_nonzero_size": 69429,
+        "units_seen": 49,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 448,
+        "dead_stripped": 65385,
+        "symbols_nonzero_size": 69185,
+        "units_seen": 50,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.243983,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 2806432
+    },
+    {
       "repo": "kudoleh/iOS-Modular-Architecture",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -5184,6 +6926,64 @@
       "criterion_holds": true,
       "effect": 0.889194,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 18728
+    },
+    {
+      "repo": "kudoleh/iOS-Modular-Architecture",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          971,
+          1117
+        ],
+        "symbols_nonzero_size": [
+          1092,
+          1126
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          18728,
+          19880
+        ],
+        "symbols_total": [
+          1121,
+          1155
+        ],
+        "bytes_covered": [
+          43753,
+          45132
+        ],
+        "binary_bytes_before_strip": [
+          146744,
+          150072
+        ]
+      },
+      "base_abs": {
+        "object_files": 58,
+        "dead_stripped": 971,
+        "symbols_nonzero_size": 1092,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 58,
+        "dead_stripped": 1117,
+        "symbols_nonzero_size": 1126,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.15036,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 18728
     },
     {
@@ -5311,6 +7111,64 @@
       "text_size_base": 7115232
     },
     {
+      "repo": "ldakhoa/GistHub",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          34932,
+          35242
+        ],
+        "symbols_nonzero_size": [
+          84167,
+          84243
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          7115232,
+          7115728
+        ],
+        "symbols_total": [
+          95845,
+          95938
+        ],
+        "bytes_covered": [
+          38300891,
+          38300213
+        ],
+        "binary_bytes_before_strip": [
+          48160248,
+          48134384
+        ]
+      },
+      "base_abs": {
+        "object_files": 230,
+        "dead_stripped": 34932,
+        "symbols_nonzero_size": 84167,
+        "units_seen": 188,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 230,
+        "dead_stripped": 35242,
+        "symbols_nonzero_size": 84243,
+        "units_seen": 188,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.008874,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 7115232
+    },
+    {
       "repo": "lokii49/mirror",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -5401,6 +7259,72 @@
       "text_size_base": 10800456
     },
     {
+      "repo": "lokii49/mirror",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          199,
+          200
+        ],
+        "dead_stripped": [
+          61551,
+          68361
+        ],
+        "symbols_nonzero_size": [
+          189066,
+          190302
+        ],
+        "units_seen": [
+          67,
+          68
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          10800456,
+          10731432
+        ],
+        "symbols_total": [
+          204955,
+          206416
+        ],
+        "bytes_covered": [
+          16792099,
+          16762704
+        ],
+        "binary_bytes_before_strip": [
+          53332648,
+          53893784
+        ]
+      },
+      "base_abs": {
+        "object_files": 199,
+        "dead_stripped": 61551,
+        "symbols_nonzero_size": 189066,
+        "units_seen": 67,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 200,
+        "dead_stripped": 68361,
+        "symbols_nonzero_size": 190302,
+        "units_seen": 68,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.11064,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 10800456
+    },
+    {
       "repo": "mikelikesdesign/SwiftUI-experiments",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -5488,6 +7412,72 @@
       "criterion_holds": true,
       "effect": 0.119145,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 30884
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          55,
+          56
+        ],
+        "dead_stripped": [
+          145,
+          245
+        ],
+        "symbols_nonzero_size": [
+          1217,
+          1253
+        ],
+        "units_seen": [
+          15,
+          16
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          30884,
+          31584
+        ],
+        "symbols_total": [
+          1251,
+          1288
+        ],
+        "bytes_covered": [
+          63966,
+          65281
+        ],
+        "binary_bytes_before_strip": [
+          268288,
+          274680
+        ]
+      },
+      "base_abs": {
+        "object_files": 55,
+        "dead_stripped": 145,
+        "symbols_nonzero_size": 1217,
+        "units_seen": 15,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 56,
+        "dead_stripped": 245,
+        "symbols_nonzero_size": 1253,
+        "units_seen": 16,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.689655,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 30884
     },
     {
@@ -5615,94 +7605,70 @@
       "text_size_base": 7552460
     },
     {
-      "repo": "mozilla-mobile/firefox-ios",
-      "config": "lto",
-      "verdict": "NO_OBSERVED_DIFFERENCE",
-      "deltas": {},
-      "noisy_deltas": {},
-      "base_abs": {
-        "object_files": 121,
-        "dead_stripped": 45559,
-        "symbols_nonzero_size": 48073,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "config_abs": {
-        "object_files": 121,
-        "dead_stripped": 45559,
-        "symbols_nonzero_size": 48073,
-        "units_seen": 64,
-        "lto_objects": 0,
-        "lto_symbols": 0,
-        "lto_bytes": 0,
-        "lto_text_bytes": 0
-      },
-      "criterion": "_lto.o 出现且吸收了 __text 字节",
-      "criterion_holds": false,
-      "effect": 0.0,
-      "effect_def": "_lto.o 吸收的 __text 字节 / base __text 字节",
-      "text_size_base": 2743988
-    },
-    {
-      "repo": "mozilla-mobile/firefox-ios",
-      "config": "no_deadstrip",
+      "repo": "ml-explore/mlx-swift-examples",
+      "config": "singlefile",
       "verdict": "DIFFERS",
       "deltas": {
+        "object_files": [
+          71,
+          72
+        ],
         "dead_stripped": [
-          45559,
-          0
+          22028,
+          22114
         ],
         "symbols_nonzero_size": [
-          48073,
-          48477
+          48417,
+          48445
+        ],
+        "units_seen": [
+          39,
+          40
         ]
       },
       "noisy_deltas": {
         "text_size": [
-          2743988,
-          2747800
+          7552460,
+          7552336
         ],
         "symbols_total": [
-          56792,
-          57473
+          67777,
+          67806
         ],
         "bytes_covered": [
-          3783960,
-          3793582
+          9967865,
+          9968257
         ],
         "binary_bytes_before_strip": [
-          8535552,
-          8571248
+          20830360,
+          20834416
         ]
       },
       "base_abs": {
-        "object_files": 121,
-        "dead_stripped": 45559,
-        "symbols_nonzero_size": 48073,
-        "units_seen": 64,
+        "object_files": 71,
+        "dead_stripped": 22028,
+        "symbols_nonzero_size": 48417,
+        "units_seen": 39,
         "lto_objects": 0,
         "lto_symbols": 0,
         "lto_bytes": 0,
         "lto_text_bytes": 0
       },
       "config_abs": {
-        "object_files": 121,
-        "dead_stripped": 0,
-        "symbols_nonzero_size": 48477,
-        "units_seen": 64,
+        "object_files": 72,
+        "dead_stripped": 22114,
+        "symbols_nonzero_size": 48445,
+        "units_seen": 40,
         "lto_objects": 0,
         "lto_symbols": 0,
         "lto_bytes": 0,
         "lto_text_bytes": 0
       },
-      "criterion": "dead_stripped 归零",
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
       "criterion_holds": true,
-      "effect": 0.947705,
-      "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
-      "text_size_base": 2743988
+      "effect": 0.003904,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 7552460
     },
     {
       "repo": "rafsoh/dimeApp",
@@ -5792,6 +7758,64 @@
       "criterion_holds": true,
       "effect": 0.384127,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 3627772
+    },
+    {
+      "repo": "rafsoh/dimeApp",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          21901,
+          35634
+        ],
+        "symbols_nonzero_size": [
+          57015,
+          61668
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3627772,
+          4011220
+        ],
+        "symbols_total": [
+          63518,
+          68552
+        ],
+        "bytes_covered": [
+          5022911,
+          5558193
+        ],
+        "binary_bytes_before_strip": [
+          19269144,
+          20943144
+        ]
+      },
+      "base_abs": {
+        "object_files": 192,
+        "dead_stripped": 21901,
+        "symbols_nonzero_size": 57015,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 192,
+        "dead_stripped": 35634,
+        "symbols_nonzero_size": 61668,
+        "units_seen": 56,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.627049,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 3627772
     },
     {
@@ -5885,6 +7909,68 @@
       "text_size_base": 149696
     },
     {
+      "repo": "rajdeep/proton",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          92,
+          93
+        ],
+        "dead_stripped": [
+          4141,
+          6508
+        ],
+        "symbols_nonzero_size": [
+          4029,
+          4539
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          149696,
+          166480
+        ],
+        "symbols_total": [
+          4518,
+          5082
+        ],
+        "bytes_covered": [
+          239923,
+          261582
+        ],
+        "binary_bytes_before_strip": [
+          661352,
+          727584
+        ]
+      },
+      "base_abs": {
+        "object_files": 92,
+        "dead_stripped": 4141,
+        "symbols_nonzero_size": 4029,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 93,
+        "dead_stripped": 6508,
+        "symbols_nonzero_size": 4539,
+        "units_seen": 25,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.571601,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 149696
+    },
+    {
       "repo": "richardtop/CalendarApp",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -5972,6 +8058,68 @@
       "criterion_holds": true,
       "effect": 0.552251,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 241676
+    },
+    {
+      "repo": "richardtop/CalendarApp",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          57,
+          58
+        ],
+        "dead_stripped": [
+          2637,
+          2759
+        ],
+        "symbols_nonzero_size": [
+          4775,
+          4849
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          241676,
+          242512
+        ],
+        "symbols_total": [
+          5428,
+          5502
+        ],
+        "bytes_covered": [
+          328889,
+          331056
+        ],
+        "binary_bytes_before_strip": [
+          813816,
+          818904
+        ]
+      },
+      "base_abs": {
+        "object_files": 57,
+        "dead_stripped": 2637,
+        "symbols_nonzero_size": 4775,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 58,
+        "dead_stripped": 2759,
+        "symbols_nonzero_size": 4849,
+        "units_seen": 30,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.046265,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 241676
     },
     {
@@ -6065,6 +8213,64 @@
       "text_size_base": 3462272
     },
     {
+      "repo": "saxobroko/SaxWeather",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          41357,
+          47722
+        ],
+        "symbols_nonzero_size": [
+          77742,
+          80484
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3462272,
+          2994428
+        ],
+        "symbols_total": [
+          87349,
+          94237
+        ],
+        "bytes_covered": [
+          5651056,
+          5168238
+        ],
+        "binary_bytes_before_strip": [
+          23267184,
+          23014968
+        ]
+      },
+      "base_abs": {
+        "object_files": 236,
+        "dead_stripped": 41357,
+        "symbols_nonzero_size": 77742,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 236,
+        "dead_stripped": 47722,
+        "symbols_nonzero_size": 80484,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.153904,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 3462272
+    },
+    {
       "repo": "sigfault-byte/LegitURL",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -6152,6 +8358,72 @@
       "criterion_holds": true,
       "effect": 0.735967,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 1180876
+    },
+    {
+      "repo": "sigfault-byte/LegitURL",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          212,
+          213
+        ],
+        "dead_stripped": [
+          11682,
+          18328
+        ],
+        "symbols_nonzero_size": [
+          15873,
+          17251
+        ],
+        "units_seen": [
+          44,
+          45
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1180876,
+          1215424
+        ],
+        "symbols_total": [
+          17506,
+          19158
+        ],
+        "bytes_covered": [
+          1510468,
+          1565509
+        ],
+        "binary_bytes_before_strip": [
+          3539432,
+          3796848
+        ]
+      },
+      "base_abs": {
+        "object_files": 212,
+        "dead_stripped": 11682,
+        "symbols_nonzero_size": 15873,
+        "units_seen": 44,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 213,
+        "dead_stripped": 18328,
+        "symbols_nonzero_size": 17251,
+        "units_seen": 45,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.568909,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 1180876
     },
     {
@@ -6245,6 +8517,64 @@
       "text_size_base": 2278684
     },
     {
+      "repo": "simple-login/Simple-Login-iOS",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          22289,
+          27547
+        ],
+        "symbols_nonzero_size": [
+          51200,
+          50654
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          2278684,
+          2237844
+        ],
+        "symbols_total": [
+          58587,
+          57973
+        ],
+        "bytes_covered": [
+          3301258,
+          3265836
+        ],
+        "binary_bytes_before_strip": [
+          10281808,
+          10085360
+        ]
+      },
+      "base_abs": {
+        "object_files": 206,
+        "dead_stripped": 22289,
+        "symbols_nonzero_size": 51200,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 206,
+        "dead_stripped": 27547,
+        "symbols_nonzero_size": 50654,
+        "units_seen": 54,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.235901,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 2278684
+    },
+    {
       "repo": "timfraedrich/OutRun",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -6332,6 +8662,72 @@
       "criterion_holds": true,
       "effect": 0.68884,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 555700
+    },
+    {
+      "repo": "timfraedrich/OutRun",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          213,
+          214
+        ],
+        "dead_stripped": [
+          9475,
+          17397
+        ],
+        "symbols_nonzero_size": [
+          13755,
+          16524
+        ],
+        "units_seen": [
+          35,
+          37
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          555700,
+          611028
+        ],
+        "symbols_total": [
+          16118,
+          19183
+        ],
+        "bytes_covered": [
+          838080,
+          941102
+        ],
+        "binary_bytes_before_strip": [
+          2324480,
+          2742928
+        ]
+      },
+      "base_abs": {
+        "object_files": 213,
+        "dead_stripped": 9475,
+        "symbols_nonzero_size": 13755,
+        "units_seen": 35,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 214,
+        "dead_stripped": 17397,
+        "symbols_nonzero_size": 16524,
+        "units_seen": 37,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.836095,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 555700
     },
     {
@@ -6455,6 +8851,38 @@
       "text_size_base": 4857472
     },
     {
+      "repo": "vincode-io/Zavala",
+      "config": "singlefile",
+      "verdict": "NO_OBSERVED_DIFFERENCE",
+      "deltas": {},
+      "noisy_deltas": {},
+      "base_abs": {
+        "object_files": 254,
+        "dead_stripped": 41122,
+        "symbols_nonzero_size": 69702,
+        "units_seen": 73,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 254,
+        "dead_stripped": 41122,
+        "symbols_nonzero_size": 69702,
+        "units_seen": 73,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": false,
+      "effect": 0.0,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 4857472
+    },
+    {
       "repo": "wikimedia/wikipedia-ios",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -6572,6 +9000,72 @@
       "criterion_holds": true,
       "effect": 1.416338,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 4903844
+    },
+    {
+      "repo": "wikimedia/wikipedia-ios",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          640,
+          641
+        ],
+        "dead_stripped": [
+          119529,
+          150463
+        ],
+        "symbols_nonzero_size": [
+          84393,
+          87968
+        ],
+        "units_seen": [
+          48,
+          49
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          4903844,
+          4989328
+        ],
+        "symbols_total": [
+          93559,
+          98137
+        ],
+        "bytes_covered": [
+          6922747,
+          7022843
+        ],
+        "binary_bytes_before_strip": [
+          14421640,
+          15144376
+        ]
+      },
+      "base_abs": {
+        "object_files": 640,
+        "dead_stripped": 119529,
+        "symbols_nonzero_size": 84393,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 641,
+        "dead_stripped": 150463,
+        "symbols_nonzero_size": 87968,
+        "units_seen": 49,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.258799,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 4903844
     },
     {
@@ -6699,6 +9193,72 @@
       "text_size_base": 39517076
     },
     {
+      "repo": "yattee/yattee",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          4146,
+          4147
+        ],
+        "dead_stripped": [
+          191247,
+          221634
+        ],
+        "symbols_nonzero_size": [
+          365949,
+          367941
+        ],
+        "units_seen": [
+          100,
+          101
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          39517076,
+          39080468
+        ],
+        "symbols_total": [
+          381760,
+          384337
+        ],
+        "bytes_covered": [
+          60211328,
+          59822344
+        ],
+        "binary_bytes_before_strip": [
+          102631288,
+          104206192
+        ]
+      },
+      "base_abs": {
+        "object_files": 4146,
+        "dead_stripped": 191247,
+        "symbols_nonzero_size": 365949,
+        "units_seen": 100,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 4147,
+        "dead_stripped": 221634,
+        "symbols_nonzero_size": 367941,
+        "units_seen": 101,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.158889,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 39517076
+    },
+    {
       "repo": "youstanzr/YouTag",
       "config": "lto",
       "verdict": "NO_OBSERVED_DIFFERENCE",
@@ -6786,6 +9346,72 @@
       "criterion_holds": true,
       "effect": 0.474055,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 1547768
+    },
+    {
+      "repo": "youstanzr/YouTag",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          109,
+          110
+        ],
+        "dead_stripped": [
+          14416,
+          16613
+        ],
+        "symbols_nonzero_size": [
+          30410,
+          31126
+        ],
+        "units_seen": [
+          48,
+          49
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          1547768,
+          1577604
+        ],
+        "symbols_total": [
+          33241,
+          34033
+        ],
+        "bytes_covered": [
+          2392302,
+          2429088
+        ],
+        "binary_bytes_before_strip": [
+          5836920,
+          5970144
+        ]
+      },
+      "base_abs": {
+        "object_files": 109,
+        "dead_stripped": 14416,
+        "symbols_nonzero_size": 30410,
+        "units_seen": 48,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 110,
+        "dead_stripped": 16613,
+        "symbols_nonzero_size": 31126,
+        "units_seen": 49,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.1524,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 1547768
     },
     {
@@ -6909,6 +9535,68 @@
       "text_size_base": 3765756
     },
     {
+      "repo": "zizicici/Off-Day",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "object_files": [
+          188,
+          189
+        ],
+        "dead_stripped": [
+          33619,
+          38318
+        ],
+        "symbols_nonzero_size": [
+          76935,
+          77668
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          3765756,
+          3771208
+        ],
+        "symbols_total": [
+          83453,
+          84266
+        ],
+        "bytes_covered": [
+          6160774,
+          6170513
+        ],
+        "binary_bytes_before_strip": [
+          14644032,
+          14720976
+        ]
+      },
+      "base_abs": {
+        "object_files": 188,
+        "dead_stripped": 33619,
+        "symbols_nonzero_size": 76935,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 189,
+        "dead_stripped": 38318,
+        "symbols_nonzero_size": 77668,
+        "units_seen": 51,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.139772,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
+      "text_size_base": 3765756
+    },
+    {
       "repo": "zzanehip/The-OldOS-Project",
       "config": "lto",
       "verdict": "DIFFERS",
@@ -7026,6 +9714,64 @@
       "criterion_holds": true,
       "effect": 0.583906,
       "effect_def": "base 里被 dead-strip 的符号数 / base 非零符号数",
+      "text_size_base": 9651584
+    },
+    {
+      "repo": "zzanehip/The-OldOS-Project",
+      "config": "singlefile",
+      "verdict": "DIFFERS",
+      "deltas": {
+        "dead_stripped": [
+          80920,
+          102606
+        ],
+        "symbols_nonzero_size": [
+          138584,
+          140271
+        ]
+      },
+      "noisy_deltas": {
+        "text_size": [
+          9651584,
+          9761064
+        ],
+        "symbols_total": [
+          154814,
+          156629
+        ],
+        "bytes_covered": [
+          13272427,
+          13419346
+        ],
+        "binary_bytes_before_strip": [
+          38112936,
+          37972736
+        ]
+      },
+      "base_abs": {
+        "object_files": 201,
+        "dead_stripped": 80920,
+        "symbols_nonzero_size": 138584,
+        "units_seen": 97,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "config_abs": {
+        "object_files": 201,
+        "dead_stripped": 102606,
+        "symbols_nonzero_size": 140271,
+        "units_seen": 97,
+        "lto_objects": 0,
+        "lto_symbols": 0,
+        "lto_bytes": 0,
+        "lto_text_bytes": 0
+      },
+      "criterion": "dead_stripped 比 base 多（没有 whole-module，跨文件的死函数只能留给链接器剥）",
+      "criterion_holds": true,
+      "effect": 0.267993,
+      "effect_def": "dead_stripped 增量 / base dead_stripped",
       "text_size_base": 9651584
     }
   ]
