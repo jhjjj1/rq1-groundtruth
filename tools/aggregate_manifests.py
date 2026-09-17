@@ -103,6 +103,37 @@ def variant_bucket(v):
     return "OK"
 
 
+#: app bundle 一级的分桶。与 `BUCKETS` 分开：那张表回答「map 与二进制配不配套」，
+#: 第一轮的数是按它报的；这张表回答「清单那一半的材料在不在」。合并会让旧数换了含义。
+#: 第一轮的 manifest 没有 bundle 字段，落在 NOT_COLLECTED —— 「那时没收」不是「收了是空的」。
+BUNDLE_BUCKETS = ("OK", "OK_NO_PRIVACY_MANIFEST", "PACK_FAILED", "VERIFY_FAILED",
+                  "NO_APP_BUNDLE", "NOT_COLLECTED")
+
+
+def bundle_bucket(m):
+    if "bundle_zip" not in m:
+        return "NOT_COLLECTED"
+    if not m.get("app_bundle"):
+        return "NO_APP_BUNDLE"
+    if not m.get("bundle_zip"):
+        return "PACK_FAILED"
+    verdict = (m.get("bundle_verify") or {}).get("verdict") or ""
+    if verdict == "OK":
+        return "OK"
+    if verdict == "OK_NO_PRIVACY_MANIFEST":
+        return "OK_NO_PRIVACY_MANIFEST"
+    return "VERIFY_FAILED"
+
+
+BUNDLE_WHY = {
+    "OK": "包在，能打开，各级 PrivacyInfo.xcprivacy 都收进去了",
+    "OK_NO_PRIVACY_MANIFEST": "包在、能打开，但这个 App 一份清单都没有 —— 这是它的事实，不是收集失败",
+    "PACK_FAILED": "找到了 .app，但包没打出来（见 bundle_note）",
+    "VERIFY_FAILED": "包打出来了但复检没过（Payload 根不唯一 / 主可执行文件缺失或与收上来的二进制不一致）",
+    "NO_APP_BUNDLE": "构建产物里没有 .app",
+    "NOT_COLLECTED": "这一轮产物里没有 bundle 字段（第一轮的 manifest）—— 未观测，不是空",
+}
+
 #: scheme 判定 → 分桶。每一档都对应一个能单独回答「该不该算进分母」的成因。
 SCHEME_VERDICT_BUCKET = {
     "NO_APP_SCHEME_OBSERVED": "NO_APP_SCHEME",
@@ -167,6 +198,7 @@ def main(argv=None):
     per_repo = collections.defaultdict(collections.Counter)
     totals = collections.Counter()
     vtotals = collections.Counter()
+    btotals = collections.Counter()
     per_variant_style = collections.defaultdict(collections.Counter)
     ambiguous, synthesized = [], 0
 
@@ -186,6 +218,7 @@ def main(argv=None):
                 vtotals[vb] += 1
                 per_variant_style[f"{cfg}/{v.get('strip_style')}"][vb] += 1
                 synthesized += bool(v.get("_synthesized"))
+            btotals[bundle_bucket(m)] += 1
 
     observed = len(rows)
     n_jobs = args.expected or observed
@@ -213,6 +246,9 @@ def main(argv=None):
         "variant_ok_rate": (round(vtotals["OK"] / variants_observed, 4)
                             if variants_observed else 0.0),
         "variants_from_legacy_manifests": synthesized,
+        # app bundle 一级：清单那一半的材料在不在。与上面两张表并列，不并入。
+        "bundles_observed": sum(btotals.values()),
+        "bundle_totals": {b: btotals[b] for b in BUNDLE_BUCKETS},
         "per_config_variant": {c: dict(v) for c, v in per_variant_style.items()},
         "per_config": {c: dict(v) for c, v in per_config.items()},
         "per_repo": {c: dict(v) for c, v in per_repo.items()},
@@ -279,6 +315,21 @@ def main(argv=None):
         for cfg in sorted(per_config):
             c = per_config[cfg]
             lines.append(f"| `{cfg}` | " + " | ".join(str(c[b]) for b in BUCKETS) + " |")
+
+    if result["bundles_observed"]:
+        lines.append("")
+        lines.append("## app bundle（申报那一半的材料）")
+        lines.append("")
+        lines.append("| 结果 | job 数 | 含义 |")
+        lines.append("|---|---:|---|")
+        for b in BUNDLE_BUCKETS:
+            if btotals[b]:
+                lines.append(f"| `{b}` | {btotals[b]} | {BUNDLE_WHY[b]} |")
+        ok = btotals["OK"] + btotals["OK_NO_PRIVACY_MANIFEST"]
+        lines.append("")
+        lines.append(f"能交给分析器的 **{ok} / {result['bundles_observed']}**；"
+                     f"其中 {btotals['OK_NO_PRIVACY_MANIFEST']} 个 App 自己一份清单都没有"
+                     f"（这是观测结果，不是收集失败）。")
 
     text = "\n".join(lines)
     print(text)

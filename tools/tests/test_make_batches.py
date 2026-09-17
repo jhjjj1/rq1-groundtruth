@@ -70,6 +70,33 @@ def main():
         rows = [json.loads(l) for l in io.open(out / wiki[0], encoding="utf-8")][1:]
         assert all("reason_constraints" not in r and "hosts" not in r for r in rows)
         assert all(any(l.startswith(f"{r['line']:5d}>>") for l in r["context"]["lines"]) for r in rows)
+        # flow_todo: §5 的搜索在打批次时就做掉，标注者拿到的是候选清单而不是一句「去 grep」
+        allrows = [r for n in names for r in [json.loads(l) for l in io.open(out / n, encoding="utf-8")][1:]]
+        assert all("flow_todo" in r for r in allrows)
+        deps_rows = [r for n in names if "__deps__" in n or "__pods__" in n
+                     for r in [json.loads(l) for l in io.open(out / n, encoding="utf-8")][1:]]
+        assert deps_rows and all("TRIGGER" in r["flow_todo"]["owes_hint"] for r in deps_rows)      # 库里每个站点都欠触发点
+        assert all("hosts_to_search" in r["flow_todo"] for r in deps_rows)
+        wr = [r for r in allrows if "CHANNEL" in r["flow_todo"]["owes_hint"]]
+        assert wr, "写入站点应当欠 CHANNEL"
+        assert all((r.get("key") or {}).get("value") or (r.get("wrapper_ref") or [{}])[0].get("keys") for r in wr)
+        # 同一个键在别的单元里出现过，就作为候选列出来（这里 wikipedia 与 Cache 的键不重合，候选可以为空，
+        # 但字段必须在，且 exported 由 enclosing_function 的可见性算出来）
+        assert all(isinstance(r["flow_todo"]["channel_candidates"], list) for r in allrows)
+        assert any(r["flow_todo"]["enclosing_exported"] for r in allrows)
+        # 同一个键跨单元时，候选必须列出另一个单元的读取点（这一步是把人肉 grep 换成算出来的）
+        w = {"site_id": "w" * 16, "file": "A.swift", "line": 3, "operation_prefill": "WRITE", "domain_hint": "APP_GROUP",
+             "key": {"expr": "k", "value": "lastSync", "source": "LITERAL"}, "wrapper_ref": None,
+             "enclosing_function": "public func save() {"}
+        rd = {"site_id": "r" * 16, "file": "B.swift", "line": 9, "operation_prefill": "READ", "domain_hint": "APP_GROUP",
+              "key": {"expr": "k", "value": "lastSync", "source": "LITERAL"}, "wrapper_ref": None,
+              "enclosing_function": "func load() {"}
+        idx = M.key_index({"repos/app-a": [w], "repos/app-b": [rd]})
+        td = M.flow_todo(w, "repos/app-a", idx, None)
+        assert td["owes_hint"] == ["CHANNEL"] and td["enclosing_exported"]
+        assert [(c["unit"], c["key"], c["sites"][0]["site_id"]) for c in td["channel_candidates"]] == \
+               [("repos/app-b", "lastSync", "r" * 16)], td["channel_candidates"]
+        assert M.flow_todo(rd, "repos/app-b", idx, None)["owes_hint"] == []          # 读方不欠 CHANNEL，写方欠
         # packs: full unit source per pack, units never split, headers rewritten with source_scope
         annot = tmp / "annot"; annot.mkdir(); (annot / "ANNOTATION_PRINCIPLES.md").write_text("# 原则\n", encoding="utf-8"); (annot / "OPUS_PROMPT.md").write_text("# 契约\n", encoding="utf-8")
         buf = io.StringIO(); old = sys.stdout; sys.stdout = buf
@@ -110,7 +137,8 @@ def main():
         import annotate_validate as V
         rows = [json.loads(l) for l in io.open(out2 / "a0001__deps__newpkg@000000000000.jsonl", encoding="utf-8")][1:]
         assert V.find_batch(out2, [(1, rows[0])]).name.startswith("a0001__")
-        print(f"PASS  {len(names)} 个批次：顺序 repos→deps→pods / --exclude-units / 去重忽略行号 / 源码补充目录 / 批次头工程事实 / {len(packs)} 个全源码包 / --only-new-vs 补充批次")
+        print(f"PASS  {len(names)} 个批次：顺序 repos→deps→pods / --exclude-units / 去重忽略行号 / 源码补充目录 / 批次头工程事实 / "
+              f"flow_todo 预算欠账与跨单元键候选 / {len(packs)} 个全源码包 / --only-new-vs 补充批次")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

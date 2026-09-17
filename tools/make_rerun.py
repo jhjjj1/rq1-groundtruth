@@ -58,6 +58,9 @@ def main(argv=None):
                     help="原批次的 targets/batchNN.json（可给多个）")
     ap.add_argument("--exclude-buckets", default="",
                     help="逗号分隔；这些成因的仓库不重跑（默认全部重跑）")
+    ap.add_argument("--pick", choices=("failed", "ok"), default="failed",
+                    help="failed=挑没产出可评分变体的重跑（默认，救失败）；"
+                         "ok=挑已经成功的重跑（补收上一轮没收的产物，比如 app bundle）")
     ap.add_argument("--out", "--json", dest="out", required=True)
     args = ap.parse_args(argv)
 
@@ -90,8 +93,11 @@ def main(argv=None):
                      else "NO_XCODE_CONTAINER" if "skipped" in outcomes
                      else "BUILD_FAILED")
         reasons[cause] += 1
-        if cause == "OK":
-            left_out.append({"repo": repo, "reason": "ALREADY_OK"})
+        # `--pick ok` 反过来：要重跑的是**已经成功**的那些。补收一件上一轮没收的
+        # 产物时，失败的仓库重跑一遍仍然会失败，跑它们只是烧 runner 时间。
+        wanted = (cause == "OK") if args.pick == "ok" else (cause != "OK")
+        if not wanted:
+            left_out.append({"repo": repo, "reason": ("ALREADY_OK" if cause == "OK" else f"NOT_OK_{cause}")})
         elif cause in skip:
             left_out.append({"repo": repo, "reason": f"EXCLUDED_{cause}"})
         else:

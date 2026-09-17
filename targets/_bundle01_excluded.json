@@ -1,0 +1,534 @@
+{
+  "originals": 181,
+  "rerun": 49,
+  "left_out": [
+    {
+      "repo": "rainbow-me/rainbow",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "bither/bither-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "herzbube/littlego",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "ExistOrLive/GithubClient",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "splinesoft/MUDRammer",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "denissimon/distributed-model-training",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "utmapp/UTM",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "simplex-chat/simplex-chat",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "pointfreeco/swift-composable-architecture",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "Ranchero-Software/NetNewsWire",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "TelegramMessenger/Telegram-iOS",
+      "reason": "NOT_OK_NO_APP_SCHEME_OBSERVED"
+    },
+    {
+      "repo": "kickstarter/ios-oss",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "mullvad/mullvadvpn-app",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "blinksh/blink",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "claration/Feather",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "jellyfin/Swiftfin",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "EhPanda-Team/EhPanda",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "holzschu/a-shell",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "wordpress-mobile/WordPress-iOS",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "yichengchen/ATV-Bilibili-demo",
+      "reason": "NOT_OK_NO_APP_SCHEME_OBSERVED"
+    },
+    {
+      "repo": "nextcloud/ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "home-assistant/iOS",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "twostraws/Unwrap",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "TortugaPower/BookPlayer",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "automattic/simplenote-ios",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "Automattic/pocket-casts-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "AdguardTeam/AdguardForiOS",
+      "reason": "NOT_OK_NO_APP_SCHEME_OBSERVED"
+    },
+    {
+      "repo": "migueldeicaza/SwiftTerm",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "moonlight-stream/moonlight-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "mssun/passforios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "tnantoka/edhita",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "partout-io/passepartout",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "rudrankriyam/Foundation-Models-Framework-Lab",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "element-hq/element-x-ios",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "HabitRPG/habitica-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "cagnulein/qdomyos-zwift",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "weiran/Hackers",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "rrroyal/Harbour",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "eerimoq/moblin",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "bitwarden/ios",
+      "reason": "NOT_OK_NO_APP_SCHEME_OBSERVED"
+    },
+    {
+      "repo": "ProtonVPN/ios-mac-app",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "Swiftgram/Telegram-iOS",
+      "reason": "NOT_OK_NO_APP_SCHEME_OBSERVED"
+    },
+    {
+      "repo": "belm/BaiduFM-Swift",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "niochat/nio",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "Dimillian/IcySky",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "peterfriese/MakeItSo",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "owntracks/ios",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "threema-ch/threema-ios",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "woocommerce/woocommerce-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "pia-foss/mobile-ios",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "Dimillian/FoundationChat",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "mikaelacaron/Basic-Car-Maintenance",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "criticalmaps/criticalmaps-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "nightscout/nightguard",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "lukeswitz/DragonSync-iOS",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "duckduckgo/apple-browsers",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "mlemgroup/mlem",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "gdombiak/OctoPod",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "openhab/openhab-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "altstoreio/AltStore",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "Provenance-Emu/Provenance",
+      "reason": "NOT_OK_NO_SHARED_SCHEMES"
+    },
+    {
+      "repo": "rileytestut/Delta",
+      "reason": "NOT_OK_NO_APP_SCHEME_OBSERVED"
+    },
+    {
+      "repo": "element-hq/element-ios",
+      "reason": "NOT_OK_NO_SHARED_SCHEMES"
+    },
+    {
+      "repo": "vinhnx/Clendar",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "monal-im/Monal",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "cinderella-project/iMast",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "bigjermaine/SwiftTracker",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "soramitsu/fearless-iOS",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "iBurnApp/iBurn-iOS",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "asuc-octo/berkeley-mobile-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "miataru/miataru-ios-client",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "walktalkmeditate/pilgrim-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "signalapp/Signal-iOS",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "artsy/eigen",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "OnionBrowser/OnionBrowser",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "mateusz-bak/openreads",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "zulip/zulip-mobile",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "DeluxeAlonso/UpcomingMovies",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "deltachat/deltachat-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "guardianproject/orbot-apple",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "tinode/ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "Say-Their-Name/say-their-names-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "leathalman/Jotify",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "StepicOrg/stepik-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "ooni/probe-multiplatform",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "netless-io/flat-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "lionheart/Pushpin",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "suicidesafetyplan/safetyplan-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "chunkyguy/PhotoApp",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "daneden/Zeitgeist",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "tls-inspector/tls-inspector",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "AnthonyH93/GoCycling",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "ProtonDriveApps/ios-drive",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "wireapp/wire-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "SwissCovid/swisscovid-app-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "VishwaiOSDev/Loadify-iOS",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "Thomvis/Construct",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "gematik/E-Rezept-App-iOS",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "daneden/Solstice",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "catrobat/catty",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "willowtreeapps/vocable-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "Piecelet/neodb-app",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "WWDCScholars/iOS-app",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "kurozora/kurozora-app",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "EvgenyKarkan/Feeds4U",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "mathieudutour/TimeLines",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "WezSieTato/ScanNow",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "AnthonyH93/HexaCalc",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "vermont42/Conjugar",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "strumswell/oscar-weather",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "writingmate/aidictation",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "amikhaylin/pompaddo",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "FlineDev/Prayer",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "joeldavidw/Chronos",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "AlexCatch/Oak",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "misteu/VocabularyTraining",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "GigaDuckAI/conduck",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "TICESoftware/tice-ios",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "256Arts/Sprite-Pencil",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "256Arts/Sprite-Catalog",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "hishd/SkyWizard-SwiftUI",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "Keith-43/MuVis-Experimentation",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "marcusraitner/pulse",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "frostland/GPS-Stone",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "apps-fab/exercism-app",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "denissimon/Cryptocurrency-Info",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "dl-alexandre/SymbolGrid",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "wvabrinskas/PokePal",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    },
+    {
+      "repo": "krazywarez/hutch",
+      "reason": "NOT_OK_SCHEMES_JSON_UNREADABLE"
+    },
+    {
+      "repo": "Loriage/Minidisc",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "robertwtucker/kfinderapp-ios",
+      "reason": "NOT_OK_APP_SCHEME_AMBIGUOUS"
+    },
+    {
+      "repo": "hishd/RicketyRick-iOS",
+      "reason": "NOT_OK_APP_SCHEME_FOUND"
+    }
+  ]
+}

@@ -12,12 +12,24 @@ match the batch header's reasons, a SUPPORTED / CONFLICT verdict without an
 `L<n>` evidence line, contradictions between fields (escape without the
 matching value_fate, is_api_use NO with an operation).
 
-Principles 1.9 rules checked here as well: operations without a data value
+Principles 1.10 rules checked here as well: operations without a data value
 (SYNC / ACQUIRE / REMOVE / OBSERVE) carry value_fate ["LOCAL_ONLY"] and no
 escape; a WRAPPED site whose wrapper_ref says SET carries ["PERSISTED_LOCAL"];
 an ALT site judged NO has exceeds_all_reasons null; a per-domain verdict dict
 is only allowed on a DefaultsDomainIs constraint of a MIXED_DOMAINS site;
 needs_context carries machine-readable `requests` (kind / symbol).
+
+Flow coverage (§5) is a blocking rule, not a warning.  §5 seeds three paths
+from facts the batch already carries, so whether a site owes a flow record is
+decided here, not by the annotator: a site in a deps / pods unit owes a
+TRIGGER record, a write-shaped site with a resolvable key owes a CHANNEL
+record, a site with a non-null escape owes a RETURN_VALUE record.  A search
+that found nothing is a flow record too (`sink_unit: null` +
+`stuck_at.why: NO_CONSUMER_FOUND: …`).  A site that owes nothing still has to
+say why the value stops where it stops -- one of the closure codes in `notes`
+(IN_UNIT / TERMINAL / NOT_EXPORTED / NO_VALUE) -- because "looked and found
+nothing" and "never looked" must not be the same bytes.  `--flow-rules off`
+restores the 1.9 behaviour for comparing old passes.
 
 Warnings: things worth a look but not a rejection -- disagreement with the
 scanner's prefills (that is the annotator's job, we only count it), an UNSURE
@@ -56,11 +68,90 @@ FLOW_KEYS = ["path_type", "sink_unit", "hops", "sink_use", "sink_value", "sink_d
 PATH_TYPES = {"RETURN_VALUE", "TRIGGER", "CHANNEL"}
 RE_LOC = re.compile(r".+:\d+$")
 RE_EVIDENCE = re.compile(r"\bL\d+")
+#: a *checkable* citation quotes the line: `L<n>: <片段>` with enough of the line to find it again.
+#: A bare `L<n>` followed by a paraphrase names a line but asserts nothing that source can refute,
+#: so recheck_annotations.py cannot verify it -- §1 rule 3 asks for the fragment for exactly that reason.
+RE_QUOTED = re.compile(r"\bL\d+\s*[:：]\s*\S[^\n]{7,}")
 #: unit-level constraints may cite worksheet / batch-header fields instead of a code line (§4.5)
 RE_UNIT_EVIDENCE = re.compile(r"\bL\d+|unit_kind=|unit_location=|app_facts|清单|manifest|PrivacyInfo")
+#: the same, minus the bare line number -- a unit-level fact is the only thing that excuses a
+#: missing code fragment; `L13` on its own must not, or the quoted-evidence rule has no teeth.
+RE_UNIT_FACT = re.compile(r"unit_kind=|unit_location=|app_facts|清单|manifest|PrivacyInfo|callers:|key=|target\.")
 NO_CODES = ("COMPILE_GUARD_EXCLUDES_IOS_RELEASE", "NAME_COLLISION", "WRAPPER_CALL", "DECLARATION", "STRING_LITERAL", "WRAPPER_TYPE_MEMBER", "OTHER")
 NO_VALUE_OPS = ("SYNC", "ACQUIRE", "REMOVE", "OBSERVE")
 REQUEST_KINDS = {"DEFINITION", "CALLERS", "BODY", "TYPE", "FILE"}
+#: §5: why a site carries no flow record.  Written at the head of a `notes` segment, code first.
+CLOSURE_CODES = ("IN_UNIT", "TERMINAL", "NOT_EXPORTED", "NO_VALUE")
+RE_CLOSURE = re.compile(r"(?:^|[;；]\s*)(" + "|".join(CLOSURE_CODES) + r")\b")
+#: §5 CHANNEL seeds: a write-shaped operation whose key is known can be read by another unit
+WRITE_OPS = ("WRITE", "REMOVE")
+FLOW_DUTY_WHY = {
+    "TRIGGER": "deps / pods 单元的每个 YES 站点都要找宿主的触发点",
+    "CHANNEL": "写入的键可能被别的单元读",
+    "RETURN_VALUE": "escape 非空，值出了本函数",
+}
+
+
+#: `   32>>             guard UserDefaults.standard…` / `   33               feedContentController…`
+RE_CTX_LINE = re.compile(r"^\s*(\d+)(?:>>)?\s?(.*)$")
+#: every `L<n>: <片段>` in a text field
+RE_CITE_Q = re.compile(r"\bL(\d+)\s*[:：]\s*([^\n;；]{4,})")
+
+
+def context_text(site):
+    """{行号: 该行原文} from the site's context window -- the real bytes of the file, as shipped."""
+    out = {}
+    for l in ((site.get("context") or {}).get("lines") or []):
+        m = RE_CTX_LINE.match(l)
+        if m: out[int(m.group(1))] = m.group(2)
+    return out
+
+
+def _norm(s):
+    return re.sub(r"\s+", " ", s or "").strip().strip("`\"'…。,，;；").lower()
+
+
+def check_quotes(site, rec, errors, stats):
+    """A fragment cited for a line inside the context window is compared with that line.
+
+    The window travels with the batch, so this runs with no corpus at hand: a paraphrase
+    of a line the annotator was already shown is caught in the same pass that writes it.
+    Lines outside the window are left to recheck_annotations.py, which has `src/`.
+    """
+    ctx = context_text(site)
+    if not ctx: return
+    lo, hi = min(ctx), max(ctx)
+    for field in ("fate_evidence", "notes", "is_api_use_reason"):
+        for m in RE_CITE_Q.finditer(rec.get(field) or ""):
+            n, frag = int(m.group(1)), m.group(2)
+            if not (lo <= n <= hi): continue
+            stats[("quote", "checked")] += 1
+            want, got = _norm(frag), _norm(ctx.get(n, ""))
+            if not want or len(want) < 6: continue
+            if want in got or got in want or (len(got) >= 12 and want.startswith(got[:12])):
+                stats[("quote", "ok")] += 1
+            else:
+                stats[("quote", "mismatch")] += 1
+                errors.append(f"{rec['site_id']} {field} 引的 L{n} 与批次里的原文对不上："
+                              f"引 {frag.strip()[:60]!r}，该行是 {ctx.get(n, '').strip()[:60]!r}")
+
+
+def flow_duties(site, rec, unit_location):
+    """Which §5 paths this site owes a record for, from batch facts alone (§5 的三个种子).
+
+    TRIGGER   -- every YES site of a deps / pods unit (not only the escaping ones)
+    CHANNEL   -- a write-shaped UserDefaults site whose key resolved to a value
+    RETURN_VALUE -- a non-null escape
+    """
+    if rec.get("is_api_use") != "YES": return set()
+    duties = set()
+    if (unit_location or "").split("/")[0] in ("deps", "pods"): duties.add("TRIGGER")
+    op = rec.get("operation")
+    wr = (site.get("wrapper_ref") or [{}])[0]
+    keyed = bool((site.get("key") or {}).get("value")) or bool(wr.get("keys"))
+    if keyed and (op in WRITE_OPS or (op == "WRAPPED" and wr.get("access") == "SET")): duties.add("CHANNEL")
+    if rec.get("escape"): duties.add("RETURN_VALUE")
+    return duties
 
 
 def read_batch(path):
@@ -113,7 +204,7 @@ def find_batch(batches_dir, rows):
     return best[1] if best else None
 
 
-def validate(batch_path, out_path, ws_dir=None):
+def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence=True):
     rows, bad = read_output(out_path)
     if batch_path is not None:
         header, sites = read_batch(batch_path)
@@ -160,14 +251,23 @@ def validate(batch_path, out_path, ws_dir=None):
             else:
                 if "::" not in esc["target"]: warnings.append(f"{tag} escape.target 不是 <单元>::<类型>.<成员> 的写法: {esc['target']!r}")
                 if not isinstance(esc.get("symbols"), list) or not esc.get("symbols"): warnings.append(f"{tag} escape.symbols 缺失或为空")
-        # flows (§5): every escape carries at least one flow record (a searched-but-not-found one counts)
+        # flows (§5): the batch decides which paths this site owes; a fruitless search is still a record
         flows = r["flows"]
         if not isinstance(flows, list):
             errors.append(f"{tag} flows 必须是列表")
         else:
-            if esc is not None and r["is_api_use"] != "NO" and not flows and esc.get("kind") in ("PASSED_OUT", "RETURNED", "STORED", "PERSISTED_LOCAL"):
-                warnings.append(f"{tag} 有 escape 但 flows 为空（出了单元的要追，没找到接收方也要记 NO_CONSUMER_FOUND；留在单元内的写 notes IN_UNIT）")
             if r["is_api_use"] == "NO" and flows: errors.append(f"{tag} is_api_use=NO 但 flows 非空")
+            if flow_rules:
+                duties = flow_duties(s, r, header.get("unit_location"))
+                got = {fl.get("path_type") for fl in flows if isinstance(fl, dict)}
+                for d in sorted(duties - got):
+                    stats[("flow_missing", d)] += 1
+                    errors.append(f"{tag} 欠一条 {d} 流记录（§5）：{FLOW_DUTY_WHY[d]}；查过没找到也要记 sink_unit:null + stuck_at.why=NO_CONSUMER_FOUND")
+                if not duties and not flows and r["is_api_use"] == "YES":
+                    if not RE_CLOSURE.search(r["notes"] or "") and not (r["operation"] in NO_VALUE_OPS):
+                        stats[("flow_missing", "CLOSURE")] += 1
+                        errors.append(f"{tag} 没有流记录也没写值为什么停在这里：notes 要以 {'/'.join(CLOSURE_CODES)} 之一开头（§5）")
+                stats[("flow_duty", "owed")] += len(duties); stats[("flow_duty", "met")] += len(duties & got)
             for i, fl in enumerate(flows):
                 ft = f"{tag} flows[{i}]"
                 if not isinstance(fl, dict): errors.append(f"{ft} 不是对象"); continue
@@ -189,6 +289,7 @@ def validate(batch_path, out_path, ws_dir=None):
                     if fl["verdict"] != "UNKNOWN" or not (fl.get("stuck_at") or {}).get("why"): errors.append(f"{ft} 没找到接收方时 verdict 应为 UNKNOWN 且 stuck_at.why 写明查了什么")
                 if fl["verdict"] == "UNKNOWN" and found and not (fl.get("stuck_at") or {}).get("why"): warnings.append(f"{ft} UNKNOWN 却没有 stuck_at.why")
                 stats[("flow", fl["path_type"])] += 1; stats[("flow_verdict", fl["verdict"])] += 1
+        if quoted_evidence: check_quotes(s, r, errors, stats)
         nc = r["needs_context"]
         if nc is not None:
             if not isinstance(nc, dict) or not nc.get("what") or not nc.get("why"):
@@ -240,8 +341,13 @@ def validate(batch_path, out_path, ws_dir=None):
                     pred = next((c.get("predicate", "") for code in ([ar] if ar not in ("UNSURE",) else declared) for c in reasons.get(code, {}).get("constraints", []) if c.get("id") == k.split("/")[-1]), "")
                     if not pred.startswith("DefaultsDomainIs"):
                         errors.append(f"{tag} verdict {k} 按域分开，但它不是 DefaultsDomainIs 类约束（{pred}）")
-                if any(x in ("SUPPORTED", "CONFLICT") for x in vals) and not (RE_EVIDENCE.search(r["fate_evidence"]) or RE_UNIT_EVIDENCE.search(r["notes"])):
-                    errors.append(f"{tag} verdict {k}={v} 没有 L<n> 证据行（单元级约束可引用字段）")
+                if any(x in ("SUPPORTED", "CONFLICT") for x in vals):
+                    blob = f"{r['fate_evidence'] or ''}\n{r['notes'] or ''}"
+                    if not (RE_EVIDENCE.search(r["fate_evidence"] or "") or RE_UNIT_EVIDENCE.search(r["notes"] or "")):
+                        errors.append(f"{tag} verdict {k}={v} 没有 L<n> 证据行（单元级约束可引用字段）")
+                    elif quoted_evidence and not (RE_QUOTED.search(blob) or RE_UNIT_FACT.search(r["notes"] or "")):
+                        errors.append(f"{tag} verdict {k}={v} 的证据只有行号没有代码片段，无法对着源码核："
+                                      f"写成 `L<n>: <该行的原文片段>`（§1 第 3 条）")
         # consistency
         if r["is_api_use"] == "NO":
             if not r["is_api_use_reason"].startswith(NO_CODES): errors.append(f"{tag} is_api_use=NO 的 is_api_use_reason 必须以代码开头（§4.1）: {r['is_api_use_reason'][:40]!r}")
@@ -271,8 +377,18 @@ def validate(batch_path, out_path, ws_dir=None):
         # prefill disagreement (counted, not judged)
         if s.get("operation_prefill") and r["operation"] not in ("NA",) and s["operation_prefill"] not in ("NA", "WRAPPED?") and r["operation"] != s["operation_prefill"]:
             disagree["operation"] += 1
-        if s.get("guard_live_on_ios") is False and r["is_api_use"] != "NO": disagree["guard_dead_but_YES"] += 1
-        if s.get("guard_live_on_ios") is True and r["is_api_use"] == "NO" and "GUARD" in r["is_api_use_reason"]: disagree["guard_live_but_guard_NO"] += 1
+        # …except guard liveness, which is not a hint: it is computed from the target's Release build settings
+        # (§4.1).  Contradicting it silently puts code that is not in the shipped binary into the ground truth,
+        # so the record has to say `GUARD_OVERRIDE: <为什么这个标志在 Release 里其实是开的>`.
+        if s.get("guard_live_on_ios") is False and r["is_api_use"] != "NO":
+            disagree["guard_dead_but_YES"] += 1
+            if "GUARD_OVERRIDE:" not in (r["notes"] or ""):
+                errors.append(f"{tag} 编译守卫 {s.get('compile_guard')} 在 iOS Release 下不成立（guard_live_on_ios=false），"
+                              f"却判 is_api_use={r['is_api_use']}：要么按 COMPILE_GUARD_EXCLUDES_IOS_RELEASE 判 NO，要么在 notes 写 GUARD_OVERRIDE: 理由")
+        if s.get("guard_live_on_ios") is True and r["is_api_use"] == "NO" and "GUARD" in r["is_api_use_reason"]:
+            disagree["guard_live_but_guard_NO"] += 1
+            if "GUARD_OVERRIDE:" not in (r["notes"] or ""):
+                errors.append(f"{tag} 编译守卫在 iOS Release 下成立（guard_live_on_ios=true），却以守卫为由判 NO：要么改判，要么在 notes 写 GUARD_OVERRIDE: 理由")
         if r["unit_role"] != (s.get("unit_role_prefill") or "").rstrip("?"): disagree["unit_role"] += 1
         if s.get("declaring_unit_prefill") and r["declaring_unit"] != s["declaring_unit_prefill"]: disagree["declaring_unit"] += 1
         stats[("is_api_use", r["is_api_use"])] += 1
@@ -281,6 +397,19 @@ def validate(batch_path, out_path, ws_dir=None):
         for k, v in cv.items():
             for x in (v.values() if isinstance(v, dict) else [v]): stats[("verdict", x)] += 1
         if r["needs_context"]: stats[("needs_context", "yes")] += 1
+    # batch-level: evidence that collapses to a handful of shapes once numbers and names are
+    # blanked was written by a template, not read off the code.  A warning with the number, not
+    # a rejection -- a batch of forty near-identical @AppStorage lines legitimately looks alike.
+    ev = [r["fate_evidence"] for _, r in rows if isinstance(r.get("fate_evidence"), str) and r.get("is_api_use") == "YES"]
+    if len(ev) >= 10:
+        shapes = {re.sub(r"\d+", "#", re.sub(r"[\"'`][^\"'`]*[\"'`]", "S", e)) for e in ev}
+        stats[("evidence_shapes", "distinct")] = len(shapes); stats[("evidence_shapes", "total")] = len(ev)
+        if len(shapes) / len(ev) < 0.34:
+            warnings.append(f"本批 {len(ev)} 条证据只有 {len(shapes)} 种句式（抹掉数字与字符串后），像是套模板生成的；"
+                            f"证据要从代码里抄，不同站点抄到的行不一样，句式自然就不一样")
+    q = stats[("quote", "checked")]
+    if quoted_evidence and len(ev) >= 10 and q == 0:
+        warnings.append(f"本批没有一处证据引到上下文窗口内的行：窗口里就是文件原文，逐字抄一段过来比复述省事")
     return header, errors, warnings, stats, disagree, rows
 
 
@@ -321,7 +450,9 @@ def main(argv=None):
     ap.add_argument("--worksheets", default=None, help="没有批次包时，用工作表目录做字段级校验")
     ap.add_argument("outputs", nargs="*")
     ap.add_argument("--compare", nargs=2, metavar=("A", "B"))
-    ap.add_argument("--json", default=None, help="把校验结果写成 JSON")
+    ap.add_argument("--json", dest="out", default=None, help="把校验结果写成 JSON")
+    ap.add_argument("--flow-rules", choices=("on", "off"), default="on", help="§5 流覆盖是否算阻塞错误（默认 on；off 用于复现 1.9 的口径）")
+    ap.add_argument("--quoted-evidence", choices=("on", "off"), default="on", help="SUPPORTED/CONFLICT 的证据是否必须带代码片段（默认 on）")
     a = ap.parse_args(argv)
     if a.compare:
         rows, _ = read_output(a.compare[0]); bp = find_batch(a.batches, rows) if a.batches else None
@@ -334,7 +465,7 @@ def main(argv=None):
         bp = find_batch(a.batches, rows) if a.batches else None
         if a.batches and not bp:
             print(f"{out}: 找不到对应批次（site_id 一个都对不上）"); rc = 1; continue
-        header, errors, warnings, stats, disagree, _ = validate(bp, out, a.worksheets)
+        header, errors, warnings, stats, disagree, _ = validate(bp, out, a.worksheets, a.flow_rules == "on", a.quoted_evidence == "on")
         verdict = "通过" if not errors else "打回"
         print(f"== {out} → {bp.name if bp else '(worksheets)'}: {verdict}，{len(errors)} 错误，{len(warnings)} 警告")
         for e in errors: print(f"   ERR  {e}")
@@ -343,7 +474,7 @@ def main(argv=None):
         if disagree: print("   与预填不一致:", dict(disagree))
         report[out] = {"batch": bp.name if bp else None, "errors": errors, "warnings": warnings, "stats": {f"{k[0]}={k[1]}": v for k, v in stats.items()}, "disagree": dict(disagree)}
         if errors: rc = 1
-    if a.json: pathlib.Path(a.json).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+    if a.out: pathlib.Path(a.out).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     return rc
 
 

@@ -107,6 +107,67 @@ def copy_files(src, loc, files, out_src):
     return rec
 
 
+#: a member the host can reach: Swift visibility, or an ObjC method (always reachable from the header)
+RE_EXPORTED = re.compile(r"\b(public|open)\b|@objc|^\s*[-+]\s*\(")
+WRITE_HINTS = ("WRITE", "REMOVE")
+READ_HINTS = ("READ", "OBSERVE")
+#: at most this many other units listed per key before the rest are summarised as a count
+MAX_CANDIDATES = 12
+
+
+def site_keys(s):
+    """Every UserDefaults key this site resolves to -- the direct `forKey:` argument and,
+    for a call through a local extension member, the keys that member's body touches."""
+    out = []
+    k = (s.get("key") or {}).get("value")
+    if k: out.append(k)
+    for w in s.get("wrapper_ref") or []:
+        for kk in w.get("keys") or []:
+            if kk.get("value"): out.append(kk["value"])
+    return out
+
+
+def key_index(by_unit):
+    """key -> unit_location -> [site sketches].  §5 CHANNEL asks the annotator to find the
+    other units that touch the same key; that search is closed over the corpus, so it is
+    computed here once instead of grepped 4,500 times."""
+    idx = collections.defaultdict(lambda: collections.defaultdict(list))
+    for loc, sites in by_unit.items():
+        for s in sites:
+            for k in site_keys(s):
+                idx[k][loc].append({"site_id": s["site_id"], "file": s["file"], "line": s["line"],
+                                    "op": s.get("operation_prefill"), "domain": s.get("domain_hint")})
+    return idx
+
+
+def flow_todo(s, loc, idx, hosts):
+    """What §5 will ask of this site, with the search already done where it can be done by machine.
+
+    `owes_hint` is the scanner's guess from the prefills; the real duty is recomputed by
+    annotate_validate from what the annotator ends up writing (an operation it disagrees with
+    changes what it owes).  The candidates are facts either way: these units touch this key.
+    """
+    tree = loc.split("/")[0]
+    op = s.get("operation_prefill") or ""
+    owes = []
+    if tree in ("deps", "pods"): owes.append("TRIGGER")
+    keys = site_keys(s)
+    wr = (s.get("wrapper_ref") or [{}])[0]
+    if keys and (op.rstrip("?") in WRITE_HINTS or (op.rstrip("?") == "WRAPPED" and wr.get("access") == "SET")):
+        owes.append("CHANNEL")
+    cands = []; more = 0
+    for k in keys:
+        others = {u: v for u, v in idx.get(k, {}).items() if u != loc}
+        for i, (u, v) in enumerate(sorted(others.items())):
+            if i >= MAX_CANDIDATES: more += 1; continue
+            cands.append({"key": k, "unit": u, "sites": v[:4], "n_sites": len(v)})
+    td = {"owes_hint": owes, "enclosing_exported": bool(RE_EXPORTED.search(s.get("enclosing_function") or "")),
+          "channel_candidates": cands, "n_more_units": more}
+    if "TRIGGER" in owes:
+        td["hosts_to_search"] = [h.get("repo") for h in (hosts or []) if h.get("repo")]
+    return td
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--worksheets", required=True, help="scan_source_rra 的 --out-dir")
@@ -162,6 +223,9 @@ def main(argv=None):
                                   "same_declared_reasons": s["declared_reasons"] == rep["declared_reasons"],
                                   "same_guard": s["guard_live_on_ios"] == rep["guard_live_on_ios"]})
 
+    # --- the §5 CHANNEL search, done once over the whole corpus
+    kidx = key_index(by_unit)
+
     # --- batches
     manifest = {"provenance": units_json.get("provenance"), "batch_size": a.size, "batches": [], "duplicates": pairs,
                 "excluded_units": sorted(skip), "only_new_vs": a.only_new_vs, "n_old_site_ids": len(old_ids), "supplement": {},
@@ -209,6 +273,7 @@ def main(argv=None):
                 fh.write(json.dumps(h, ensure_ascii=False) + "\n")
                 for s in chunk:
                     r = {k: v for k, v in s.items() if k not in SITE_DROP}
+                    r["flow_todo"] = flow_todo(s, loc, kidx, s.get("hosts"))
                     fh.write(json.dumps(r, ensure_ascii=False) + "\n")
             manifest["batches"].append({"file": name, "unit_location": loc, "n": len(chunk), "site_ids": h["site_ids"],
                                         "files": sorted({s["file"] for s in chunk})})

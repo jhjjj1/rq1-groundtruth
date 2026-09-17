@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import collections
 import gzip
+import hashlib
 import json
 import os
 import pathlib
@@ -30,6 +31,7 @@ import plistlib
 import shutil
 import subprocess
 import sys
+import zipfile
 
 import macho_sections
 import parse_link_map
@@ -205,8 +207,215 @@ def describe_binary(path):
             "otool_rc": rc, "_raw": text}
 
 
+#: Mach-O magics, both endiannesses, thin and fat.  Used to tell an executable
+#: from a resource without trusting the file name (`.dylib` is a convention,
+#: `Frameworks/Foo.framework/Foo` has no suffix at all).
+MACHO_MAGICS = {
+    b"\xfe\xed\xfa\xce", b"\xce\xfa\xed\xfe",      # 32-bit
+    b"\xfe\xed\xfa\xcf", b"\xcf\xfa\xed\xfe",      # 64-bit
+    b"\xca\xfe\xba\xbe", b"\xbe\xba\xfe\xca",      # fat
+}
+#: What the analyser opens inside an IPA, read off its own source rather than
+#: guessed: `Info.plist` and `Entitlements.plist` (inventory/ipa_zip.py),
+#: `PrivacyInfo.xcprivacy` (inventory/manifests.py), the Mach-O of every
+#: `.app` / `.appex` / `.framework` / `.bundle`, and the bundle tree itself.
+#: Everything else in a built `.app` -- Assets.car, images, audio, fonts, nibs,
+#: storyboards, localisation tables -- it never reads.  Dropping exactly those
+#: keeps the package honest (every byte the tool consumes is the byte the build
+#: produced) while taking a 500 MB bundle down to a few MB.
+BUNDLE_KEEP_SUFFIXES = {".plist", ".xcprivacy", ".entitlements", ".mobileprovision", ".dylib"}
+BUNDLE_KEEP_NAMES = {"PrivacyInfo.xcprivacy", "Info.plist", "Entitlements.plist",
+                     "embedded.mobileprovision", "CodeResources"}
+#: Directories whose *structure* the analyser walks; kept even when empty of code.
+BUNDLE_DIR_SUFFIXES = (".app", ".appex", ".framework", ".bundle", ".systemextension")
+#: A zip entry date fixed so two collections of the same build produce the same bytes.
+ZIP_EPOCH = (1980, 1, 1, 0, 0, 0)
+
+
+def is_macho(path, _cache={}):
+    """True if the first four bytes are a Mach-O magic.  Unreadable file → False, recorded upstream."""
+    try:
+        with open(path, "rb") as fh:
+            return fh.read(4) in MACHO_MAGICS
+    except OSError:
+        return False
+
+
+def bundle_keep(rel, path):
+    """(keep?, why).  Name and suffix decide first; anything else is opened to check for Mach-O."""
+    name = rel.name
+    if name in BUNDLE_KEEP_NAMES: return True, "NAME"
+    if rel.suffix in BUNDLE_KEEP_SUFFIXES: return True, "SUFFIX"
+    if is_macho(path): return True, "MACHO"
+    return False, "RESOURCE"
+
+
+def pack_bundle(app, out_dir, exe_name, max_bytes, strip_styles=("none",)):
+    """Zip the built `.app` into `Payload/<App>.app/…` -- an IPA in shape, so the analyser
+    can open it with `zipfile` exactly as it opens a decrypted App Store package.
+
+    Why this exists at all: the RRA question has two halves, "the code calls it" and "the app
+    declared a reason for it".  The second half lives in `PrivacyInfo.xcprivacy` files inside
+    the bundle, and *which* manifest covers *which* binary is decided by where the build put
+    them.  Run #1 uploaded only the main executable, so that half of the question had no data
+    and the nesting of extensions and embedded frameworks was gone with it.
+
+    Resources the analyser never opens are left out (see BUNDLE_KEEP_*), and what was left out
+    is counted by extension so the omission is on the record rather than invisible.  Nothing is
+    added, renamed or moved: every kept byte is the byte the build wrote.
+
+    One package per strip style, mirroring `binary.<style>.gz`.  Symbol loss is a dimension of
+    the experiment, not an afterthought: a binary analyser is easy on a symbol-rich build and
+    hard on a stripped one, so evaluating only the unstripped package would measure the easy
+    half.  `strip` runs over **every** Mach-O in the package (the app executable, each .appex,
+    each embedded framework) with the same flags the binary path uses, so the two agree.
+    """
+    rec = {"bundle_zip": None, "bundle_zip_bytes": None, "bundle_full_bytes": 0,
+           "bundle_kept_files": 0, "bundle_kept_bytes": 0,
+           "bundle_dropped_files": 0, "bundle_dropped_bytes": 0,
+           "bundle_dropped_by_ext": {}, "bundle_macho_files": 0,
+           "bundle_privacy_manifests": [], "bundle_nested_bundles": [],
+           "bundle_symlinks": 0, "bundle_unreadable": [], "bundle_note": None,
+           "bundle_verify": None, "bundle_variants": []}
+    app = pathlib.Path(app)
+    root = f"Payload/{app.name}"
+    dropped = collections.Counter(); dropped_bytes = collections.Counter()
+    keep_list = []
+
+    for dirpath, dirnames, filenames in os.walk(app, followlinks=False):
+        dirnames.sort(); filenames.sort()
+        d = pathlib.Path(dirpath)
+        if d != app and d.suffix in BUNDLE_DIR_SUFFIXES:
+            rec["bundle_nested_bundles"].append(str(d.relative_to(app)))
+        for fn in filenames:
+            p = d / fn
+            rel = p.relative_to(app)
+            if p.is_symlink():
+                rec["bundle_symlinks"] += 1
+                try:
+                    target = p.resolve()
+                    if app.resolve() not in target.parents: continue   # points out of the bundle: skip, counted
+                    p = target
+                except OSError as exc:
+                    rec["bundle_unreadable"].append(f"{rel}: {exc}"); continue
+            try:
+                size = p.stat().st_size
+            except OSError as exc:
+                rec["bundle_unreadable"].append(f"{rel}: {exc}"); continue
+            rec["bundle_full_bytes"] += size
+            keep, why = bundle_keep(rel, p)
+            if keep:
+                keep_list.append((rel, p, size, why))
+                rec["bundle_kept_files"] += 1; rec["bundle_kept_bytes"] += size
+                if why == "MACHO" or rel.suffix == ".dylib": rec["bundle_macho_files"] += 1
+                if rel.name == "PrivacyInfo.xcprivacy": rec["bundle_privacy_manifests"].append(str(rel))
+            else:
+                ext = rel.suffix.lower() or "(无后缀)"
+                dropped[ext] += 1; dropped_bytes[ext] += size
+                rec["bundle_dropped_files"] += 1; rec["bundle_dropped_bytes"] += size
+
+    rec["bundle_dropped_by_ext"] = {k: {"n": v, "bytes": dropped_bytes[k]}
+                                    for k, v in dropped.most_common(20)}
+    if not keep_list:
+        rec["bundle_note"] = "NOTHING_TO_PACK"
+        return rec
+
+    tmp = pathlib.Path(out_dir) / "_bundle_strip"
+    for style in strip_styles:
+        flags = STRIP_FLAGS.get(style)
+        zpath = pathlib.Path(out_dir) / f"bundle.{style}.ipa"
+        var = {"strip_style": style, "file": None, "bytes": None,
+               "n_stripped": 0, "strip_failed": [], "verify": None, "note": None}
+        try:
+            with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as zf:
+                for rel, p, _size, why in keep_list:
+                    data = None
+                    if flags is not None and (why == "MACHO" or rel.suffix == ".dylib"):
+                        # strip 是原地操作，所以先复制一份再动它 —— 与二进制那条路同样的做法
+                        tmp.parent.mkdir(parents=True, exist_ok=True)
+                        try:
+                            shutil.copy2(p, tmp)
+                            rc, out = run(["strip", *flags, str(tmp)], timeout=900)
+                            if rc != 0:
+                                var["strip_failed"].append(f"{rel}: rc={rc} {out.strip()[:120]}")
+                            else:
+                                var["n_stripped"] += 1
+                            data = tmp.read_bytes()
+                        except OSError as exc:
+                            var["strip_failed"].append(f"{rel}: {exc}")
+                        finally:
+                            tmp.unlink(missing_ok=True)
+                    if data is None:
+                        with open(p, "rb") as fh:
+                            data = fh.read()
+                    info = zipfile.ZipInfo(f"{root}/{rel.as_posix()}", date_time=ZIP_EPOCH)
+                    info.compress_type = zipfile.ZIP_DEFLATED
+                    info.external_attr = 0o644 << 16
+                    zf.writestr(info, data)
+        except OSError as exc:
+            var["note"] = f"BUNDLE_ZIP_FAILED: {exc}"
+            zpath.unlink(missing_ok=True)
+            rec["bundle_variants"].append(var)
+            continue
+        var["bytes"] = zpath.stat().st_size
+        if max_bytes and var["bytes"] > max_bytes:
+            # Recorded and still uploaded: a bundle over budget is a fact about that app,
+            # and silently dropping it would look exactly like an app with no manifests.
+            var["note"] = f"BUNDLE_OVER_BUDGET: {var['bytes']:,} > {max_bytes:,}"
+        var["file"] = zpath.name
+        var["verify"] = verify_bundle(zpath, app.name, exe_name)
+        rec["bundle_variants"].append(var)
+
+    # 代表变体：第一个成功的那个，供汇总表与聚合脚本引用；逐档位的数在 bundle_variants 里
+    first = next((v for v in rec["bundle_variants"] if v["file"]), None)
+    if first is None:
+        rec["bundle_note"] = rec["bundle_variants"][0]["note"] if rec["bundle_variants"] else "NO_STRIP_STYLES"
+        return rec
+    rec["bundle_zip"] = first["file"]; rec["bundle_zip_bytes"] = first["bytes"]
+    rec["bundle_verify"] = first["verify"]; rec["bundle_note"] = first["note"]
+    return rec
+
+
+def verify_bundle(zpath, app_name, exe_name):
+    """Reopen the zip the way the analyser will, and say what is in it.
+
+    Checked here rather than downstream because a bundle that cannot be opened is a fact
+    about *this job*, and the runner is the only place that still has the build to compare with.
+    """
+    v = {"opens": False, "payload_roots": [], "executable_member": None,
+         "executable_bytes": None, "executable_sha256": None,
+         "n_members": 0, "n_privacy_manifests": 0, "verdict": None}
+    try:
+        with zipfile.ZipFile(zpath) as zf:
+            names = zf.namelist()
+            v["opens"] = True; v["n_members"] = len(names)
+            v["payload_roots"] = sorted({n.split("/")[1] for n in names
+                                         if n.startswith("Payload/") and "/" in n[8:]})
+            v["n_privacy_manifests"] = sum(1 for n in names if n.endswith("/PrivacyInfo.xcprivacy"))
+            member = f"Payload/{app_name}/{exe_name}"
+            if member in names:
+                data = zf.read(member)
+                v["executable_member"] = member
+                v["executable_bytes"] = len(data)
+                v["executable_sha256"] = hashlib.sha256(data).hexdigest()
+    except (OSError, zipfile.BadZipFile) as exc:
+        v["verdict"] = f"UNREADABLE: {exc}"
+        return v
+    if len(v["payload_roots"]) != 1:
+        v["verdict"] = f"PAYLOAD_ROOTS={len(v['payload_roots'])}"
+    elif not v["executable_member"]:
+        v["verdict"] = "EXECUTABLE_MISSING_IN_ZIP"
+    elif v["n_privacy_manifests"] == 0:
+        # Not an error: an app may genuinely ship none.  Named so the two cases
+        # ("declared nothing" vs "we failed to pack it") stay apart downstream.
+        v["verdict"] = "OK_NO_PRIVACY_MANIFEST"
+    else:
+        v["verdict"] = "OK"
+    return v
+
+
 def collect_variants(derived_data, out_dir, map_sections=None,
-                     strip_styles=("all",)):
+                     strip_styles=("all",), bundle_max_bytes=0):
     """Find the built .app and emit one binary per strip style, from ONE link.
 
     Why variants instead of one binary per job
@@ -227,7 +436,8 @@ def collect_variants(derived_data, out_dir, map_sections=None,
     per strip style.  A style that could not be produced is recorded with its
     reason, never dropped.
     """
-    shared = {"app_bundle": None, "executable_name": None, "collect_note": None}
+    shared = {"app_bundle": None, "executable_name": None, "collect_note": None,
+              "bundle_zip": None, "bundle_verify": None, "bundle_variants": []}
     out_dir = pathlib.Path(out_dir)
 
     products = pathlib.Path(derived_data) / "Build" / "Products"
@@ -269,6 +479,8 @@ def collect_variants(derived_data, out_dir, map_sections=None,
     before = describe_binary(pristine)
 
     variants = []
+    #: strip 档位 -> 该档位产出的主二进制 sha256，用来和同档位包里的那一份对账
+    binary_sha = {}
     for style in strip_styles:
         rec = {"strip_style": style, "binary_file": None,
                "binary_bytes": None, "binary_gz_bytes": None,
@@ -346,6 +558,11 @@ def collect_variants(derived_data, out_dir, map_sections=None,
             (out_dir / name).write_text(text, encoding="utf-8")
 
         try:
+            with open(work, "rb") as fh:
+                binary_sha[style] = hashlib.sha256(fh.read()).hexdigest()
+        except OSError:
+            pass
+        try:
             rec["binary_gz_bytes"] = gzip_copy(work, out_dir / f"binary.{style}.gz")
             rec["binary_file"] = f"binary.{style}.gz"
         except OSError as exc:
@@ -355,6 +572,23 @@ def collect_variants(derived_data, out_dir, map_sections=None,
         variants.append(rec)
 
     pristine.unlink(missing_ok=True)
+
+    # 包与二进制是同一个问题的两半，必须出自同一次构建：每个 strip 档位打一份包，
+    # 再拿包里那份主可执行文件的 sha256 和同档位的 binary.<style>.gz 对账。两条路
+    # 各自独立地跑了 strip，对得上才说明它们描述的是同一个东西。
+    shared.update(pack_bundle(app, out_dir, exe_name, bundle_max_bytes, strip_styles))
+    for var in shared.get("bundle_variants") or []:
+        v = var.get("verify") or {}
+        want = binary_sha.get(var["strip_style"])
+        if v.get("executable_sha256") and want:
+            v["matches_binary"] = (v["executable_sha256"] == want)
+            if not v["matches_binary"]:
+                v["verdict"] = "EXECUTABLE_DIFFERS_FROM_COLLECTED_BINARY"
+        elif v.get("executable_sha256"):
+            v["matches_binary"] = None                 # 该档位没产出二进制，无从对账
+    first = next((x for x in (shared.get("bundle_variants") or []) if x["file"]), None)
+    if first is not None:
+        shared["bundle_verify"] = first["verify"]
     return variants, shared
 
 
@@ -371,6 +605,9 @@ def main(argv=None):
     ap.add_argument("--strip-variants", default="all",
                     help="逗号分隔的 strip 档位；一次链接产出多份二进制，"
                          "共用同一份 map。例：none,all")
+    ap.add_argument("--max-bundle-mb", type=float, default=200.0,
+                    help="app bundle 压缩包的预算（MB）；超了照传，只在 manifest 里记 "
+                         "BUNDLE_OVER_BUDGET —— 悄悄丢掉会和「这个 App 没有清单」长得一样")
     # Everything below is recorded verbatim.  These are the job's own facts;
     # this script judges none of them.
     for flag in ("repo", "sha", "config-id", "build-settings",
@@ -410,7 +647,8 @@ def main(argv=None):
         print(f"未知 strip 档位 {unknown}；可选 {sorted(STRIP_FLAGS)}", file=sys.stderr)
         return 2
     variants, shared = collect_variants(dd, out_dir, map_sections=map_sections,
-                                        strip_styles=styles)
+                                        strip_styles=styles,
+                                        bundle_max_bytes=int(args.max_bundle_mb * 1024 * 1024))
 
     requested = [m for m in maps if m["is_requested_basename"]]
     app_maps = [m for m in maps if m["output_kind"] == KIND_APP]
@@ -453,6 +691,11 @@ def main(argv=None):
         "usable_for_groundtruth": bool(app_maps) and bool([
             v for v in variants
             if v["map_matches_binary"] is True and v["binary_bytes"]]),
+        # Kept separate from `usable_for_groundtruth` on purpose: that field means
+        # "map and binary are a matched pair" and run #1's numbers are reported against
+        # it.  Widening it now would silently change what the old numbers meant.  This
+        # one answers the new question — can the analyser be pointed at this job at all.
+        "bundle_usable": bool((shared.get("bundle_verify") or {}).get("verdict", "").startswith("OK")),
     }
 
     with open(out_dir / "maps_index.json", "w", encoding="utf-8") as fh:
@@ -481,6 +724,30 @@ def main(argv=None):
         if d.get("verdict") not in (None, "IDENTICAL"):
             print(f"        map/binary: {d.get('verdict')}")
     print(f"    可用变体: {manifest['usable_variants']}")
+    print()
+    print("=== app bundle 包 ===")
+    if not shared.get("bundle_zip"):
+        print(f"    没打出来：{shared.get('bundle_note') or shared.get('collect_note') or '（没有 .app）'}")
+    else:
+        print(f"    内容（各档位相同）：bundle 原始 {shared['bundle_full_bytes']:,} 字节，"
+              f"留 {shared['bundle_kept_files']} 个文件 / {shared['bundle_kept_bytes']:,} 字节，"
+              f"其中 Mach-O {shared['bundle_macho_files']} 个、PrivacyInfo.xcprivacy "
+              f"{len(shared['bundle_privacy_manifests'])} 份；内嵌 bundle {len(shared['bundle_nested_bundles'])} 个")
+        print(f"    丢 {shared['bundle_dropped_files']} 个资源文件 / {shared['bundle_dropped_bytes']:,} 字节 —— "
+              f"分析器不读这些，按后缀分布：")
+        for ext, d in list((shared.get("bundle_dropped_by_ext") or {}).items())[:8]:
+            print(f"        {ext:<16} {d['n']:>6} 个  {d['bytes']:>14,} 字节")
+        print(f"    {'档位':<10}{'文件':<22}{'字节':>12}  {'strip 了几个':>12}  复检 / 与同档位二进制一致")
+        for var in shared.get("bundle_variants") or []:
+            vv = var.get("verify") or {}
+            print(f"    {var['strip_style']:<10}{str(var['file']):<22}{(var['bytes'] or 0):>12,}"
+                  f"  {var['n_stripped']:>12}  {vv.get('verdict')} / {vv.get('matches_binary')}")
+            for line in (var.get("strip_failed") or [])[:3]:
+                print(f"        strip 失败：{line}")
+            if var.get("note"):
+                print(f"        note: {var['note']}")
+        for line in (shared.get("bundle_unreadable") or [])[:5]:
+            print(f"    读不了：{line}")
     print()
     print(f"=== map 候选 {len(maps)} 个，按输出类型：{dict(kinds)} ===")
     print(f"    上传 {manifest['maps_uploaded']} 个，"

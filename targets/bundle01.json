@@ -1,0 +1,495 @@
+{
+  "targets": [
+    {
+      "repo": "DaidoujiChen/Dai-Hentai",
+      "sha": "36128517801825b033a9c1963f76dd42d81f9ca4",
+      "linkage": "STATIC_LIKELY",
+      "stars": 1267,
+      "locks": [
+        "Podfile.lock"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "mozilla-mobile/firefox-ios",
+      "sha": "861fd78df99a65f1919573ae5eba49618d2035f9",
+      "linkage": "SPM_ONLY",
+      "stars": 13040,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "glushchenko/fsnotes",
+      "sha": "4e44ff472b231c595d87199bcdba0e84e0be4d5d",
+      "linkage": "SPM_ONLY",
+      "stars": 7487,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "sha": "b2db3033fbf67a97b54d25d6dac2df8a029b26b1",
+      "linkage": "SPM_ONLY",
+      "stars": 7061,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "gluonfield/enchanted",
+      "sha": "dc9bff882411a1317ff0cc5869de7e0515897df0",
+      "linkage": "SPM_ONLY",
+      "stars": 5998,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "yattee/yattee",
+      "sha": "2969b086924b1d9f490615fee57ba42761fa8973",
+      "linkage": "SPM_ONLY",
+      "stars": 3685,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "zzanehip/The-OldOS-Project",
+      "sha": "a2e454d0a4155c8969d236340b37b865376a69de",
+      "linkage": "SPM_ONLY",
+      "stars": 3532,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "wikimedia/wikipedia-ios",
+      "sha": "9db6a52a416a3005c53e668cd853bf5438cd9815",
+      "linkage": "SPM_ONLY",
+      "stars": 3449,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "joreilly/PeopleInSpace",
+      "sha": "0d5cd8b09cf9c83dbf6a1e72a546efdd1b77c301",
+      "linkage": "SPM_ONLY",
+      "stars": 3428,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "airbnb/HorizonCalendar",
+      "sha": "257927434aecbc4a70163570b5ef40976f0428a2",
+      "linkage": "SPM_ONLY",
+      "stars": 3158,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "analogcode/Swift-Radio-Pro",
+      "sha": "b2b4a457da2fdbba0ba532a2bb2e92a4bb703855",
+      "linkage": "SPM_ONLY",
+      "stars": 2941,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "0xCUB3/wBlock",
+      "sha": "d38efb8afbe8ff3fd1adc59e1053803643630765",
+      "linkage": "SPM_ONLY",
+      "stars": 2880,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "ml-explore/mlx-swift-examples",
+      "sha": "378f2449c257788c5067b9f8b086731d76b39b33",
+      "linkage": "SPM_ONLY",
+      "stars": 2664,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "mikelikesdesign/SwiftUI-experiments",
+      "sha": "b75268ca6c501ad15f179bfc5cfb623827afc263",
+      "linkage": "SPM_ONLY",
+      "stars": 2063,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "Jaennaet/pISSStream",
+      "sha": "11f73f186d1d611c9c74f4558007dd9a62593a2b",
+      "linkage": "SPM_ONLY",
+      "stars": 1905,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "rafsoh/dimeApp",
+      "sha": "0463cb8caba237de781ae02e70a2ec82ae900c67",
+      "linkage": "SPM_ONLY",
+      "stars": 1886,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "keepassium/KeePassium",
+      "sha": "e651df4f89b0b8550371566ca9aa55a964d2904e",
+      "linkage": "SPM_ONLY",
+      "stars": 1690,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "rajdeep/proton",
+      "sha": "30c0f87c48ccba6f89935d16096b6c01c204a82d",
+      "linkage": "SPM_ONLY",
+      "stars": 1379,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "joreilly/BikeShare",
+      "sha": "f6ba775ed0a0f518150619e610c2548c0e047f63",
+      "linkage": "SPM_ONLY",
+      "stars": 829,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "awaseem/foqos",
+      "sha": "a58e407d08f44f365daf93641aadc43e64cfc63c",
+      "linkage": "SPM_ONLY",
+      "stars": 811,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "jasudev/FabulaItemsProvider",
+      "sha": "af08a0815e21889db8251578ec28c2c27e5b27b1",
+      "linkage": "SPM_ONLY",
+      "stars": 724,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "vincode-io/Zavala",
+      "sha": "1dffb452140879b8b096409849bdaf216520c4f2",
+      "linkage": "SPM_ONLY",
+      "stars": 426,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "cranci1/Sora",
+      "sha": "28f55f3d273b0dd32338e564324054287e500ff9",
+      "linkage": "SPM_ONLY",
+      "stars": 421,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "AnderGoig/github-contributions-ios",
+      "sha": "1eb838a85ac9dac0df29c02c8fd010b5a384fa57",
+      "linkage": "SPM_ONLY",
+      "stars": 388,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "zizicici/Off-Day",
+      "sha": "59850651d495ca70f3bb36d935198f1c74a76c91",
+      "linkage": "SPM_ONLY",
+      "stars": 388,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "youstanzr/YouTag",
+      "sha": "f0077608406dfef8d1861270e9f7c50cd2f0514d",
+      "linkage": "SPM_ONLY",
+      "stars": 343,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "joreilly/StarWars",
+      "sha": "7d2273cace2205ebb6b99beb9e5faf1d199a5f96",
+      "linkage": "SPM_ONLY",
+      "stars": 243,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "richardtop/CalendarApp",
+      "sha": "b4903ce323c07f525bb076e24116c270d8cc8d09",
+      "linkage": "SPM_ONLY",
+      "stars": 232,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "EmergeTools/hackernews",
+      "sha": "6eea866e77e956a32fe8435b7427501284f47517",
+      "linkage": "SPM_ONLY",
+      "stars": 219,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "Finb/Bark",
+      "sha": "8c7973fa7a7791c766f70bfe044d6044e16a3045",
+      "linkage": "BOTH",
+      "stars": 9088,
+      "locks": [
+        "Package.resolved",
+        "Podfile.lock"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "timfraedrich/OutRun",
+      "sha": "f2ecb3862ef63c7913e5f1754a47c961fd89dd16",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 875,
+      "locks": [
+        "Podfile.lock"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "kudoleh/iOS-Modular-Architecture",
+      "sha": "02b207642a714495fe5b647b8b6562b184f5a897",
+      "linkage": "DYNAMIC_LIKELY",
+      "stars": 849,
+      "locks": [
+        "Podfile.lock"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "jpsim/Milestones",
+      "sha": "55f12be2879b398588af3a462146d048f572e5cb",
+      "linkage": "SPM_ONLY",
+      "stars": 204,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "simple-login/Simple-Login-iOS",
+      "sha": "4b50dda9f74f14b6b2dfa5caa6a3733187e61a76",
+      "linkage": "SPM_ONLY",
+      "stars": 179,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "5calls/ios",
+      "sha": "f3e34a71af9ed2c0ac50d86e17114dcbaaeadd63",
+      "linkage": "SPM_ONLY",
+      "stars": 168,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "ldakhoa/GistHub",
+      "sha": "05c63a4b9f98401891d0c09a18d9b1547f94199b",
+      "linkage": "SPM_ONLY",
+      "stars": 154,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "eugenepyvovarov/CodeAgentsMobile",
+      "sha": "e815702e7f313fd313f75aef692a88cc305e2f1e",
+      "linkage": "SPM_ONLY",
+      "stars": 152,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "XunMengWinter/PetNote-oss",
+      "sha": "ed28632f49470b05c40a291edd8323b495946b66",
+      "linkage": "SPM_ONLY",
+      "stars": 120,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "joreilly/WordMasterKMP",
+      "sha": "e7c194a8cd54cd7c6c86f03a6f7c168486720730",
+      "linkage": "SPM_ONLY",
+      "stars": 106,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "jeffreybergier/Hipstapaper",
+      "sha": "2632929a3a65dc9dc8ee4a8b67dfd03cb268c436",
+      "linkage": "SPM_ONLY",
+      "stars": 94,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "freesuraj/TLDR",
+      "sha": "7a68cfa9aec892d467e13612ac0e4e7f5d3b5c3f",
+      "linkage": "SPM_ONLY",
+      "stars": 75,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "b5i/Atwy",
+      "sha": "37b47c3c3e87b90cc338b11249d2e396ae2bcfd5",
+      "linkage": "SPM_ONLY",
+      "stars": 68,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "fulldecent/vowel-practice",
+      "sha": "6e0495ae0b37a1905c9a6c0e7667209732c5b669",
+      "linkage": "SPM_ONLY",
+      "stars": 67,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "JosephDuffy/Overamped",
+      "sha": "2d527154f10b88e12e04202d89d42b8d9cb7a4a5",
+      "linkage": "SPM_ONLY",
+      "stars": 51,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "Visual-Studio-Coder/Recap",
+      "sha": "e3662892950733a0c03faf8fafd48700d06218e2",
+      "linkage": "SPM_ONLY",
+      "stars": 37,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "NiftyTreeStudios/Bean-Juice",
+      "sha": "13d4ebb22279883caeed32f11d2a24582c146939",
+      "linkage": "SPM_ONLY",
+      "stars": 30,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "sigfault-byte/LegitURL",
+      "sha": "a51c19e2e8fa190890dee3439ae3a4efdff39cd0",
+      "linkage": "SPM_ONLY",
+      "stars": 20,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "saxobroko/SaxWeather",
+      "sha": "a746c4f164cbc59c7cfe4951f80b6596f1437611",
+      "linkage": "SPM_ONLY",
+      "stars": 8,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "lokii49/mirror",
+      "sha": "ed897d5b3c0fe21970bb929e8472946b3e7a0c08",
+      "linkage": "SPM_ONLY",
+      "stars": 0,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    }
+  ]
+}

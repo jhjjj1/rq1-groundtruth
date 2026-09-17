@@ -85,6 +85,28 @@ def main():
                     ("MAP_BINARY_MISMATCH", 2)):
         if t[b] != want:
             fails.append(f"{b}={t[b]}, 期望 {want}")
+    # app bundle 一级：第一轮的 manifest 没有 bundle 字段，必须全部落在 NOT_COLLECTED
+    # ——「那一轮没收」与「收了是空的」在数据里不能长得一样
+    bt = res["bundle_totals"]
+    if res["bundles_observed"] != sum(bt.values()):
+        fails.append(f"bundle 合计 {sum(bt.values())} != bundles_observed {res['bundles_observed']}")
+    if bt["NOT_COLLECTED"] != 10:
+        fails.append(f"bundle NOT_COLLECTED={bt['NOT_COLLECTED']}, 期望 10（10 份老 manifest）")
+    # 第二轮四种形态各自归位
+    for name, m, want in (
+        ("bok", base(bundle_zip="bundle.ipa", app_bundle="/x/A.app",
+                     bundle_verify={"verdict": "OK"}), "OK"),
+        ("bnone", base(bundle_zip="bundle.ipa", app_bundle="/x/A.app",
+                       bundle_verify={"verdict": "OK_NO_PRIVACY_MANIFEST"}), "OK_NO_PRIVACY_MANIFEST"),
+        ("bbad", base(bundle_zip="bundle.ipa", app_bundle="/x/A.app",
+                      bundle_verify={"verdict": "EXECUTABLE_DIFFERS_FROM_COLLECTED_BINARY"}), "VERIFY_FAILED"),
+        ("bfail", base(bundle_zip=None, app_bundle="/x/A.app",
+                       bundle_note="BUNDLE_ZIP_FAILED: disk full"), "PACK_FAILED"),
+        ("bnoapp", base(bundle_zip=None, app_bundle=None), "NO_APP_BUNDLE"),
+    ):
+        got = A.bundle_bucket(m)
+        if got != want:
+            fails.append(f"bundle_bucket({name})={got}, 期望 {want}")
     # 代码里 ok_rate 是 round(x, 4)，容差不能比它还紧
     if abs(res["ok_rate"] - round(2 / 12, 4)) > 1e-9:
         fails.append(f"ok_rate={res['ok_rate']}, 期望 {round(2/12,4)}（分母是 12 不是 10）")
@@ -137,6 +159,7 @@ def main():
             print("  -", f_)
         return 1
     print("PASS  分桶守恒：10 份 manifest + 2 个没回收 = 12，与 jobs_expected 一致")
+    print("      app bundle 一级：老 manifest 全归 NOT_COLLECTED；新格式五种形态各自归位")
     print(f"      变体一级：{res['variants_observed']} 个，合计守恒；"
           f"老格式 manifest 能合成并标记来源")
     print(f"      ok_rate={res['ok_rate']} （分母用应有 job 数，不是回收数）")

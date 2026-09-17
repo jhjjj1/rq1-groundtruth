@@ -313,7 +313,8 @@ jobs:
             --scheme-elapsed-s "${{ steps.scheme.outputs.elapsed }}" \
             --map-mode "${{ steps.mapmode.outputs.map_mode }}" \
             --map-verdict "${{ steps.mapmode.outputs.map_verdict }}" \
-            --build-outcome "${{ steps.xcbuild.outcome }}"
+            --build-outcome "${{ steps.xcbuild.outcome }}" \
+            --max-bundle-mb 200
 
       # 绿勾不再等于「编出来了」：这张小表直接写在 job 页上。
       - name: Job summary
@@ -338,8 +339,26 @@ jobs:
                     "map_verdict", "map_mode", "build_outcome",
                     "maps_found", "maps_by_output_kind", "app_map_bytes",
                     "collect_note", "usable_variants",
-                    "usable_for_groundtruth"):
+                    "usable_for_groundtruth", "bundle_usable"):
               print(f"| {k} | `{m.get(k)}` |")
+          print()
+          # app bundle：清单这一半的材料在不在，直接写在 job 页上，不用去翻 manifest
+          bv = m.get("bundle_verify") or {}
+          print("| app bundle | 值 |")
+          print("|---|---|")
+          for k, val in (("bundle 原始字节", f"{(m.get('bundle_full_bytes') or 0):,}"),
+                         ("Mach-O 个数", m.get("bundle_macho_files")),
+                         ("PrivacyInfo.xcprivacy 份数", len(m.get("bundle_privacy_manifests") or [])),
+                         ("内嵌 bundle 个数", len(m.get("bundle_nested_bundles") or [])),
+                         ("丢弃资源 个数/字节", f"{m.get('bundle_dropped_files')} / {(m.get('bundle_dropped_bytes') or 0):,}")):
+              print(f"| {k} | `{val}` |")
+          print()
+          print("| strip 档位 | 包 | 字节 | strip 了几个 | 复检 | 与同档位二进制一致 |")
+          print("|---|---|---:|---:|---|---|")
+          for var in (m.get("bundle_variants") or []):
+              vv = var.get("verify") or {}
+              print(f"| `{var.get('strip_style')}` | `{var.get('file')}` | {(var.get('bytes') or 0):,} "
+                    f"| {var.get('n_stripped')} | `{vv.get('verdict')}` | `{vv.get('matches_binary')}` |")
           print()
           print("| 变体 | strip 跑了 | nsyms 前→后 | 字节 前→后 | 保布局 | map 配套 |")
           print("|---|---|---|---|---|---|")
@@ -363,6 +382,9 @@ jobs:
           # 实测单个 job：主二进制 62 MB + app map 51 MB。905 个 job 按原样
           # 上传就是 ~100 GB。collect 脚本已经只传 bundle map 且全部 gzip
           # （约 25 MB/job），保留期再缩到 7 天，每批跑完尽快拉回本地。
+          # 第二轮多了 bundle.ipa：只装分析器会打开的东西（Mach-O、各级
+          # Info.plist 与 PrivacyInfo.xcprivacy、entitlements），Assets.car
+          # 与图片音频字体 nib 一律不进包，所以它按 MB 计而不是按百 MB 计。
           retention-days: 7
           if-no-files-found: warn
 
