@@ -1,6 +1,6 @@
 # RRA 与替代 API 源码调用点标注原则
 
-版本 1.9 · 词表来源 `cross_rra_analyzer 0.123.81 / rra_rules.yaml (schema 5)` · 适用对象:执行标注的模型或人
+版本 1.9.1（1.9 + 附录 C 增补 4 项,正文不变）· 词表来源 `cross_rra_analyzer 0.123.82 / rra_rules.yaml (schema 5)` · 适用对象:执行标注的模型或人
 
 ---
 
@@ -13,7 +13,7 @@
 | RQ1 | 用了 RRA 却没声明的情况,按类别 × App/SDK 怎么分布 | `is_api_use`, `unit_role`, `declaring_unit` |
 | RQ2 | Apple 清单之外的替代 API 用得多不多、有没有声明、是否越界 | `site_class=ALT` 站点的 `is_api_use`, `declared_for_mapped_category`, `value_fate`, `exceeds_all_reasons` |
 | RQ3 | 已声明的用法,实际行为是否满足获批理由的约束 | `value_fate`, `constraint_verdicts` |
-| RQ4 | RRA 数据跨单元传播后,接收方是否违反源头理由 | 第二轮流层字段 |
+| RQ4 | RRA 数据跨单元传播后,接收方是否违反源头理由 | `flows`(§5) |
 
 **你不是在找问题,你是在记录事实。** 一个站点"没有问题"和"有问题"是同等重要的结果。
 
@@ -37,7 +37,7 @@
 
 ## 1. 五条铁律
 
-1. **只写你在给定材料里能看到的。** 材料之外的东西一律 `UNSURE` / `UNKNOWN`,并在 `needs_context` 里写明你缺什么。猜一个答案比留空更糟,因为猜的和看到的在数据里长得一样。**Apple 与 Swift 标准库 API 的公开语义算"看得到"**:`systemUptime` 返回什么、`ContinuousClock.Instant` 打印出来是什么(没有自定义 description 的标准库 struct 按默认反射输出,含全部存储属性)、`URLSession` 把数据发到哪——这些是公开规范,直接用;"看不到"只指**本仓库代码**里不在批次内的部分。批次自带一个**源码补充目录**(批次头 `source_dir`,文件清单在 `source_files` / `unit_files`,各带 sha1):站点所在的完整源文件、被调用的扩展成员定义所在文件、实例构造处所在文件、键常量所在文件,以及单元的清单 / `Package.swift` / podspec / `project.pbxproj`。**这些文件里的内容也算看得到**,引用时写 `<文件路径> L<n>: <片段>`(站点自己文件的行仍写 `L<n>`)。清单之外的文件不存在——不要凭记忆引用仓库里的其他文件。
+1. **只写你在给定材料里能看到的。** 材料之外的东西一律 `UNSURE` / `UNKNOWN`,并在 `needs_context` 里写明你缺什么。猜一个答案比留空更糟,因为猜的和看到的在数据里长得一样。**Apple 与 Swift 标准库 API 的公开语义算"看得到"**:`systemUptime` 返回什么、`ContinuousClock.Instant` 打印出来是什么(没有自定义 description 的标准库 struct 按默认反射输出,含全部存储属性)、`URLSession` 把数据发到哪——这些是公开规范,直接用;"看不到"只指**这批材料**之外的东西。材料有两部分:批次文件,和随批次一起给出的**整个语料的源码**(压缩包,解开是 `src/<unit_location>/…`,与批次头 `unit_location` 同名;范围与扫描器一致——源码后缀加清单 / `Package.swift` / podspec / `project.pbxproj` / xcconfig / entitlements,测试目录、构建产物、依赖的示例工程不在其中;完整文件清单与 sha1 在 `SOURCE_INDEX.txt`)。**`src/` 里的内容都算看得到**,引用时写 `<文件路径> L<n>: <片段>`(站点自己文件的行仍写 `L<n>`;别的单元的文件写 `<unit_location>/<文件路径> L<n>`)。批次头的 `source_files` / `unit_files` 是脚本认为与本批次直接相关的文件(站点文件、被调扩展成员的定义、实例构造处、键常量、清单与工程文件),先看它们;要跨单元时按 §4.9 的范围找。`src/` 之外的东西不存在——不要凭记忆引用仓库里没给的版本或文件。
 2. **每个站点必须有且只有一条输出,`site_id` 原样回传。** 不许合并、不许跳过、不许新造 `site_id`。输入 N 条,输出 N 条。
 3. **每个判断附证据行。** `fate_evidence` 里写 `L<行号>: <那一行的关键片段>`。没有证据行的 `SUPPORTED` / `CONFLICT` 视为无效,会被校验脚本打回。
 4. **词表之外的值不许出现。** 所有枚举字段只能取附录 A 列出的值,大小写一致。需要表达词表没有的情况,写进 `notes`,枚举字段填 `UNSURE` / `UNKNOWN`。
@@ -137,9 +137,9 @@
                                    "release_swift_flags": ["NDEBUG"], "flags_complete": true }, { "name": "WidgetsExtension", "kind": "APP_EXTENSION", "…": "…" } ] } ],
     "packages": {}, "podspec": null, "notes": [] },
   "ud_members": ["wmf_isImageDimmingEnabled", "…"],   // 本单元目录里 UserDefaults 扩展/分类成员的名字
-  "source_dir": "src/repos/wikimedia-wikipedia-ios",   // 源码补充目录(相对批次包根)
-  "source_files": [ { "path": "Wikipedia/Code/AppDelegate.swift", "sha1": "c905445e5ebb", "n_lines": 261 } ],   // 本批次引用到的文件
-  "unit_files": [ { "path": "Wikipedia/Resources/PrivacyInfo.xcprivacy", "sha1": "…", "n_lines": 20 }, { "path": "Wikipedia.xcodeproj/project.pbxproj", "…": "…" } ],
+  "source_dir": "src/repos/wikimedia-wikipedia-ios",   // 本单元的源码在语料压缩包里的目录
+  "source_files": [ { "path": "Wikipedia/Code/AppDelegate.swift", "sha1": "c905445e5ebb", "n_lines": 261 } ],   // 脚本认为与本批次直接相关的文件(站点文件、扩展成员定义、构造处、键常量)
+  "unit_files": [ { "path": "Wikipedia/Resources/PrivacyInfo.xcprivacy", "sha1": "…", "n_lines": 20 }, { "path": "Wikipedia.xcodeproj/project.pbxproj", "…": "…" } ],   // 单元级文件
   "reasons": {                                // 本单元出现过的每个理由码的约束,判 constraint_verdicts 时按站点的 declared_reasons 来这里查
     "1C8F.1": { "category": "UserDefaults", "title": "User Defaults Shared Within the Same App Group",
                 "restrictions": ["Do not intentionally read information written by members outside the App Group or by the system.", "…"],
@@ -193,13 +193,14 @@
   "operation": "READ",                      // READ | WRITE | REMOVE | OBSERVE | SYNC | WRAPPED | ACQUIRE | NA
   "value_fate": ["LOCAL_ONLY"],             // 多选,见 §4.3
   "fate_evidence": "L248: let start = ProcessInfo.processInfo.systemUptime; L258: elapsed = … - start",
-  "escape": null,                           // 值离开函数时填:{"kind": "RETURNED|PASSED_OUT|PERSISTED_LOCAL|STORED", "value": "RAW|DERIVED", "target": "…"}
+  "escape": null,                           // 值离开函数时填:{"kind": "RETURNED|PASSED_OUT|PERSISTED_LOCAL|STORED", "value": "RAW|DERIVED", "target": "<接收单元>::<类型>.<成员>", "symbols": ["…"]},见 §4.3
   "applicable_reason": "35F9.1",            // 理由码 | NONE(未声明) | UNSURE(多条声明分不清)
   "constraint_verdicts": { "R35F9_C1": "SUPPORTED", "R35F9_C2": "SUPPORTED",
                            "R35F9_C3": "UNKNOWN", "R35F9_C4": "SUPPORTED" },
   "alt_equivalence": null,                  // ALT 站点必填:NEAR_EQUIVALENT | CONDITIONAL | PARTIAL_DATUM
   "exceeds_all_reasons": null,              // ALT 站点必填:YES | NO | UNKNOWN,见 §4.7
   "needs_context": null,                    // 或 {"what": "…", "why": "…", "requests": [{"kind": "DEFINITION", "symbol": "NIODeadline", "file": "Sources/NIOCore/EventLoop.swift"}]},见 §4.6
+  "flows": [],                              // 值出了本单元之后的每一条流,见 §5;没有逃逸就是 []
   "notes": ""
 }
 ```
@@ -260,7 +261,7 @@ ALT 站点同样按此判,并额外注意两处最容易误判的:`DispatchTime.
 - UserDefaults:`string(forKey:)` `object(forKey:)` `bool(forKey:)` `dictionaryRepresentation` … → READ;`set(_:forKey:)` `setValue` `register(defaults:)` → WRITE;`removeObject(forKey:)` `removePersistentDomain` → REMOVE;`addObserver` / KVO / `@AppStorage` 声明处 → OBSERVE;`synchronize()` 及其他**不带键的家族调用** → SYNC。一行里既读又写填主要动作,`notes` 写另一个。**没有可追数据值的操作——SYNC、ACQUIRE、REMOVE、OBSERVE(注册观察)——`value_fate` 一律 `["LOCAL_ONLY"]`,`escape: null`,`fate_evidence` 仍写站点行,`notes` 写 `NO_VALUE`**。空数组 `[]` 只属于 `is_api_use: NO` 的站点。
 - FileTimestamp:`setAttributes([.modificationDate: …])` / `setResourceValues` 写时间戳 → WRITE;其余读取 → READ。**WRITE 站点的 `value_fate` 一律 `["PERSISTED_LOCAL"]`**(写进去的东西就是被持久化了),`escape: null`;被写入的值是什么写在 notes:`WRITTEN_VALUE: 本单元自算的过期时间` / `WRITTEN_VALUE: 设备 token`——RQ3 关心的是写进去的是不是设备数据,这在 notes 里,不在 fate 里。UserDefaults 的 WRITE 同理。
 - SystemBootTime / DiskSpace / ActiveKeyboards:一律 READ(只有读取语义)。
-- 调用的是**本单元自定义的扩展成员**(wikipedia-ios 的 `UserDefaults.standard.wmf_isImageDimming`,367 处)→ `WRAPPED`;定义在 `wrapper_ref` 里(文件、行、getter/setter、体内的键)。按 `wrapper_ref[0].access` 分:**`SET`**(`UserDefaults.standard.defaultTabType = .settings`)语义上就是一次写入 → `value_fate: ["PERSISTED_LOCAL"]`,`escape: null`,notes 写 `WRITTEN_VALUE: …`;赋 `nil` 的 setter 仍是 `WRAPPED`(形态决定 operation),notes 写 `WRITTEN_VALUE: nil —— 语义是清除该键`,不改成 REMOVE。**`GET` / `CALL`** → 追封装返回的值,与 READ 同法。真实读写在扩展体内的站点上另标。`wrapper_ref` 为 null(单元里没有这个成员)→ `operation: WRAPPED`、`value_fate` 按可见去向追,notes 写 `WRAPPER_DEFINITION_NOT_IN_UNIT`,不填 needs_context(补充目录里也没有)。
+- 调用的是**本单元自定义的扩展成员**(wikipedia-ios 的 `UserDefaults.standard.wmf_isImageDimming`,367 处)→ `WRAPPED`;定义在 `wrapper_ref` 里(文件、行、getter/setter、体内的键)。按 `wrapper_ref[0].access` 分:**`SET`**(`UserDefaults.standard.defaultTabType = .settings`)语义上就是一次写入 → `value_fate: ["PERSISTED_LOCAL"]`,`escape: null`,notes 写 `WRITTEN_VALUE: …`;赋 `nil` 的 setter 仍是 `WRAPPED`(形态决定 operation),notes 写 `WRITTEN_VALUE: nil —— 语义是清除该键`,不改成 REMOVE。**`GET` / `CALL`** → 追封装返回的值,与 READ 同法。真实读写在扩展体内的站点上另标。`wrapper_ref` 为 null(单元里没有这个成员)→ `operation: WRAPPED`、`value_fate` 按可见去向追,notes 写 `WRAPPER_DEFINITION_NOT_IN_UNIT`,不填 needs_context——但要在 `src/` 里 grep 一次这个成员名:定义在别的单元(依赖)里就在 notes 写 `WRAPPER_DEFINED_IN: <unit_location>/<文件>:<行>`,哪里都没有再写 `WRAPPER_DEFINITION_NOT_IN_UNIT`。
 - 只是**取得 defaults 对象**、当行没有读写(`let ud = UserDefaults.standard`、`NSUserDefaults *ud = [NSUserDefaults standardUserDefaults]`、`UserDefaults(suiteName:)` 赋给变量或存进属性)→ `ACQUIRE`。二进制侧这仍是一次家族调用,所以它是站点。
 
 **别名之后的调用才是真正的读写,它们也是站点——哪怕那一行没有 `UserDefaults` 四个字。** 三种别名形态,工作表都会把它们作为站点列出(`alias_of` 字段指回取得对象的那一行):
@@ -317,7 +318,10 @@ ALT 站点同样按此判,并额外注意两处最容易误判的:`DispatchTime.
 
 **Apple 系统框架不是单元。** 把值交给 UIKit / CoreAnimation / Foundation / Combine 的 API(`anim.beginTime = CACurrentMediaTime() + delay`、`label.text = …`)算 `LOCAL_ONLY` 或 `UI_DISPLAY`,不算 `PASSED_OUT`;只有网络、分析、崩溃上报类 API(`URLSession`、`URLRequest`、`os_log` 之外的远程日志、`Analytics`/`Crashlytics`/自家的 `Funnel`/`EventLogging`)才是 `OFF_DEVICE` 的入口。交给**另一个单元**的函数才是 `PASSED_OUT`——单元按 `unit` / `target` 划分,**第一方本地包(wikipedia-ios 的 WMFData、WMFComponents)和仓库内 framework target 也是不同单元**,不只第三方 SDK;`escape.target` 写明接收单元。这样 RQ4 的流层才能把 App ↔ 本地包 ↔ extension 的传播接上。
 
-`PASSED_OUT` 与 `OFF_DEVICE` 的区别:传给同单元内的辅助函数不算 `PASSED_OUT`(那仍是本地流转,继续追);传给**不同单元**的函数才算;而 `OFF_DEVICE` 要求你能看到它进了网络/上报——传给一个名叫 `Analytics.track` 的东西,如果那个单元不在你面前,标 `PASSED_OUT` 并在 `escape.target` 写 `Analytics.track`,不要直接标 `OFF_DEVICE`。第二轮会顺着 `escape.target` 追。
+`PASSED_OUT` 与 `OFF_DEVICE` 的区别:传给同单元内的辅助函数不算 `PASSED_OUT`(那仍是本地流转,继续追);传给**不同单元**的函数才算;而 `OFF_DEVICE` 要求你能看到它在**本单元**进了网络/上报——传给一个名叫 `Analytics.track` 的东西,站点字段标 `PASSED_OUT`,接收方拿它做了什么写进 `flows`(§5),不写进 `value_fate`。出口要记成机器能接的形状:
+
+- `escape.target` 写 `<接收单元>::<类型>.<成员>`。接收单元用 `declaring_unit` 的写法(target 名 / SPM target 名 / pod 名),本单元内部的 STORED / RETURNED 写本单元:`WMFData::WMFSettingsDataController.setShowSearchLanguageBar(_:)`、`Alamofire::DataResponse.serializationDuration`、`NIOCore::NIODeadline`、`SessionsFunnel::SessionsFunnel.pageLoadTimes`。接收方是宿主的闭包 / 回调,写 `HOST::<闭包参数或回调名>`。
+- `escape.symbols`:值离开时经过的标识符列表——属性名、参数标签、返回类型、UserDefaults 键——追流时拿它们在接收单元里 grep(§5),也留给工具复核:`["DataResponse", "serializationDuration", "completionHandler"]`、`["pageLoadTimes"]`;`PERSISTED_LOCAL` 到 UserDefaults 的写 `["<键值>", "<suite 名或 .standard>"]`。
 
 ### 4.4 `applicable_reason`
 
@@ -328,7 +332,7 @@ ALT 站点同样按此判,并额外注意两处最容易误判的:`DispatchTime.
 
 ### 4.5 `constraint_verdicts` —— 对每条约束给 SUPPORTED / CONFLICT / UNKNOWN
 
-约束的 `predicate` 分几个家族,判法如下。**通用规则:`REQUIRED` 型约束,正面证据→SUPPORTED,明确反证→CONFLICT;`FORBIDDEN` 型约束,看到被禁止的事→CONFLICT,在可见范围内确认没发生且值未逃逸→SUPPORTED;值逃逸了→UNKNOWN(留给第二轮)。**
+约束的 `predicate` 分几个家族,判法如下。**通用规则:`REQUIRED` 型约束,正面证据→SUPPORTED,明确反证→CONFLICT;`FORBIDDEN` 型约束,看到被禁止的事→CONFLICT,在本单元范围内确认没发生且值未出单元→SUPPORTED;值出了单元→UNKNOWN(接收方那边的结论在 `flows` 里)。**
 
 | predicate 家族 | 怎么判 |
 |---|---|
@@ -344,7 +348,7 @@ ALT 站点同样按此判,并额外注意两处最容易误判的:`DispatchTime.
 | `NoReadFrom(OTHER_APPS_OR_SYSTEM)` `NoWriteAccessibleBy(…)` | 看**键**,不看键常量的名字:站点的 `key.value`(直接站点)或 `wrapper_ref[*].keys[*].value`(WRAPPED 站点)是解析出的字符串。系统写入的键(`AppleLanguages` `AppleLocale` `AppleKeyboards` `AppleInterfaceStyle` `AppleICUForce24HourTime` `AppleTemperatureUnit` `AppleMeasurementUnits` `AppleMetricUnits` `AppleFirstWeekday` `NSLanguages` `AppleTextDirection`、任何 `com.apple.*` / `NSGlobalDomain` 下的键;不穷举——`Apple*`/`NS*` 前缀且不是本 App 定义的字面量就按系统键处理)→ CONFLICT(除非声明的是 AC6B);解析出的键是本 App 的字面量 → SUPPORTED,证据写 `key=<值> @ <出处>`;`dictionaryRepresentation()` / `volatileDomain(forName: NSGlobalDomain)` / `persistentDomain(forName:)` 传的不是自己的 bundle id → 读到的是整条搜索链(含系统域)→ CONFLICT(Apple 公开语义,§1 第 1 条);`persistentDomain(forName: <自己的 bundle id>)` → SUPPORTED;键未解析(`UNRESOLVED_IDENTIFIER` / `EXPRESSION`)→ UNKNOWN + needs_context 要该常量的定义;WRAPPED 站点 `wrapper_ref.keys` 为空(体内没有 forKey:)→ UNKNOWN,notes `WRAPPER_KEYS_NOT_VISIBLE` |
 | `OperationAndIdentifierIs(…)` (AC6B) | 读 `com.apple.configuration.managed` / 写 `com.apple.feedback.managed` → SUPPORTED;其他键 → CONFLICT |
 | `DeclaredBy(THIRD_PARTY_SDK)` `AppRoleIs(SDK)` (0A2A/C56D) | `unit_kind` ≠ APP 且 `unit_role` 为 THIRD_PARTY / FORK → SUPPORTED;APP 或 FIRST_PARTY 本地包 → CONFLICT(App 不得声明这两条) |
-| `TriggeredBy(HOST_APP_WRAPPER_CALL)` (0A2A/C56D) | 要**看得到从 SDK 公开 API 到站点的完整链**才 SUPPORTED(swift-nio NIOPosix:`public func lstat(path:eventLoop:)` L686 → `Posix.lstat` L689 → `sysLstat` L939 → 绑定 L164,链在补充目录的同一文件里);SDK 在自己的初始化/后台任务里主动调 → CONFLICT;上游只到 `@_spi(Testing)` / `private` 的内部函数、公开入口不在可见范围 → UNKNOWN + needs_context CALLERS |
+| `TriggeredBy(HOST_APP_WRAPPER_CALL)` (0A2A/C56D) | 要**看得到从 SDK 公开 API 到站点的完整链**才 SUPPORTED(swift-nio NIOPosix:`public func lstat(path:eventLoop:)` L686 → `Posix.lstat` L689 → `sysLstat` L939 → 绑定 L164,链在 `src/` 的同一文件里);SDK 在自己的初始化/后台任务里主动调 → CONFLICT;上游只到 `@_spi(Testing)` / `private` 的内部函数、公开入口不在可见范围 → UNKNOWN + needs_context CALLERS |
 | `SDKDoesNotUseForOwnPurpose(Flow(u))` (0A2A/C56D) | 时间戳/偏好值原样交回**宿主**(可见链到达 SDK 的公开 API、中途没被 SDK 自己读取)→ SUPPORTED;SDK 自己拿它做判断、缓存、上报 → CONFLICT;交回的只是 SDK **内部**的调用方、后续不可见(swift-nio `system_stat` → `Syscall.stat` → `private func _info`)→ UNKNOWN + needs_context,与附录 B.6 一致 |
 | `SDKPrimaryPurposeIsNotRRAWrapper` `SDKDoesNotUseForOwnPurpose` | 单元级判断:该包的主要功能是不是"帮宿主读 RRA"。看包名/README 可判则判,否则 UNKNOWN |
 | `AppPrimaryFunctionIs(KEYBOARD)` `AppHas(TEXT_FIELDS)` `AppOnlyProvides(HEALTH_RESEARCH)` `AppCompliesWithReviewGuideline` | 应用级事实。`app_facts` 给了就用;没给 → UNKNOWN |
@@ -358,7 +362,7 @@ ALT 站点同样按此判,并额外注意两处最容易误判的:`DispatchTime.
 
 ### 4.6 `needs_context`
 
-值逃逸、接收者类型不明、路径来源不明、`escape.target` 是同单元函数需要继续追——这些情况填 `needs_context`。先在**补充目录**里找:站点文件的其余部分、扩展成员定义、构造处所在文件都在那里,找到了就直接用(引用写 `<文件> L<n>`),不填 needs_context。补充目录里也没有的才填,且必须是**工具能按名字取的东西**:
+值逃逸、接收者类型不明、路径来源不明、`escape.target` 是同单元函数需要继续追——这些情况先在 `src/` 里找:站点文件的其余部分、扩展成员定义、构造处、常量、类型定义都在那里,找到了就直接用(引用写 `<文件> L<n>`),不填 needs_context。整个语料的源码都给了,`needs_context` 应当很少:只剩二进制框架(xcframework)、生成代码、`src/` 里确实没有的文件。跨单元的追踪不是 needs_context,是 §5 的 `flows`。填的时候必须是**工具能按名字取的东西**:
 
 ```json
 "needs_context": {"what": "一句话", "why": "哪个字段等着它",
@@ -372,7 +376,7 @@ ALT 站点同样按此判,并额外注意两处最容易误判的:`DispatchTime.
 
 只在**有字段等着定稿**时才填:`is_api_use` / `operation` 为 UNSURE;RRA 站点 `applicable_reason` 是理由码且某个 verdict 为 UNKNOWN **且这个 UNKNOWN 是缺代码造成的**;ALT 站点 `exceeds_all_reasons` 为 UNKNOWN;`value_fate` 含 UNSURE(哪怕 `applicable_reason` 是 NONE——fate 本身是 RQ4 的输入)。**不填**的 UNKNOWN:EXCEPTION 类约束未触发的 UNKNOWN(补多少代码也消不掉);`NO_CALLERS_IN_SCOPE` / `CALLER_DOMAIN_UNKNOWN`(域在别的站点上定);`WRAPPER_DEFINITION_NOT_IN_UNIT`(定义不在本单元)。`applicable_reason` 为 NONE、fate 已定、只是值 RETURNED/RAW 离开了(Cache L67)→ `needs_context: null`,那条逃逸由 §5 的流层接手,不在这里追。
 
-**一个站点的 verdict 只有在它的逃逸被追到头之后才算定稿**,不管逃逸是不是跨单元。Lightstreamer 的 `Scheduler.now` 返回原始 uptime 毫秒值,读取方全在同一单元的 `LightstreamerClient.swift` 里——这不是 RQ4 的跨单元流,但不追完就无法判 `exceeds_all_reasons`。所以扩展回路(§4.6)和流层(§5)是两件事:前者为了把站点自己的 UNKNOWN 消掉,后者为了 RQ4。
+**一个站点的 verdict 只有在它的逃逸在本单元内被追到头之后才算定稿**。Lightstreamer 的 `Scheduler.now` 返回原始 uptime 毫秒值,读取方全在同一单元的 `LightstreamerClient.swift` 里——这不是 RQ4 的跨单元流,但不追完就无法判 `exceeds_all_reasons`;源码都在 `src/` 里,顺着读到头再判。出了单元的部分是 §5 的 `flows`,不回写站点级字段。
 
 ### 4.7 ALT 站点的附加字段
 
@@ -395,7 +399,7 @@ ALT 站点判 `is_api_use: NO` 时:`alt_equivalence` 照附录 C 填(它是 API 
 - `escape.value = RAW` 且流向 `OFF_DEVICE`,或 `value_fate` 含 `DERIVED_ID` → **YES**。该类别没有任何理由允许原值离开设备或参与指纹(全局规则 G5 对所有类别成立)。
 - 离开设备的只有**派生量**(两次读数相减的时长、时长换算的毫秒数)→ **NO**。wikipedia-ios 的 `SessionsFunnel` 把 `(CACurrentMediaTime() - pageLoadStartTime) * 1000` 送进事件日志,是 NO。
 - `value_fate` 全为本地且无 `escape` → **NO**。
-- 原值 `escape` 且去向不明 → **UNKNOWN**,扩展回路后再判。
+- 原值 `escape`、在本单元内顺着读到头仍去向不明(进了二进制框架、动态派发)→ **UNKNOWN**;出了单元的部分不影响这个字段,写在 `flows`。
 
 ---
 
@@ -404,38 +408,66 @@ ALT 站点判 `is_api_use: NO` 时:`alt_equivalence` 照附录 C 填(它是 API 
 很多库把 RRA/ALT 的值装进一个类型再到处传:swift-nio 的 `NIODeadline`(`now()` 里读 `DispatchTime.now().uptimeNanoseconds`,全库几百处 `.now()`)、Lightstreamer 的 `Scheduler.now`。逐个消费方追不完,也不该追——按下面处理:
 
 1. **站点只有一处**:数据进入类型的那一行(`NIODeadline.timeNow()` 里的 `DispatchTime.now().uptimeNanoseconds`)。类型自己的成员访问(`lhs.uptimeNanoseconds < rhs.uptimeNanoseconds`)、消费方对类型的比较/加减,都不是站点。
-2. 该站点 `value_fate` 填 `["STORED"]`,`escape = {"kind": "STORED", "value": "RAW", "target": "<类型名>"}`。
-3. 在 `notes` 里写**类型的暴露面**,四选一:`WRAPPER_EXPOSES_RAW`(有公开访问器能取回原值,如 `public var uptimeNanoseconds`)、`WRAPPER_EXPOSES_DERIVED_ONLY`(只暴露比较、时长差等派生量)、`WRAPPER_OPAQUE`(什么都不暴露)、`WRAPPER_EXPOSURE_UNKNOWN`(类型定义在补充目录里也找不到——NIODeadline 定义在站点自己的文件 `EventLoop.swift` 里,补充目录有整个文件,所以 B.7 的 `L886 public var uptimeNanoseconds` 现在是看得到的证据;引用它,不要引用附录)。
+2. 该站点 `value_fate` 填 `["STORED"]`,`escape = {"kind": "STORED", "value": "RAW", "target": "<单元>::<类型名>", "symbols": ["<类型名>", "<原值访问器>"]}`。
+3. 在 `notes` 里写**类型的暴露面**,四选一:`WRAPPER_EXPOSES_RAW`(有公开访问器能取回原值,如 `public var uptimeNanoseconds`)、`WRAPPER_EXPOSES_DERIVED_ONLY`(只暴露比较、时长差等派生量)、`WRAPPER_OPAQUE`(什么都不暴露)、`WRAPPER_EXPOSURE_UNKNOWN`(类型定义在 `src/` 里也找不到——NIODeadline 定义在站点自己的文件 `EventLoop.swift` 里,所以 B.7 的 `L886 public var uptimeNanoseconds` 现在是看得到的证据;引用它,不要引用附录)。
 4. 中间两种:该站点的 off-device 类约束和 `exceeds_all_reasons` 直接按"原值未逃逸"判(SUPPORTED / NO)——原值被类型封死了。`WRAPPER_EXPOSES_RAW`:UNKNOWN,`needs_context` 写"读取 `<类型>.<原值访问器>` 的全部位置"——工具只需 grep 那个访问器,不用追 `.now()`。`WRAPPER_EXPOSURE_UNKNOWN`:UNKNOWN,`needs_context` 要类型定义。
 
-## 5. 第二轮:流层(RQ4)
+### 4.9 跨单元的证据:能看,但只为这几条约束看
 
-第一轮完成后,所有 `escape` 非空的站点会生成流工作表:除站点记录外,附上 `escape.target` 对应的函数体、跨单元的调用者/被调者候选片段。你要输出**流记录**:
+`src/` 里有全部单元的源码,但**站点字段只描述本单元**:`is_api_use` / `operation` / `value_fate` / `escape` / `constraint_verdicts` 到本单元边界为止,值进了别的单元就记 `PASSED_OUT` + `escape`,接收方那边的事写进同一条记录的 `flows`(§5)。分开写是为了同一条流不会在源站点和汇站点上被记两次,也为了站点级字段能和二进制分析器的站点级输出对齐。
+
+站点级字段里**允许**跨单元取证的只有这几种判断,每一种都写明去哪找、找什么:
+
+| 判断 | 去哪找 | 找什么 | 找不到时 |
+|---|---|---|---|
+| `TriggeredBy(HOST_APP_WRAPPER_CALL)`(0A2A/C56D C2) | 批次头 `hosts[*].repo` 列出的宿主仓库:`owner/name` 对应目录 `src/repos/owner-name/`(只看这些,语料里没链接本单元的 App 与本站点无关) | 宿主对本单元**公开 API**(站点的可见调用链顶端)的调用行 | UNKNOWN,notes `HOST_CALL_NOT_FOUND: <grep 的符号>` |
+| `SDKDoesNotUseForOwnPurpose` | 本单元 | 值交回宿主之前有没有被本单元自己读取/缓存/上报 | UNKNOWN |
+| `AllIntendedParticipantsAreMembersOfSameAppGroup`、`NoWriteAccessibleBy` | 同仓库的其他 target(`src/repos/<slug>/` 下 extension、framework 的目录,`build_facts.projects[*].targets` 给了名字与 entitlements) | 同一 suite 名是否在对方 entitlements 里;同一键值在对方那里的读写 | 只影响 CONFLICT 的反证;SUPPORTED 仍按本单元证据判 |
+| `NoReadFrom(... | SYSTEM)` 的"读到的是谁写的" | 同一 bundle 的其他单元(`.standard` 由 App 与静态链进它的 SDK 共享;extension **不**共享 `.standard`) | 同一键值的 WRITE 站点 | 不改判——读不到写入方不是"读系统键"的证据 |
+| `unit_role` 的 fork / vendored 确认 | 本单元文件头、`hosts` | 版权头、git owner | UNSURE |
+
+跨单元的引用一律写 `<unit_location>/<文件路径> L<n>: <片段>`。站点级字段只用到"是否存在这次调用/读写"这一层;宿主拿到值之后做了什么写在 `flows` 里。找不到就是 UNKNOWN,不是 CONFLICT。
+
+## 5. 流层(RQ4):跟着值走到别的单元,写在同一条记录的 `flows` 里
+
+值离开站点所在的单元(`escape` 非空)时,**不停在边界上**——整个语料的源码都在 `src/` 里,你顺着它走到别的单元,逐行看接收方拿它做了什么,把走过的每一跳写成流记录,放进站点记录的 `flows` 数组。没有逃逸的站点 `flows: []`。这一步没有工具预筛:该查的宿主、该 grep 的符号,由你按下面的规则**全部**查,查过而没找到也要记下来。
+
+站点自己的字段(`value_fate` / `escape` / `constraint_verdicts` / `exceeds_all_reasons`)**不因流的结果改判**:它们描述的是本单元范围内的事实,是和二进制分析器的站点级输出对齐的。接收方那边的结论写在流记录的 `verdict` 里;"这个 SDK 站点在 App A 里是否越界"由工具把站点级结论与流向 A 的记录合成,你不用合。
 
 ```json
-{
-  "flow_id": "f-…", "source_site_id": "a3f9…",
-  "path_type": "RETURN_VALUE",              // RETURN_VALUE | TRIGGER | CHANNEL
-  "hops": [ {"unit": "Alamofire", "function": "startTimer()", "loc": "Source/…:248"},
-            {"unit": "APP", "function": "reportMetrics()", "loc": "App/…:91"} ],
-  "sink_unit": "APP", "sink_declared": false,
-  "sink_use": ["OFF_DEVICE"],               // 词表同 value_fate
-  "verdict": "CONFLICT",                    // 终点用法对**源头理由**约束的结论
-  "evidence": "…", "needs_context": null, "notes": ""
-}
+"flows": [
+  { "path_type": "RETURN_VALUE",                       // RETURN_VALUE | TRIGGER | CHANNEL
+    "sink_unit": "pISSStream",                         // 接收单元,declaring_unit 的写法(App 的 target 名 / SPM target 名 / pod 名)
+    "hops": [                                          // 值(或触发)经过的每一跳,按顺序;每跳都是一处可见代码
+      { "unit": "Alamofire",  "symbol": "DataResponse.serializationDuration", "loc": "Source/Core/DataRequest.swift:266" },
+      { "unit": "pISSStream", "symbol": "ISSClient.load(completion:)",         "loc": "pISSStream/Network/ISSClient.swift:91" } ],
+    "sink_use": ["LOCAL_ONLY"],                        // 词表同 value_fate:值在接收单元的最终去向(多选)
+    "sink_value": "DERIVED",                           // RAW | DERIVED:到达接收单元时是原值还是派生值
+    "sink_declared": false,                            // 接收单元自己的清单是否声明了该类别(读 src/ 里它的 PrivacyInfo.xcprivacy)
+    "verdict": "SUPPORTED",                            // 接收方的用法对源头理由约束的结论:SUPPORTED | CONFLICT | UNKNOWN
+    "evidence": "repos/…/ISSClient.swift L91: metrics.duration = response.serializationDuration;L93 只用于本地日志",
+    "stuck_at": null,                                  // 追不下去时:{"hop": n, "why": "…"}(二进制框架、动态派发、反射、字符串拼出的键)
+    "notes": "" }
+]
 ```
 
-三条路径的定义(以声明单元 A、未声明单元 B 为例):
+三条路径,各自的种子、要查的范围、终止条件:
 
-| 路径 | 定义 | 从哪里播种 | 判什么 |
+| 路径 | 种子 | 去哪查 | 一条记录的粒度 |
 |---|---|---|---|
-| `RETURN_VALUE` | A 调用 RRA,把返回值(或派生值)传给 B | 站点 `escape.kind` ∈ RETURNED / PASSED_OUT | B 拿到后的用法,对 A 声明理由的约束 |
-| `TRIGGER` | B 调用 A 的函数,间接触发了 RRA | 含 RRA 站点的函数被**别的单元**调用 | B 是不是这次 RRA 使用的实际受益方;B 自己有没有声明 |
-| `CHANNEL` | A 把值写进共有域(UserDefaults 键、文件、Keychain、数据库、可被外部读的属性/全局),B 再读出来 | 站点 `escape.kind` ∈ PERSISTED_LOCAL / STORED | 找同一键/路径/属性的读取方 B,判 B 的用法 |
+| `RETURN_VALUE` | `escape.kind` ∈ RETURNED / PASSED_OUT 且接收方是别的单元 | 接收单元的源码:用 `escape.symbols` 在 `src/<接收单元>/` 里 grep,顺着每一处读取往下走;SDK 站点的接收方是宿主时,批次头 `hosts[*].repo`(`owner/name` → `src/repos/owner-name/`)列出的**每一个**宿主都查 | 每个 (接收单元, 终点用法) 一条;同一宿主里多处读取、终点相同的合并成一条,`hops` 写代表性的那处、`notes` 列其余位置 |
+| `TRIGGER` | deps / pods 单元里每个 `is_api_use: YES` 的站点(不只是逃逸的) | 从站点的 enclosing function 向上找到本单元的**公开入口**(public / open API,或 ObjC 头文件里的方法),再到每个宿主里 grep 该入口的调用行 | 每个宿主一条;`hops` 是"入口 ← 站点"的链加宿主的调用行;`sink_use` 是宿主拿返回值做的事,宿主只是触发、没拿到值时写 `["LOCAL_ONLY"]` 并 notes `TRIGGER_ONLY` |
+| `CHANNEL` | `operation` ∈ WRITE / WRAPPED-SET / REMOVE 的 UserDefaults 站点(有 `key.value` 或 `wrapper_ref.keys`)、写文件 / Keychain 的 PERSISTED_LOCAL 站点、写进 public 属性的 STORED 站点 | 同一键值在**别的单元**里的读取:先 grep 批次(`all_batches/*.jsonl` 里 `"value": "<键>"`,READ 站点都在那里),再 grep `src/`。域要匹配:`.standard` 由 App 与静态链进它的 SDK / 本地包共享,**extension 不共享 `.standard`**,只有 group suite 跨 bundle;文件路径、Keychain 的 service/account 同理按值匹配 | 每个读取单元一条 |
 
-`sink_declared` 与 `source_declared` 都要记,两种口径("接收方受源头理由约束" vs "接收方必须自己声明")在数据里都能算。
+终止:值在接收方到达终点(网络 / UI / 日志 / 持久化 / 指纹)→ 记 `sink_use`,停;值在接收方用完即弃 → `["LOCAL_ONLY"]`,停;值又被接收方交给第三个单元 → 继续走,`hops` 加一跳,直到终止;进了二进制框架、系统 API、动态派发看不见的地方 → `verdict: "UNKNOWN"`,`stuck_at` 写卡在哪一跳。没有跳数上限——但每一跳都要能引用到一行代码。
 
-流追不到终点(值进了你看不到的单元)→ `verdict` = UNKNOWN,`needs_context` 写明卡在哪一跳。
+查过而**没找到**接收方(grep 了 `escape.symbols` / 入口名 / 键值,宿主里没有一处)时,`flows` 里放一条 `{"path_type": …, "sink_unit": null, "hops": [], "sink_use": [], "sink_value": null, "sink_declared": null, "verdict": "UNKNOWN", "evidence": "", "stuck_at": {"hop": 0, "why": "NO_CONSUMER_FOUND: grep <符号> in <范围>"}, "notes": ""}`——"查了没有"和"没查"在数据里必须长得不一样。
+
+`verdict` 判什么:源站点 `applicable_reason` 是理由码 → 接收方的用法对**那条理由**的约束(35F9:时长可以出去、原值不行;1C8F:接收方是不是同 App Group 成员;0A2A/C56D:宿主拿到值后有没有再交给别人)。源站点 `applicable_reason` 是 `NONE`(未声明)→ 对该类别的全局规则判(原值离开设备、参与设备指纹 → CONFLICT;其余 SUPPORTED),notes 写 `AGAINST_GLOBAL_RULES`。ALT 源站点同样按全局规则判。
+
+`sink_declared` 与源站点的 `applicable_reason` 都在记录里,两种口径("接收方受源头理由约束" vs "接收方必须自己声明")在数据里都能算。单元按 target 划分(App ↔ 本地包也是流),RQ4 报数时按**清单边界**折算:源与汇的覆盖清单相同(App 与它的本地包、静态链进 App 的 pod)记 `intra_manifest`,单独一档;不同清单(SDK ↔ App、App ↔ extension)才是 RQ4 主表。这个折算由工具按 `unit_manifest` 做,你不用判。
+
+站点级字段与流的分工再说一遍:`value_fate` 说的是**本函数**内的去向;`constraint_verdicts` / `exceeds_all_reasons` 用**本单元**内的全部证据(逃逸在单元内被读回的,顺着读到头,§4.6);`flows` 说的是**出了单元之后**的事。同一个事实不要写两遍。
 
 ---
 
@@ -451,7 +483,7 @@ ALT 站点判 `is_api_use: NO` 时:`alt_equivalence` 照附录 C 填(它是 API 
 |---|---|
 | `FIRST_PARTY` | App 自己的 target;仓库内的本地 Swift 包(`unit_location` 在 repo 树内);`:path:` 本地 pod |
 | `THIRD_PARTY` | `deps/` 或 `pods/` 里的外部依赖 |
-| `VENDORED_THIRD_PARTY` | 第三方源码被直接拷进仓库树(wikipedia-ios 的 `WMF Framework/Third Party/FLAnimatedImage/`,文件头是 Flipboard 的版权)。脚本按路径里的 `Third Party` / `Vendor` / `External` 预填候选,你在补充目录里打开该文件看文件头版权确认,证据写 `<文件> L1-L5: Copyright …` |
+| `VENDORED_THIRD_PARTY` | 第三方源码被直接拷进仓库树(wikipedia-ios 的 `WMF Framework/Third Party/FLAnimatedImage/`,文件头是 Flipboard 的版权)。脚本按路径里的 `Third Party` / `Vendor` / `External` 预填候选,你在 `src/` 里打开该文件看文件头版权确认,证据写 `<文件> L1-L5: Copyright …` |
 | `FORK_OF_THIRD_PARTY` | 外部依赖,但 `git` 地址的 owner 与 App 仓库 owner 相同(Bark 的 `Finb/ImageViewer.swift`、`Finb/QRScanner`)。它既不是纯第一方也不是纯第三方,单独一档 |
 | `UNSURE` | 判不了 |
 
@@ -468,7 +500,7 @@ ALT 站点判 `is_api_use: NO` 时:`alt_equivalence` 照附录 C 填(它是 API 
 
 只在 `target` 缺失(`name: null`)或你有证据认为工程文件说的不对时改写,并在 notes 说明依据;`target.note` 为 `NOT_IN_ANY_XCODE_TARGET` 的文件照抄预填(它没有 target,预填是按路径的 `unit`),notes 记这个事实。头文件 inline 函数 / 宏展开在调用方编译单元里的,填调用方。
 
-RQ4 的 `TRIGGER` 路径里还有一个归属判断——"这次 RRA 使用的实际受益方是谁"——那是流层字段 `beneficiary_unit`,第二轮填。
+RQ4 的 `TRIGGER` 路径里还有一个归属判断——"这次 RRA 使用的实际受益方是谁"——就是 `flows[].sink_unit`:调用了入口的宿主。
 
 ## 附录 A. 词表
 
@@ -506,14 +538,15 @@ RQ4 的 `TRIGGER` 路径里还有一个归属判断——"这次 RRA 使用的�
 **`escape.kind`**:`RETURNED` `PASSED_OUT` `PERSISTED_LOCAL` `STORED`
 **`applicable_reason`**:理由码 | `NONE` | `UNSURE` | `NA`(ALT 站点)
 **verdict 域**:`SUPPORTED` `CONFLICT` `UNKNOWN`
-**`path_type`**:`RETURN_VALUE` `TRIGGER` `CHANNEL`
+**`flows[].path_type`**:`RETURN_VALUE` `TRIGGER` `CHANNEL`
+**`flows[].sink_use`**:同 `value_fate`;**`flows[].sink_value`**:`RAW` `DERIVED`;**`flows[].verdict`**:`SUPPORTED` `CONFLICT` `UNKNOWN`
 **`needs_context.requests[].kind`**:`DEFINITION` `CALLERS` `BODY` `TYPE` `FILE`
 
 ---
 
 ## 附录 B. 真实站点的完整标注(十例)
 
-以下四例取自基准集真实源码(pISSStream 的依赖 Alamofire 5.10.2、Lightstreamer 6.2.0;Dai-Hentai 的 pod SDWebImage 4.0.0),行号以源文件为准。每例先给关键行,再给按本原则得出的记录。它们覆盖了:派生值逃逸(B.1)、未声明的 RRA(B.2)、单元声明了类别却只用 ALT(B.3)、键请求/取值/比较多站点(B.4)。
+以下四例取自基准集真实源码(pISSStream 的依赖 Alamofire 5.10.2、Lightstreamer 6.2.0;Dai-Hentai 的 pod SDWebImage 4.0.0),行号以源文件为准。例子里出现的 `needs_context` 请求是只给 ±8 行时的写法,留着是为了展示请求的形状;现在整个语料的源码都在 `src/` 里,这些请求应当自己追完——单元内的结论进站点字段,出了单元的进 `flows`——只有 `src/` 里确实没有的东西才填 `needs_context`。每例先给关键行,再给按本原则得出的记录。它们覆盖了:派生值逃逸(B.1)、未声明的 RRA(B.2)、单元声明了类别却只用 ALT(B.3)、键请求/取值/比较多站点(B.4)。
 
 ### B.1 Alamofire `Source/Core/DataRequest.swift:248` — SystemBootTime,已声明 35F9.1
 
@@ -536,13 +569,19 @@ RQ4 的 `TRIGGER` 路径里还有一个归属判断——"这次 RRA 使用的�
  "operation":"READ",
  "value_fate":["LOCAL_ONLY","PASSED_OUT"],
  "fate_evidence":"L248 start、L258 end 两次读数;L266 end - start 作为 serializationDuration 装入 DataResponse;L268 交给 eventMonitor(宿主可注册自己的监视器);L270 completionHandler(response) 交给宿主闭包。原值 start/end 仅参与相减,未离开闭包",
- "escape":{"kind":"PASSED_OUT","value":"DERIVED","target":"DataResponse.serializationDuration → completionHandler / eventMonitor(宿主单元)"},
+ "escape":{"kind":"PASSED_OUT","value":"DERIVED","target":"HOST::completionHandler(DataResponse)","symbols":["DataResponse","serializationDuration","completionHandler","eventMonitor"]},
  "applicable_reason":"35F9.1",
  "constraint_verdicts":{"R35F9_C1":"SUPPORTED","R35F9_C2":"SUPPORTED","R35F9_C3":"SUPPORTED","R35F9_C4":"SUPPORTED"},
  "alt_equivalence":null,"exceeds_all_reasons":null,"needs_context":null,
- "notes":"C1 两次读数相减求耗时;C2 可能离开设备的只有时长,属允许语义;C3 原值无逃逸;C4 时长解密条款成立。派生值进入宿主 → 第二轮生成 RETURN_VALUE 流,但不影响本站点四条约束,因为逃逸的不是 RAW"}
+ "flows":[{"path_type":"RETURN_VALUE","sink_unit":"pISSStream",
+           "hops":[{"unit":"Alamofire","symbol":"DataResponse.serializationDuration","loc":"Source/Core/DataRequest.swift:266"},
+                   {"unit":"pISSStream","symbol":"<宿主里读 response 的那处>","loc":"<文件>:<行>"}],
+           "sink_use":["LOCAL_ONLY"],"sink_value":"DERIVED","sink_declared":false,"verdict":"SUPPORTED",
+           "evidence":"repos/<owner-name>/<文件> L<n>: <宿主如何使用 response>","stuck_at":null,
+           "notes":"宿主只取 result,未读 serializationDuration → 时长未被使用;其余宿主同此 / 或各写一条"}],
+ "notes":"C1 两次读数相减求耗时;C2 可能离开设备的只有时长,属允许语义;C3 原值无逃逸;C4 时长解密条款成立。派生值进入宿主 → flows 里逐宿主记 RETURN_VALUE 流;不影响本站点四条约束,因为逃逸的不是 RAW"}
 ```
-**这一例决定了 `escape.value` 字段的存在**:按 v1.1 的"有逃逸即 UNKNOWN",C3 会被误判为 UNKNOWN;实际上 35F9 明文允许时长离开设备,禁的只是原值。
+**这一例决定了 `escape.value` 字段的存在**:按 v1.1 的"有逃逸即 UNKNOWN",C3 会被误判为 UNKNOWN;实际上 35F9 明文允许时长离开设备,禁的只是原值。`flows` 里的宿主记录是示意(宿主源码在 `src/repos/` 里,行号以实际为准):Alamofire 被多个 App 链接,`hosts` 里有几个宿主就查几个,每个宿主一条或注明合并。
 
 ### B.2 Lightstreamer `Sources/LightstreamerClient/MPNDevice.swift:219–224` — UserDefaults,**未声明**
 
@@ -565,7 +604,7 @@ RQ4 的 `TRIGGER` 路径里还有一个归属判断——"这次 RRA 使用的�
  "operation":"READ",
  "value_fate":["STORED"],
  "fate_evidence":"L219 appId ← string(forKey:\"LS_appID\") ?? bundleIdentifier;L226 self.applicationId = appId。MPNDevice 是 public 类,applicationId 的读取方不在可见行内",
- "escape":{"kind":"STORED","value":"RAW","target":"MPNDevice.applicationId(public 属性)"},
+ "escape":{"kind":"STORED","value":"RAW","target":"LightstreamerClient::MPNDevice.applicationId","symbols":["applicationId","deviceToken","previousDeviceToken"]},
  "applicable_reason":"NONE","constraint_verdicts":{},
  "alt_equivalence":null,"exceeds_all_reasons":null,
  "needs_context":{"what":"MPNDevice.applicationId / deviceToken / previousDeviceToken 的读取方(LightstreamerClient 里构造推送设备注册报文的代码)","why":"三个值存入 public 属性,从类名(MPN = 移动推送)看很可能进入发往服务器的注册请求"},
@@ -589,14 +628,14 @@ L222 同上但 `operation: READ`、目标 `previousDeviceToken`;L223 `operation:
  "operation":"READ",
  "value_fate":["RETURNED"],
  "fate_evidence":"L59 计算属性直接返回 uptimeNanoseconds/NSEC_PER_MSEC —— 开机以来的毫秒数,原值",
- "escape":{"kind":"RETURNED","value":"RAW","target":"Scheduler.now → LightstreamerClient.swift connectTs/recoverTs 赋值与相减"},
+ "escape":{"kind":"RETURNED","value":"RAW","target":"LightstreamerClient::Scheduler.now","symbols":["now","connectTs","recoverTs"]},
  "applicable_reason":"NA","constraint_verdicts":{},
  "alt_equivalence":"NEAR_EQUIVALENT",
- "exceeds_all_reasons":"UNKNOWN",
- "needs_context":{"what":"LightstreamerClient.swift 中 connectTs / recoverTs 的全部用途,尤其是否把原值放进发往服务器的报文","why":"原值 RETURNED;可见的 L4756 只是相减,但六处赋值的下游不可见"},
+ "exceeds_all_reasons":"<按 LightstreamerClient.swift 里六处用途判:全是相减求时长 → NO;有一处把原值装进报文 → YES>",
+ "needs_context":null,
  "notes":"该单元清单声明了 SystemBootTime/35F9.1,源码中却无任何 RRA 开机时间调用——声明对应的是这个 ALT 用法(declared_for_mapped_category=true),RQ2.2 正例。不给它填理由约束"}
 ```
-**这一例说明了两件事**:ALT 站点即使单元声明了类别也不评理由;站点的 `exceeds_all_reasons` 在单元内逃逸被追完之前只能是 UNKNOWN,扩展回路不只服务跨单元。
+**这一例说明了两件事**:ALT 站点即使单元声明了类别也不评理由;站点的 `exceeds_all_reasons` 要在单元内把逃逸读到头再判——`LightstreamerClient.swift` 就在 `src/` 里,六处 `connectTs` / `recoverTs` 的用途逐处看完再填,不要停在 UNKNOWN。
 
 ### B.4 SDWebImage 4.0.0 `SDWebImage/SDImageCache.m:489 / 516 / 541` — FileTimestamp(ObjC pod),未声明
 
@@ -642,7 +681,7 @@ L67:
  "operation":"READ",
  "value_fate":["RETURNED"],
  "fate_evidence":"L67 取 mtime 作 date;L71 装进 Entry.expiry 返回给调用方",
- "escape":{"kind":"RETURNED","value":"RAW","target":"Entry.expiry(公开返回值)"},
+ "escape":{"kind":"RETURNED","value":"RAW","target":"Cache::Entry.expiry","symbols":["Entry","expiry"]},
  "applicable_reason":"NONE","constraint_verdicts":{},
  "alt_equivalence":null,"exceeds_all_reasons":null,
  "needs_context":null,
@@ -669,7 +708,7 @@ L83:`operation: WRITE`,`value_fate: ["PERSISTED_LOCAL"]`,`escape: null`,notes `W
  "operation":"READ",
  "value_fate":["RETURNED"],
  "fate_evidence":"L72 stat 填充 inout 参数 info,整个 struct stat 原样交回调用方;可见范围内本函数未读任何时间戳字段",
- "escape":{"kind":"RETURNED","value":"RAW","target":"inout info → 调用方(FileSystem.info(forFileAt:) 等公开 API)"},
+ "escape":{"kind":"RETURNED","value":"RAW","target":"_NIOFileSystem::system_stat(_:_:) inout info","symbols":["system_stat","info","FileInfo"]},
  "applicable_reason":"0A2A.1",
  "constraint_verdicts":{"R0A2A_C1":"SUPPORTED","R0A2A_C2":"UNKNOWN","R0A2A_C3":"SUPPORTED","R0A2A_C4":"UNKNOWN","R0A2A_C5":"UNKNOWN"},
  "alt_equivalence":null,"exceeds_all_reasons":null,
@@ -697,12 +736,12 @@ NIOCore 无清单(ALT 不需要)。
  "operation":"READ",
  "value_fate":["STORED"],
  "fate_evidence":"L928 返回给 timeNow();L934 装进 NIODeadline;L886 public var uptimeNanoseconds 可取回原值",
- "escape":{"kind":"STORED","value":"RAW","target":"NIODeadline"},
+ "escape":{"kind":"STORED","value":"RAW","target":"NIOCore::NIODeadline","symbols":["NIODeadline","uptimeNanoseconds"]},
  "applicable_reason":"NA","constraint_verdicts":{},
  "alt_equivalence":"NEAR_EQUIVALENT",
  "exceeds_all_reasons":"UNKNOWN",
  "needs_context":{"what":"所有读取 NIODeadline.uptimeNanoseconds 原值访问器的位置(NIO 内部与宿主)","why":"WRAPPER_EXPOSES_RAW;比较/加减不用追,只追取回原值的地方"},
- "notes":"WRAPPER_EXPOSES_RAW。L915 的 clock_gettime(CLOCK_MONOTONIC) 是 Linux 分支,不是站点(且 CLOCK_MONOTONIC 不在附录 C)。EventLoop.swift 里另外 22 处 .uptimeNanoseconds 都是 NIODeadline 自己的成员,不是站点"}
+ "notes":"WRAPPER_EXPOSES_RAW。L915 的 clock_gettime(CLOCK_MONOTONIC) 在 #if os(Linux) 分支里,iOS 上是死代码 → 那个站点判 NO(COMPILE_GUARD_EXCLUDES_IOS_RELEASE);CLOCK_MONOTONIC 在 Darwin 上是 ALT(附录 C.1),活分支里出现才算。EventLoop.swift 里另外 22 处 .uptimeNanoseconds 都是 NIODeadline 自己的成员,不是站点"}
 ```
 
 ### B.8 wikipedia-ios `Wikipedia/Code/AppearanceSettingsViewController.swift:181` 与 `SessionsFunnel.swift:122` — App 只声明 1C8F 却用 `.standard`;第一方封装;ALT 时长上报
@@ -717,7 +756,7 @@ L181 `dimming.isImageDimmed = UserDefaults.standard.wmf_isImageDimming`:
  "operation":"WRAPPED",
  "value_fate":["STORED"],
  "fate_evidence":"L181 读出的布尔赋给 dimming.isImageDimmed(另一个对象的属性,读取方不在可见行内)",
- "escape":{"kind":"STORED","value":"RAW","target":"dimming.isImageDimmed"},
+ "escape":{"kind":"STORED","value":"RAW","target":"Wikipedia::ImageDimmingExampleViewController.isImageDimmed","symbols":["isImageDimmed"]},
  "applicable_reason":"1C8F.1",
  "constraint_verdicts":{"R1C8F_C1":"CONFLICT","R1C8F_C2":"…","R1C8F_C3":"…","R1C8F_C4":"…","R1C8F_C5":"…"},
  "alt_equivalence":null,"exceeds_all_reasons":null,"needs_context":null,
@@ -725,9 +764,9 @@ L181 `dimming.isImageDimmed = UserDefaults.standard.wmf_isImageDimming`:
 ```
 (`R1C8F_C2…C5` 的具体判法随工作表给出的约束文本填,此处省略。)
 
-`Wikipedia/Code/SessionsFunnel.swift:122` `let milliseconds = (CACurrentMediaTime() - pageLoadStartTime) * 1000`(ALT,`alt.ca_current_media_time`;函数窗口 L115–L129 全部可见):L128 `pageLoadTimes.append(milliseconds)` 存进实例属性数组,读取方不在函数内 → `value_fate: ["LOCAL_ONLY","STORED"]`,`escape: {"kind":"STORED","value":"DERIVED","target":"SessionsFunnel.pageLoadTimes"}`,notes `DERIVED_AS: 两次读数相减的毫秒时长`;`exceeds_all_reasons: "NO"`——能离开的只有时长。上报发生在同文件别的函数里,在补充目录里能看到就引用 `Wikipedia/Code/SessionsFunnel.swift L<n>`,看不到也不猜。L106 `pageLoadStartTime = CACurrentMediaTime()` 是另一个站点:`["STORED"]`,`escape.value = RAW`,但 L122 可见其唯一用途是相减,notes 写 `RAW_CONSUMED_BY_SUBTRACTION_ONLY`,`exceeds_all_reasons: "NO"`。
+`Wikipedia/Code/SessionsFunnel.swift:122` `let milliseconds = (CACurrentMediaTime() - pageLoadStartTime) * 1000`(ALT,`alt.ca_current_media_time`;函数窗口 L115–L129 全部可见):L128 `pageLoadTimes.append(milliseconds)` 存进实例属性数组,读取方不在函数内 → `value_fate: ["LOCAL_ONLY","STORED"]`,`escape: {"kind":"STORED","value":"DERIVED","target":"Wikipedia::SessionsFunnel.pageLoadTimes","symbols":["pageLoadTimes"]}`,notes `DERIVED_AS: 两次读数相减的毫秒时长`;`exceeds_all_reasons: "NO"`——能离开的只有时长。上报发生在同文件别的函数里,`src/` 里就能看到,引用 `Wikipedia/Code/SessionsFunnel.swift L<n>`。L106 `pageLoadStartTime = CACurrentMediaTime()` 是另一个站点:`["STORED"]`,`escape.value = RAW`,但 L122 可见其唯一用途是相减,notes 写 `RAW_CONSUMED_BY_SUBTRACTION_ONLY`,`exceeds_all_reasons: "NO"`。
 
-`WMF Framework/Third Party/FLAnimatedImage/FLAnimatedImage.m:450`(ALT):`unit_role: "VENDORED_THIRD_PARTY"`(补充目录里该文件 L1–L8 是 Flipboard 的版权头),`declaring_unit: "WMF"`(`target.name`:它编进的是仓库内的动态 framework target,不是 App 主二进制)。
+`WMF Framework/Third Party/FLAnimatedImage/FLAnimatedImage.m:450`(ALT):`unit_role: "VENDORED_THIRD_PARTY"`(`src/` 里该文件 L1–L8 是 Flipboard 的版权头),`declaring_unit: "WMF"`(`target.name`:它编进的是仓库内的动态 framework target,不是 App 主二进制)。
 
 ### B.9 两个"判 NO / 判不定"的真实情形
 
@@ -756,12 +795,12 @@ L181 `dimming.isImageDimmed = UserDefaults.standard.wmf_isImageDimming`:
  "alt_equivalence":null,"exceeds_all_reasons":null,
  "needs_context":{"what":"两个 store 实例各自被谁用、写了哪些键","why":"MIXED_DOMAINS;C3/C4 要看具体键是否被 group 外成员读写",
                   "requests":[{"kind":"CALLERS","symbol":"WMFUserDefaultsStore.load","file":null},{"kind":"CALLERS","symbol":"WMFUserDefaultsStore.save","file":null}]},
- "notes":"MIXED_DOMAINS:同一行对 .standard 实例是 APP_PRIVATE(1C8F 不覆盖 → CONFLICT),对 group 实例是 APP_GROUP。C2:.standard 实例的参与者只有本 App,group 实例的 suite 名 group.org.wikimedia.wikipedia 在 target.app_groups 里 → 两种域都 SUPPORTED,只写一个值。C5 未触发,不要上下文。group 实例同时被 Widgets/RandomWidget.swift:83 读——第二轮 CHANNEL 流的种子(Wikipedia ↔ WidgetsExtension 两个声明单元)"}
+ "notes":"MIXED_DOMAINS:同一行对 .standard 实例是 APP_PRIVATE(1C8F 不覆盖 → CONFLICT),对 group 实例是 APP_GROUP。C2:.standard 实例的参与者只有本 App,group 实例的 suite 名 group.org.wikimedia.wikipedia 在 target.app_groups 里 → 两种域都 SUPPORTED,只写一个值。C5 未触发,不要上下文。group 实例写的键若被 Widgets/RandomWidget.swift 读——那是一条 CHANNEL 流,写进 flows(Wikipedia ↔ WidgetsExtension 两个声明单元)"}
 ```
 
 ## 附录 C. ALT 站点的 API 名单(数据级替代 —— 要标)
 
-入选标准只有一条:**调用它能拿到某个 RRA 类别的同一数据,或其近似派生值**。名单核对日期 2026-09-16,依据 Apple 公开文档与 Apple 开源实现;"清单外"仅指本次核对未见于 Apple RRA 条目,不代表 Apple 承诺免申报。扫描器按此表生成 `site_class=ALT` 的站点,`api` 键即第一列。
+入选标准只有一条:**调用它能拿到某个 RRA 类别的同一数据,或其近似派生值**。名单核对日期 2026-09-16,1.9.1 于 2026-09-17 增补 4 项(标"1.9.1 增补"),依据 Apple 公开文档与 Apple 开源实现;"清单外"仅指本次核对未见于 Apple RRA 条目,不代表 Apple 承诺免申报。扫描器按此表生成 `site_class=ALT` 的站点,`api` 键即第一列。
 
 ### C.1 替代 SystemBootTime(`mach_absolute_time` / `systemUptime`)
 
@@ -772,7 +811,10 @@ L181 `dimming.isImageDimmed = UserDefaults.standard.wmf_isImageDimming`:
 | `alt.clock_gettime.uptime_raw_approx` | `…(CLOCK_UPTIME_RAW_APPROX` | NEAR_EQUIVALENT | 缓存值,可滞后数毫秒 |
 | `alt.clock_gettime.monotonic_raw` | `clock_gettime(CLOCK_MONOTONIC_RAW` / `clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW` | NEAR_EQUIVALENT | 含睡眠时间;与 `mach_continuous_time` 同源 |
 | `alt.clock_gettime.monotonic_raw_approx` | `…(CLOCK_MONOTONIC_RAW_APPROX` | NEAR_EQUIVALENT | 同上,缓存值 |
+| `alt.clock_gettime.monotonic` | `clock_gettime(CLOCK_MONOTONIC` / `clock_gettime_nsec_np(CLOCK_MONOTONIC`(不带 `_RAW`) | NEAR_EQUIVALENT | Darwin 上 `CLOCK_MONOTONIC` 是自启动以来的时间、含睡眠,与 `mach_continuous_time` 同源;不要按 Linux 的语义理解这个名字(1.9.1 增补) |
 | `alt.mach_continuous_time` | `mach_continuous_time(` | NEAR_EQUIVALENT | ticks,含睡眠 |
+| `alt.mach_approximate_time` | `mach_approximate_time(` | NEAR_EQUIVALENT | `mach_absolute_time` 的低精度版本,同一数据(1.9.1 增补) |
+| `alt.mach_continuous_approximate_time` | `mach_continuous_approximate_time(` | NEAR_EQUIVALENT | `mach_continuous_time` 的低精度版本(1.9.1 增补) |
 | `alt.dispatch_time.uptime_nanoseconds` | **接收者是 `DispatchTime`** 的 `.uptimeNanoseconds` / `.rawValue`:`DispatchTime.now().uptimeNanoseconds`、`let t: DispatchTime = …; t.uptimeNanoseconds` | NEAR_EQUIVALENT | **`DispatchTime.now()` 本身不是站点**,只有读出数值才是;封装类型的同名成员(`NIODeadline.uptimeNanoseconds`)不是站点,见 §4.8 |
 | `alt.ca_current_media_time` | `CACurrentMediaTime(` | NEAR_EQUIVALENT | Apple 文档明言其值来自 `mach_absolute_time` |
 | `alt.sysctl.kern_boottime` | `KERN_BOOTTIME` / `"kern.boottime"` | CONDITIONAL | 返回**开机时刻**而非清醒时长——对指纹识别而言信息量更大;未见 Apple 免申报说明 |
@@ -799,6 +841,7 @@ L181 `dimming.isImageDimmed = UserDefaults.standard.wmf_isImageDimming`:
 | `api` 键 | 匹配标识 | `alt_equivalence` | 备注 |
 |---|---|---|---|
 | `alt.text_input_mode.primary_language` | **接收者是 `UITextInputMode`** 的 `.primaryLanguage`(`responder.textInputMode?.primaryLanguage`) | PARTIAL_DATUM | 只暴露**当前**输入模式的语言,不能枚举全部键盘;可能为 nil。其他类型的 `.primaryLanguage` 不是站点 |
+| `alt.text_document_proxy.primary_language` | 键盘扩展侧 `textDocumentProxy.documentInputMode?.primaryLanguage`(`UITextDocumentProxy`) | PARTIAL_DATUM | 键盘扩展读宿主文档当前输入模式的语言,同上只有一个值(1.9.1 增补) |
 
 不是站点:`currentInputModeDidChangeNotification`(事件,无数据)、`needsInputModeSwitchKey`(布尔)、`Locale.preferredLanguages`、`Bundle.preferredLocalizations`(语言偏好,不是键盘)。
 

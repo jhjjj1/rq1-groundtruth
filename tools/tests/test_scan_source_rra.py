@@ -180,6 +180,30 @@ func deadCode() {
     UserDefaults.standard.removeObject(forKey: "AcmeDead")
 }
 """,
+    # --- v3.6 ALT additions: Darwin CLOCK_MONOTONIC, the two approximate mach clocks, keyboard-extension primaryLanguage;
+    #     the _RAW variants must keep their own api keys and the Linux branch must stay dead
+    "deps/clockkit@abcdefabcdef/Sources/ClockKit/Clocks.swift": """import Foundation
+
+enum Clocks {
+    static func monotonic() -> UInt64 {
+#if os(Linux)
+        var ts = timespec(); clock_gettime(CLOCK_MONOTONIC, &ts); return UInt64(ts.tv_sec)
+#else
+        return clock_gettime_nsec_np(CLOCK_MONOTONIC)
+#endif
+    }
+    static func raw() -> UInt64 { clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW) }
+    static func approx() -> UInt64 { mach_approximate_time() }
+    static func approxContinuous() -> UInt64 { mach_continuous_approximate_time() }
+    static func continuous() -> UInt64 { mach_continuous_time() }
+}
+""",
+    "deps/clockkit@abcdefabcdef/Sources/ClockKit/KeyboardLang.swift": """import UIKit
+
+final class KeyboardViewController: UIInputViewController {
+    var lang: String? { textDocumentProxy.documentInputMode?.primaryLanguage }
+}
+""",
     # --- callers of the wikipedia extension members (wrapper links)
     "repos/wikimedia-wikipedia-ios/Wikipedia/Code/Caller.swift": """import Foundation
 
@@ -754,7 +778,11 @@ def main():
         shim = find(nio, "shim.c")
         assert [(s["tag"], s["guard_live_on_ios"], s["compile_guard"], s["hint"]) for s in shim] == [("statfs", False, ["#ifdef __linux__"], None)], shim
         ev = find(nio, "EventLoop.swift")
-        assert [(s["site_class"], s["line"], s["guard_live_on_ios"]) for s in ev] == [("ALT", 23, True)], [(s["site_class"], s["line"]) for s in ev]
+        # v3.6: the Linux-branch clock_gettime(CLOCK_MONOTONIC) is an ALT candidate too -- dead on iOS, which the guard says
+        assert [(s["site_class"], s["line"], s["api"], s["guard_live_on_ios"]) for s in ev] == \
+            [("ALT", 16, "alt.clock_gettime.monotonic", False), ("ALT", 23, "alt.dispatch_time.uptime_nanoseconds", True)], \
+            [(s["site_class"], s["line"], s["api"]) for s in ev]
+        ev = [s for s in ev if s["line"] == 23]
         assert ev[0]["compile_guard"] == ["#if os(Linux)", "#elseif os(WASI)", "#else"] and ev[0]["alt_tier"] == "NEAR_EQUIVALENT"
         # per-target manifest: NIOPosix declares 0A2A.1, CNIOLinux and NIOCore have no covering manifest
         sysw = find(nio, "System.swift")
@@ -827,8 +855,17 @@ def main():
         ctx = by_line[6]["context"]
         assert ctx["function_lines"] == [4, 10] and ctx["lines"][0].startswith("    4   ") and any(l.startswith("    6>> ") for l in ctx["lines"]), ctx
 
+        # 11. v3.6 ALT rows: api keys per form, Linux branch dead, _RAW variants untouched
+        ck = load(out, "deps__clockkit@abcdefabcdef.jsonl")
+        got = sorted((s["file"].split("/")[-1], s["line"], s["api"], s["guard_live_on_ios"]) for s in ck)
+        assert got == [("Clocks.swift", 6, "alt.clock_gettime.monotonic", False), ("Clocks.swift", 8, "alt.clock_gettime.monotonic", True),
+                       ("Clocks.swift", 11, "alt.clock_gettime.monotonic_raw", True), ("Clocks.swift", 12, "alt.mach_approximate_time", True),
+                       ("Clocks.swift", 13, "alt.mach_continuous_approximate_time", True), ("Clocks.swift", 14, "alt.mach_continuous_time", True),
+                       ("KeyboardLang.swift", 4, "alt.text_document_proxy.primary_language", True)], got
+        assert all(s["site_class"] == "ALT" for s in ck) and {s["alt_tier"] for s in ck} == {"NEAR_EQUIVALENT", "PARTIAL_DATUM"}
+
         # 7. identity: site_id unique and stable
-        allsites = wiki + nio + cache + dh + sax + rc + fq + wb + acme
+        allsites = wiki + nio + cache + dh + sax + rc + fq + wb + acme + ck
         ids = [s["site_id"] for s in allsites]
         assert len(ids) == len(set(ids))
         for s in allsites:

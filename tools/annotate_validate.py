@@ -51,7 +51,10 @@ VOCAB = {
 }
 REQUIRED = ["site_id", "site_class", "is_api_use", "is_api_use_reason", "unit_confirmed", "unit_role", "declaring_unit",
             "operation", "value_fate", "fate_evidence", "escape", "applicable_reason", "constraint_verdicts",
-            "alt_equivalence", "exceeds_all_reasons", "needs_context", "notes"]
+            "alt_equivalence", "exceeds_all_reasons", "needs_context", "flows", "notes"]
+FLOW_KEYS = ["path_type", "sink_unit", "hops", "sink_use", "sink_value", "sink_declared", "verdict", "evidence", "stuck_at", "notes"]
+PATH_TYPES = {"RETURN_VALUE", "TRIGGER", "CHANNEL"}
+RE_LOC = re.compile(r".+:\d+$")
 RE_EVIDENCE = re.compile(r"\bL\d+")
 #: unit-level constraints may cite worksheet / batch-header fields instead of a code line (§4.5)
 RE_UNIT_EVIDENCE = re.compile(r"\bL\d+|unit_kind=|unit_location=|app_facts|清单|manifest|PrivacyInfo")
@@ -103,7 +106,7 @@ def find_batch(batches_dir, rows):
     """The batch whose site_ids best cover the output's site_ids."""
     ids = {r["site_id"] for _, r in rows if isinstance(r, dict) and "site_id" in r}
     best = None
-    for p in sorted(pathlib.Path(batches_dir).glob("b*.jsonl")):
+    for p in sorted(pathlib.Path(batches_dir).glob("*__*.jsonl")):
         h = json.loads(io.open(p, encoding="utf-8").readline())
         k = len(ids & set(h["site_ids"]))
         if k and (best is None or k > best[0]): best = (k, p)
@@ -154,6 +157,38 @@ def validate(batch_path, out_path, ws_dir=None):
                 errors.append(f"{tag} escape={esc!r} 形状/词表错")
             elif esc["kind"] not in r["value_fate"]:
                 errors.append(f"{tag} escape.kind={esc['kind']} 但 value_fate 里没有它")
+            else:
+                if "::" not in esc["target"]: warnings.append(f"{tag} escape.target 不是 <单元>::<类型>.<成员> 的写法: {esc['target']!r}")
+                if not isinstance(esc.get("symbols"), list) or not esc.get("symbols"): warnings.append(f"{tag} escape.symbols 缺失或为空")
+        # flows (§5): every escape carries at least one flow record (a searched-but-not-found one counts)
+        flows = r["flows"]
+        if not isinstance(flows, list):
+            errors.append(f"{tag} flows 必须是列表")
+        else:
+            if esc is not None and r["is_api_use"] != "NO" and not flows and esc.get("kind") in ("PASSED_OUT", "RETURNED", "STORED", "PERSISTED_LOCAL"):
+                warnings.append(f"{tag} 有 escape 但 flows 为空（出了单元的要追，没找到接收方也要记 NO_CONSUMER_FOUND；留在单元内的写 notes IN_UNIT）")
+            if r["is_api_use"] == "NO" and flows: errors.append(f"{tag} is_api_use=NO 但 flows 非空")
+            for i, fl in enumerate(flows):
+                ft = f"{tag} flows[{i}]"
+                if not isinstance(fl, dict): errors.append(f"{ft} 不是对象"); continue
+                missing = [k for k in FLOW_KEYS if k not in fl]
+                if missing: errors.append(f"{ft} 缺字段 {missing}"); continue
+                if fl["path_type"] not in PATH_TYPES: errors.append(f"{ft} path_type={fl['path_type']!r}")
+                if fl["verdict"] not in VOCAB["verdict"]: errors.append(f"{ft} verdict={fl['verdict']!r}")
+                if not isinstance(fl["sink_use"], list) or any(v not in VOCAB["value_fate"] for v in fl["sink_use"]): errors.append(f"{ft} sink_use={fl['sink_use']!r}")
+                if fl["sink_value"] not in (None, "RAW", "DERIVED"): errors.append(f"{ft} sink_value={fl['sink_value']!r}")
+                if fl["sink_declared"] not in (None, True, False): errors.append(f"{ft} sink_declared 要是 true/false/null")
+                hops = fl["hops"]
+                if not isinstance(hops, list) or any(not isinstance(h, dict) or not h.get("unit") or not h.get("symbol") or not RE_LOC.match(str(h.get("loc", ""))) for h in hops):
+                    errors.append(f"{ft} hops 每项要有 unit / symbol / loc(<文件>:<行>)")
+                found = fl["sink_unit"] is not None
+                if found and not hops: errors.append(f"{ft} 有 sink_unit 但没有 hops")
+                if found and fl["verdict"] in ("SUPPORTED", "CONFLICT") and not (RE_EVIDENCE.search(fl["evidence"]) or RE_LOC.search(fl["evidence"].split(":")[0] + ":1")):
+                    errors.append(f"{ft} verdict={fl['verdict']} 但 evidence 没有行号")
+                if not found:
+                    if fl["verdict"] != "UNKNOWN" or not (fl.get("stuck_at") or {}).get("why"): errors.append(f"{ft} 没找到接收方时 verdict 应为 UNKNOWN 且 stuck_at.why 写明查了什么")
+                if fl["verdict"] == "UNKNOWN" and found and not (fl.get("stuck_at") or {}).get("why"): warnings.append(f"{ft} UNKNOWN 却没有 stuck_at.why")
+                stats[("flow", fl["path_type"])] += 1; stats[("flow_verdict", fl["verdict"])] += 1
         nc = r["needs_context"]
         if nc is not None:
             if not isinstance(nc, dict) or not nc.get("what") or not nc.get("why"):

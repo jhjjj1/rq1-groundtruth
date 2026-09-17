@@ -1,29 +1,40 @@
-# 交给标注模型的任务说明(随每个批次附上)
+# 交给标注模型的任务说明(每个对话开头附上)
 
-你会收到一个批次包 `all_batches.zip`,里面有:
+每个对话里你会收到三样东西:
 
 1. `annot/ANNOTATION_PRINCIPLES.md` —— 标注原则 1.9,是唯一的判定依据。先完整读一遍,再开始。
-2. 批次文件 `b####__<unit>.jsonl` —— 第一行是批次头(单元级事实、工程文件事实、理由约束、要输出的 `site_ids` 顺序、本批次可用的源文件清单),之后每行一个站点。
-3. `src/<unit_location>/…` —— 源码补充目录。批次头 `source_files` / `unit_files` 列出的文件(站点所在的完整源文件、被调扩展成员的定义文件、实例构造处、键常量、清单、`Package.swift` / podspec / `project.pbxproj`)都在这里,可以打开。**清单之外的文件不存在。**
-4. `MANIFEST.json` —— 批次清单与去重映射,你不用读。
+2. `all_batches.zip` —— 全部批次。解开后每个 `b####__<unit>.jsonl` 是一个批次:第一行是批次头(单元级事实、工程文件事实、理由约束、要输出的 `site_ids` 顺序、直接相关的文件清单),之后每行一个站点;`MANIFEST.json` 是批次顺序与去重映射。
+3. `src_all.tgz.00`、`src_all.tgz.01`、… —— **整个语料的源码**,按 28 MB 切开的同一个 tar.gz。先拼回去再解开:
 
-## 你要输出什么
+```bash
+cat src_all.tgz.* > src_all.tgz && tar xzf src_all.tgz && unzip -q all_batches.zip
+ls src/            # repos/ deps/ pods/ —— 与批次头 unit_location 同名;SOURCE_INDEX.txt 列出每个文件的 sha1
+```
 
-每个批次一个 JSONL 文本块,**每个站点恰好一行**,顺序与批次头的 `site_ids` 一致,字段按原则 §3;`site_id` 原样回传。代码块第一行是 `# <批次文件名>`。不要输出解释、前言、总结或 Markdown 表格——只有 JSONL。批次头有 `n_sites` 个站点,你就输出 `n_sites` 行。
+`src/<unit_location>/<file>` 就是站点记录里 `file` 字段指的文件。范围与扫描器一致:源码后缀加清单、`Package.swift`、podspec、`project.pbxproj`、xcconfig、entitlements;测试目录、构建产物、依赖的示例工程不在其中。`src/` 之外的文件不存在。
+
+## 工作方式:自己连续做完,结果写文件,不等指令
+
+1. 解开材料后,按 `all_batches/MANIFEST.json` 的顺序**连续**处理批次,不要停下来等确认。每个批次的结果写到 `out/<批次文件名去掉 .jsonl>.out.jsonl`(例如 `out/b0001__repos__0xCUB3-wBlock.out.jsonl`),**每个站点恰好一行**,顺序与批次头的 `site_ids` 一致,字段按原则 §3;`site_id` 原样回传。批次头有 `n_sites` 个站点,文件里就有 `n_sites` 行。
+2. 每写完一个批次,先跑校验器:`python3 all_batches/tools/annotate_validate.py --batches all_batches out/<该文件>`。有 ERR 就改到 0 个 ERR 再进入下一批;WARN 看一眼,该改的改,不该改的在 notes 里说明。
+3. 每个批次结束后向 `out/PROGRESS.jsonl` 追加一行:`{"batch": "…", "n": 40, "yes": …, "no": …, "flows": …, "needs_context": …, "errors": 0, "warnings": …}`;标注过程中发现原则没说清的地方,随时追加到 `out/NOTES.md`(情形、涉及 site_id、原则哪一节、你按什么判),不要攒到最后。
+4. 聊天里每个批次只打印**一行**进度(`b0001 … n=40 YES=… NO=… flows=… ERR=0`),不要把 JSONL 贴到聊天里。
+5. 做完全部批次,或者你判断本对话快撑不住了(上下文将满),把 `out/` 整个打成 zip 交给我(用你环境里交付文件的方式),并说明做到了哪个批次。下一个对话我会把这个 zip 和材料一起传回来,你从 `out/PROGRESS.jsonl` 之后的批次继续。
+6. 不要输出解释、前言、总结或 Markdown 表格;需要说的写进 `out/NOTES.md`。
 
 每行的字段(缺一不可;不适用的填原则规定的 `NA` / `null` / `{}`):
 
 ```
 site_id, site_class, is_api_use, is_api_use_reason, unit_confirmed, unit_role, declaring_unit,
 operation, value_fate, fate_evidence, escape, applicable_reason, constraint_verdicts,
-alt_equivalence, exceeds_all_reasons, needs_context, notes
+alt_equivalence, exceeds_all_reasons, needs_context, flows, notes
 ```
 
 ## 五条硬规则(原则 §1 的复述,违反任何一条整批打回)
 
-1. 只写你在批次和补充目录里能看到的。看不到的填 `UNSURE` / `UNKNOWN`,并在 `needs_context` 写清要什么(§4.6 的结构化请求)。不要猜。
+1. 只写你在批次和 `src/` 里能看到的。看不到的填 `UNSURE` / `UNKNOWN`,并在 `needs_context` 写清要什么(§4.6 的结构化请求)。不要猜。站点字段只描述本单元;值出了单元之后的事逐跳写进 `flows`(§5),引用写 `<unit_location>/<文件> L<n>`。
 2. 输入 N 条,输出 N 条,`site_id` 不许改、不许合并、不许跳过。
-3. 每个 `SUPPORTED` / `CONFLICT` 都要有证据:站点文件的行写 `L<行号>: <片段>`,补充目录里别的文件的行写 `<文件路径> L<行号>: <片段>`,单元级事实写字段(`callers: n=11 全部 APP_PRIVATE`、`key=… @ …`、`target.app_groups=…`)。
+3. 每个 `SUPPORTED` / `CONFLICT` 都要有证据:站点文件的行写 `L<行号>: <片段>`,本单元别的文件写 `<文件路径> L<行号>: <片段>`,别的单元写 `<unit_location>/<文件路径> L<行号>: <片段>`,单元级事实写字段(`callers: n=11 全部 APP_PRIVATE`、`key=… @ …`、`target.app_groups=…`)。
 4. 枚举字段只能取原则附录 A 的值,大小写一致。
 5. `SUPPORTED` 要正面证据,`CONFLICT` 要明确反证,两者都没有就是 `UNKNOWN`。
 
@@ -43,12 +54,14 @@ alt_equivalence, exceeds_all_reasons, needs_context, notes
 
 没有可追数据值的操作(SYNC / ACQUIRE / REMOVE / OBSERVE)`value_fate: ["LOCAL_ONLY"]`、`escape: null`、notes `NO_VALUE`。
 
-值在可见范围内进了网络 / UI / 日志 / 持久化就是终点:标对应 fate,`escape` 填 `null`;`escape` 只用于值离开函数而去向不可见的情形(原则 §4.3)。**派生值(布尔、差值)离开函数也是逃逸**,`escape.value: "DERIVED"`,notes `DERIVED_AS:`。
+值在可见范围内进了网络 / UI / 日志 / 持久化就是终点:标对应 fate,`escape` 填 `null`;`escape` 用于值离开函数的情形(原则 §4.3),`target` 写 `<接收单元>::<类型>.<成员>`,`symbols` 列出你 grep 过的标识符。**派生值(布尔、差值)离开函数也是逃逸**,`escape.value: "DERIVED"`,notes `DERIVED_AS:`。
 
-`needs_context` 只在补充目录里也找不到、且有字段等着定稿时填,而且要写成工具能取的请求:`{"what": "…", "why": "…", "requests": [{"kind": "DEFINITION|CALLERS|BODY|TYPE|FILE", "symbol": "…", "file": "…或 null"}]}`。EXCEPTION 类约束未触发的 UNKNOWN 不要上下文。
+**流(§5)与站点同一轮标。** 值出了本单元就顺着 `src/` 走到接收单元,逐行看它拿值做了什么,每一条写进 `flows`:`path_type`(RETURN_VALUE / TRIGGER / CHANNEL)、`sink_unit`、逐跳的 `hops`(每跳 unit / symbol / `<文件>:<行>`)、`sink_use`、`sink_value`、`sink_declared`、`verdict`、`evidence`、`stuck_at`。要查的范围不打折:SDK 站点看批次头 `hosts` 里的**每一个**宿主(`owner/name` → `src/repos/owner-name/`);deps / pods 里每个 YES 站点都要找 TRIGGER(公开入口 ← 站点,再到宿主的调用行);WRITE 站点的键值先在 `all_batches/*.jsonl` 里 grep `"value": "<键>"` 找别的单元的 READ 站点,再 grep `src/`。查过没找到也要记一条 `sink_unit: null` + `stuck_at.why: NO_CONSUMER_FOUND: …`。没有逃逸 `flows: []`。站点级字段不因流的结果改判。
+
+`needs_context` 只在 `src/` 里也找不到、且有字段等着定稿时填(整个语料的源码都给了,它应当很少;跨单元的追踪不是 needs_context,是 flows),而且要写成工具能取的请求:`{"what": "…", "why": "…", "requests": [{"kind": "DEFINITION|CALLERS|BODY|TYPE|FILE", "symbol": "…", "file": "…或 null"}]}`。EXCEPTION 类约束未触发的 UNKNOWN 不要上下文。
 
 ## 一个输出行的样子(原则附录 B.1 的 Alamofire 例子,压成一行)
 
 ```json
-{"site_id":"…","site_class":"RRA","is_api_use":"YES","is_api_use_reason":"ProcessInfo.processInfo.systemUptime;无平台守卫;非字符串","unit_confirmed":"YES","unit_role":"THIRD_PARTY","declaring_unit":"Alamofire","operation":"READ","value_fate":["LOCAL_ONLY","PASSED_OUT"],"fate_evidence":"L248 start、L258 end 两次读数;L266 end - start 作为 serializationDuration 装入 DataResponse;L268 交给 eventMonitor;L270 completionHandler(response) 交给宿主闭包。原值 start/end 仅参与相减,未离开闭包","escape":{"kind":"PASSED_OUT","value":"DERIVED","target":"DataResponse.serializationDuration → completionHandler / eventMonitor(宿主单元)"},"applicable_reason":"35F9.1","constraint_verdicts":{"R35F9_C1":"SUPPORTED","R35F9_C2":"SUPPORTED","R35F9_C3":"SUPPORTED","R35F9_C4":"SUPPORTED"},"alt_equivalence":null,"exceeds_all_reasons":null,"needs_context":null,"notes":"C1 两次读数相减求耗时;C2 可能离开设备的只有时长;C3 原值无逃逸;C4 时长解密条款成立;DERIVED_AS: 两次读数之差"}
+{"site_id":"…","site_class":"RRA","is_api_use":"YES","is_api_use_reason":"ProcessInfo.processInfo.systemUptime;无平台守卫;非字符串","unit_confirmed":"YES","unit_role":"THIRD_PARTY","declaring_unit":"Alamofire","operation":"READ","value_fate":["LOCAL_ONLY","PASSED_OUT"],"fate_evidence":"L248 start、L258 end 两次读数;L266 end - start 作为 serializationDuration 装入 DataResponse;L268 交给 eventMonitor;L270 completionHandler(response) 交给宿主闭包。原值 start/end 仅参与相减,未离开闭包","escape":{"kind":"PASSED_OUT","value":"DERIVED","target":"HOST::completionHandler(DataResponse)","symbols":["DataResponse","serializationDuration","completionHandler","eventMonitor"]},"applicable_reason":"35F9.1","constraint_verdicts":{"R35F9_C1":"SUPPORTED","R35F9_C2":"SUPPORTED","R35F9_C3":"SUPPORTED","R35F9_C4":"SUPPORTED"},"alt_equivalence":null,"exceeds_all_reasons":null,"needs_context":null,"flows":[{"path_type":"RETURN_VALUE","sink_unit":"pISSStream","hops":[{"unit":"Alamofire","symbol":"DataResponse.serializationDuration","loc":"Source/Core/DataRequest.swift:266"},{"unit":"pISSStream","symbol":"<宿主读 response 的函数>","loc":"<文件>:<行>"}],"sink_use":["LOCAL_ONLY"],"sink_value":"DERIVED","sink_declared":false,"verdict":"SUPPORTED","evidence":"repos/<owner-name>/<文件> L<n>: <片段>","stuck_at":null,"notes":""}],"notes":"C1 两次读数相减求耗时;C2 可能离开设备的只有时长;C3 原值无逃逸;C4 时长解密条款成立;DERIVED_AS: 两次读数之差"}
 ```

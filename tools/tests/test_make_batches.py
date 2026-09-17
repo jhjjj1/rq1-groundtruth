@@ -11,6 +11,8 @@ import tempfile
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import make_batches as M  # noqa: E402
+import make_packs as P  # noqa: E402
+import zipfile  # noqa: E402
 import scan_source_rra as S  # noqa: E402
 import test_scan_source_rra as T  # noqa: E402
 
@@ -68,7 +70,47 @@ def main():
         rows = [json.loads(l) for l in io.open(out / wiki[0], encoding="utf-8")][1:]
         assert all("reason_constraints" not in r and "hosts" not in r for r in rows)
         assert all(any(l.startswith(f"{r['line']:5d}>>") for l in r["context"]["lines"]) for r in rows)
-        print(f"PASS  {len(names)} 个批次：顺序 repos→deps→pods / --exclude-units / 去重忽略行号 / 源码补充目录 / 批次头工程事实")
+        # packs: full unit source per pack, units never split, headers rewritten with source_scope
+        annot = tmp / "annot"; annot.mkdir(); (annot / "ANNOTATION_PRINCIPLES.md").write_text("# 原则\n", encoding="utf-8"); (annot / "OPUS_PROMPT.md").write_text("# 契约\n", encoding="utf-8")
+        buf = io.StringIO(); old = sys.stdout; sys.stdout = buf
+        try:
+            assert P.main(["--batches", str(out), "--src", str(src), "--out", str(tmp / "packs"), "--annot", str(annot), "--max-mb", "0.03"]) == 0
+        finally:
+            sys.stdout = old
+        packs = json.loads((tmp / "packs" / "PACKS.json").read_text(encoding="utf-8"))["packs"]
+        assert len(packs) >= 2 and sum(len(p["units"]) for p in packs) == len({b["unit_location"] for b in man["batches"]}), packs
+        assert [b for p in packs for u in p["units"] for b in u["batches"]] == names            # every batch exactly once, MANIFEST order
+        z = zipfile.ZipFile(tmp / "packs" / packs[0]["pack"])
+        entries = z.namelist()
+        assert f"{packs[0]['pack'][:-4]}/annot/ANNOTATION_PRINCIPLES.md" in entries and f"{packs[0]['pack'][:-4]}/SOURCE_INDEX.json" in entries
+        first = [e for e in entries if e.endswith(".jsonl")][0]
+        hz = json.loads(z.read(first).decode("utf-8").splitlines()[0])
+        assert hz["source_scope"] in ("FULL_UNIT", "SITE_MODULES", "REFERENCED_FILES") and hz["source_index"] == "SOURCE_INDEX.json"
+        idx = json.loads(z.read(f"{packs[0]['pack'][:-4]}/SOURCE_INDEX.json").decode("utf-8"))
+        wiki_units = [u for p in packs for u in p["units"] if u["unit_location"] == "repos/wikimedia-wikipedia-ios"]
+        assert wiki_units and wiki_units[0]["source_scope"] == "FULL_UNIT"
+        wz = zipfile.ZipFile(tmp / "packs" / [p for p in packs if any(u["unit_location"] == "repos/wikimedia-wikipedia-ios" for u in p["units"])][0]["pack"])
+        assert any(e.endswith("Wikipedia/Code/Caller.swift") for e in wz.namelist()) and any(e.endswith("Wikipedia/Resources/PrivacyInfo.xcprivacy") for e in wz.namelist())
+        assert all("sha1" in r for r in list(idx.values())[0]["files"].values())
+        # --only-new-vs: a second scan with an extra unit yields batches for the new sites only, under another prefix
+        src2 = tmp / "src2"; shutil.copytree(src, src2)
+        extra = src2 / "deps" / "newpkg@000000000000" / "Sources" / "NewPkg"; extra.mkdir(parents=True)
+        (extra / "Up.swift").write_text("let t = mach_approximate_time()\n", encoding="utf-8")
+        ws2 = tmp / "ws2"; out2 = tmp / "addendum"
+        buf = io.StringIO(); old = sys.stdout; sys.stdout = buf
+        try:
+            assert S.main(["--rules", str(T.RULES), "--src", str(src2), "--out-dir", str(ws2)]) == 0
+            assert M.main(["--worksheets", str(ws2), "--out", str(out2), "--only-new-vs", str(ws), "--prefix", "a"]) == 0
+        finally:
+            sys.stdout = old
+        man2 = json.loads((out2 / "MANIFEST.json").read_text(encoding="utf-8"))
+        assert [b["file"] for b in man2["batches"]] == ["a0001__deps__newpkg@000000000000.jsonl"] and man2["counts"]["sites_batched"] == 1, man2["batches"]
+        assert man2["n_old_site_ids"] == sum(1 for f in ws.glob("*.jsonl") for _ in io.open(f, encoding="utf-8"))
+        # the validator finds an `a####` batch too
+        import annotate_validate as V
+        rows = [json.loads(l) for l in io.open(out2 / "a0001__deps__newpkg@000000000000.jsonl", encoding="utf-8")][1:]
+        assert V.find_batch(out2, [(1, rows[0])]).name.startswith("a0001__")
+        print(f"PASS  {len(names)} 个批次：顺序 repos→deps→pods / --exclude-units / 去重忽略行号 / 源码补充目录 / 批次头工程事实 / {len(packs)} 个全源码包 / --only-new-vs 补充批次")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

@@ -116,7 +116,13 @@ def main(argv=None):
     ap.add_argument("--units", default=None, help="只切这些单元（unit_location，逗号分隔），如 repos/x,deps/y@rev")
     ap.add_argument("--exclude-units", default=None, help="不切这些单元（unit_location，逗号分隔）")
     ap.add_argument("--no-dedup", action="store_true", help="不做跨版本去重")
+    ap.add_argument("--only-new-vs", default=None, help="只切这个工作表目录里没有的 site_id（增补扫描后的补充批次）")
+    ap.add_argument("--prefix", default="b", help="批次文件名前缀（补充批次用 a，避免与 b#### 撞名）")
     a = ap.parse_args(argv)
+    old_ids = set()
+    if a.only_new_vs:
+        for f in sorted(pathlib.Path(a.only_new_vs).glob("*.jsonl")):
+            for line in io.open(f, encoding="utf-8"): old_ids.add(json.loads(line)["site_id"])
 
     ws = pathlib.Path(a.worksheets); out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     src = pathlib.Path(a.src) if a.src else None
@@ -130,6 +136,7 @@ def main(argv=None):
             s = json.loads(line)
             if only and s["unit_location"] not in only: continue
             if s["unit_location"] in skip: continue
+            if old_ids and s["site_id"] in old_ids: continue
             by_unit.setdefault(s["unit_location"], []).append(s)
     by_unit = collections.OrderedDict(sorted(by_unit.items(), key=lambda kv: (TREE_ORDER.get(kv[0].split("/")[0], 9), kv[0].lower())))
 
@@ -157,7 +164,7 @@ def main(argv=None):
 
     # --- batches
     manifest = {"provenance": units_json.get("provenance"), "batch_size": a.size, "batches": [], "duplicates": pairs,
-                "excluded_units": sorted(skip), "supplement": {},
+                "excluded_units": sorted(skip), "only_new_vs": a.only_new_vs, "n_old_site_ids": len(old_ids), "supplement": {},
                 "counts": {"sites_total": 0, "sites_batched": 0, "sites_copied_from_duplicates": len(dup_of)}}
     n = 0
     for loc, sites in by_unit.items():
@@ -190,7 +197,7 @@ def main(argv=None):
             manifest["supplement"][loc] = {"unit_files": unit_files, "files": []}
         for i in range(0, len(todo), a.size):
             chunk = todo[i:i + a.size]; n += 1
-            name = f"b{n:04d}__{loc.replace('/', '__')}.jsonl"
+            name = f"{a.prefix}{n:04d}__{loc.replace('/', '__')}.jsonl"
             h = dict(header); h["_batch"] = name; h["n_sites"] = len(chunk); h["site_ids"] = [s["site_id"] for s in chunk]
             if src is not None:
                 h["source_dir"] = f"src/{loc}"
@@ -210,7 +217,7 @@ def main(argv=None):
     c = manifest["counts"]
     print(f"单元 {len(by_unit)}，站点 {c['sites_total']}，去重复制 {c['sites_copied_from_duplicates']}，进批次 {c['sites_batched']}，批次 {n} 个（每批 ≤{a.size}）"
           + (f"；补充源文件 {sum(len(v['files']) + len(v['unit_files']) for v in manifest['supplement'].values())} 个 → {out}/src/" if src is not None else ""))
-    print(f"输出 {out}/b####__<unit>.jsonl + MANIFEST.json")
+    print(f"输出 {out}/{a.prefix}####__<unit>.jsonl + MANIFEST.json")
     return 0
 
 

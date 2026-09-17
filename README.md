@@ -570,6 +570,25 @@ Opus 交回 22 条"原则没说清的地方"，1.9 逐条裁决（都写进了�
 
 全量标注用 1.9 + v3.5 批次；13 个试标批次一并重标，1.8 那遍作一致性参照。
 
+### 规则文件复核与替代 API 增补（2026-09-17，v3.6 / 原则 1.9.1 / 分析器 0.123.82）
+
+拿 Apple 当天的 NSPrivacyAccessedAPIType 页面（DocC JSON）逐条对 `rra_rules.yaml`：27 条 API 一条不差。一处标签错：
+Apple 把 FileTimestamp 类目的 `fileModificationDate` 链接到 `UIDocument.fileModificationDate`，知识库写的 owner 是
+`NSDictionary`——选择子相同，二进制侧原来两个都能抓，但 triage 的结构化通道和 matcher 的 EXACT 判定要求接收者/导入类
+在 owners 里，只导入 UIDocument 的二进制是假阴性。0.123.82 把 owners 改成 [UIDocument, NSDictionary]，rule id 不动。
+
+替代 API 名单（附录 C）不在规则文件里，是我们自己构造的；复核补了 4 项：Darwin 的 `CLOCK_MONOTONIC`（自启动含睡眠，
+之前只收了 `_RAW` 变体）、`mach_approximate_time`、`mach_continuous_approximate_time`、键盘扩展侧的
+`documentInputMode?.primaryLanguage`。RRA 集合没变，老站点的 `site_id` 不变；新站点用 `make_batches.py --only-new-vs
+<上一版工作表> --prefix a` 切成补充批次（`a####__…`），随全量一起标。
+
+标注方拿到的是**整个语料扫描范围内的源码**（`src/<unit_location>/…`，与扫描器同一套后缀/目录规则加清单与工程文件；
+一个 tar.gz 按 28 MB `split` 切片，`SOURCE_INDEX.txt` 记每个文件的 sha1）加 `all_batches.zip`。不做任何预筛：站点级字段
+仍只描述本单元（与二进制分析器的站点级输出对齐），值出了单元之后由标注方顺着源码逐跳走到接收单元，写进同一条记录的
+`flows`（§5：RETURN_VALUE / TRIGGER / CHANNEL，每跳 `<文件>:<行>`；SDK 站点查 `hosts` 里的每一个宿主；查过没找到也记
+`NO_CONSUMER_FOUND`）——流层和站点同一轮标，RQ4 的清单边界折算由工具事后按 `unit_manifest` 做。`tools/make_packs.py`
+（按单元切包）保留但不再是交付路径。
+
 ## 试标第一轮（b0001 swift-nio 40 站点 + b0003 Cache 7 站点，Opus 5，原则 1.6）
 
 `tools/annotate_validate.py` 校验：b0003 全过；b0001 的 60 处错误全是同一件事——原则没写 `is_api_use=NO` 时理由/约束字段填什么，
