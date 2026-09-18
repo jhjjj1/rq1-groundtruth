@@ -1,0 +1,14 @@
+{
+  "targets": [
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "sha": "b2db3033fbf67a97b54d25d6dac2df8a029b26b1",
+      "linkage": "SPM_ONLY",
+      "stars": 7061,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    }
+  ]
+}
