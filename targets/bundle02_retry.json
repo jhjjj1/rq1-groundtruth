@@ -1,0 +1,14 @@
+{
+  "targets": [
+    {
+      "repo": "joreilly/StarWars",
+      "sha": "7d2273cace2205ebb6b99beb9e5faf1d199a5f96",
+      "linkage": "SPM_ONLY",
+      "stars": 243,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    }
+  ]
+}

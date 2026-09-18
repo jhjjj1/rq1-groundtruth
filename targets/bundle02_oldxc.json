@@ -1,0 +1,34 @@
+{
+  "targets": [
+    {
+      "repo": "Dimillian/IceCubesApp",
+      "sha": "b2db3033fbf67a97b54d25d6dac2df8a029b26b1",
+      "linkage": "SPM_ONLY",
+      "stars": 7061,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "ldakhoa/GistHub",
+      "sha": "05c63a4b9f98401891d0c09a18d9b1547f94199b",
+      "linkage": "SPM_ONLY",
+      "stars": 154,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    },
+    {
+      "repo": "jeffreybergier/Hipstapaper",
+      "sha": "2632929a3a65dc9dc8ee4a8b67dfd03cb268c436",
+      "linkage": "SPM_ONLY",
+      "stars": 94,
+      "locks": [
+        "Package.resolved"
+      ],
+      "rerun_cause": "OK"
+    }
+  ]
+}
