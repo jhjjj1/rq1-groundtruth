@@ -112,15 +112,6 @@ WHAT THE PILOT ANNOTATION (456 sites, principles 1.8) ASKED FOR AND v3.5 ADDS:
                  Wikipedia/Code can be compiled into the WMF framework).
   context        the window is the enclosing function (signature always
                  included, capped), not ±8 lines; every line carries its number.
-
-v3.6 (2026-09-17): four ALT rows added after re-checking Appendix C -- Darwin's
-CLOCK_MONOTONIC (time since boot incl. sleep; only the _RAW variants were
-listed), mach_approximate_time, mach_continuous_approximate_time, and the
-keyboard-extension form documentInputMode?.primaryLanguage.  RRA rules come
-from cross_rra_analyzer 0.123.82, whose fileModificationDate entry now names
-UIDocument (Apple's link) alongside NSDictionary; the API set is unchanged, so
-existing site_ids are unaffected and the additions are batched with
-`make_batches.py --only-new-vs <previous worksheets> --prefix a`.
 """
 
 import argparse
@@ -213,10 +204,7 @@ ALT_KEYWORDS = {'alt.clock_gettime_nsec_np.uptime_raw': ['CLOCK_UPTIME_RAW'],
                 'alt.clock_gettime.uptime_raw_approx': ['CLOCK_UPTIME_RAW_APPROX'],
                 'alt.clock_gettime.monotonic_raw': ['CLOCK_MONOTONIC_RAW'],
                 'alt.clock_gettime.monotonic_raw_approx': ['CLOCK_MONOTONIC_RAW_APPROX'],
-                'alt.clock_gettime.monotonic': ['CLOCK_MONOTONIC'],
                 'alt.mach_continuous_time': ['mach_continuous_time'],
-                'alt.mach_approximate_time': ['mach_approximate_time'],
-                'alt.mach_continuous_approximate_time': ['mach_continuous_approximate_time'],
                 'alt.dispatch_time.uptime_nanoseconds': ['DispatchTime'],
                 'alt.ca_current_media_time': ['CACurrentMediaTime'],
                 'alt.sysctl.kern_boottime': ['KERN_BOOTTIME', 'kern.boottime'],
@@ -225,7 +213,6 @@ ALT_KEYWORDS = {'alt.clock_gettime_nsec_np.uptime_raw': ['CLOCK_UPTIME_RAW'],
                 'alt.getfsstat': ['getfsstat'],
                 'alt.getmntinfo': ['getmntinfo'],
                 'alt.text_input_mode.primary_language': ['primaryLanguage'],
-                'alt.text_document_proxy.primary_language': ['primaryLanguage'],
                 'alt.cfpreferences.app': ['CFPreferences'],
                 'alt.cfpreferences.domain': ['CFPreferences']}
 ALT_PATTERNS = [
@@ -239,16 +226,8 @@ ALT_PATTERNS = [
      re.compile(r"\bclock_gettime(_nsec_np)?\s*\(\s*CLOCK_MONOTONIC_RAW\b(?!_APPROX)")),
     ("alt.clock_gettime.monotonic_raw_approx", "SystemBootTime", "NEAR_EQUIVALENT", "CLOCK_MONOTONIC_RAW_APPROX",
      re.compile(r"\bclock_gettime(_nsec_np)?\s*\(\s*CLOCK_MONOTONIC_RAW_APPROX\b")),
-    # Darwin's CLOCK_MONOTONIC is time since boot including sleep (same source as mach_continuous_time);
-    # the Linux reading of the name does not apply on iOS.  The _RAW / _RAW_APPROX variants have their own rows.
-    ("alt.clock_gettime.monotonic", "SystemBootTime", "NEAR_EQUIVALENT", "CLOCK_MONOTONIC",
-     re.compile(r"\bclock_gettime(_nsec_np)?\s*\(\s*CLOCK_MONOTONIC\b(?!_RAW)")),
     ("alt.mach_continuous_time", "SystemBootTime", "NEAR_EQUIVALENT", "mach_continuous_time(",
      re.compile(r"\bmach_continuous_time\s*\(")),
-    ("alt.mach_approximate_time", "SystemBootTime", "NEAR_EQUIVALENT", "mach_approximate_time(",
-     re.compile(r"\bmach_approximate_time\s*\(")),
-    ("alt.mach_continuous_approximate_time", "SystemBootTime", "NEAR_EQUIVALENT", "mach_continuous_approximate_time(",
-     re.compile(r"\bmach_continuous_approximate_time\s*\(")),
     ("alt.dispatch_time.uptime_nanoseconds", "SystemBootTime", "NEAR_EQUIVALENT", "DispatchTime…uptimeNanoseconds",
      re.compile(r"\bDispatchTime\s*(\.now\s*\(\s*\)|\([^()]*\))\s*\.\s*(uptimeNanoseconds|rawValue)\b")),
     ("alt.ca_current_media_time", "SystemBootTime", "NEAR_EQUIVALENT", "CACurrentMediaTime(",
@@ -263,9 +242,6 @@ ALT_PATTERNS = [
     ("alt.getmntinfo", "DiskSpace", "CONDITIONAL", "getmntinfo(", re.compile(r"\bgetmntinfo(_r_np)?\s*\(")),
     ("alt.text_input_mode.primary_language", "ActiveKeyboards", "PARTIAL_DATUM", "textInputMode…primaryLanguage",
      re.compile(r"\b(textInputMode|UITextInputMode)\b[^;\n]{0,60}?\.primaryLanguage\b")),
-    # keyboard-extension side: UITextDocumentProxy.documentInputMode?.primaryLanguage
-    ("alt.text_document_proxy.primary_language", "ActiveKeyboards", "PARTIAL_DATUM", "documentInputMode…primaryLanguage",
-     re.compile(r"\bdocumentInputMode\b[^;\n]{0,40}?\.primaryLanguage\b")),
     ("alt.cfpreferences.app", "UserDefaults", "CONDITIONAL", "CFPreferences*App*",
      re.compile(r"\bCFPreferences(CopyAppValue|SetAppValue|AppSynchronize|CopyMultiple|SetMultiple)\s*\(")),
     ("alt.cfpreferences.domain", "UserDefaults", "CONDITIONAL", "CFPreferences{Copy,Set}Value",

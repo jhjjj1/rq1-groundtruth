@@ -19,6 +19,19 @@ an ALT site judged NO has exceeds_all_reasons null; a per-domain verdict dict
 is only allowed on a DefaultsDomainIs constraint of a MIXED_DOMAINS site;
 needs_context carries machine-readable `requests` (kind / symbol).
 
+Rule-table consistency (§4.5 domains, §4.7 ALT) is checked the same way, against
+`rule_table.py`: a verdict that contradicts the row the table gives for this
+site's domain is a blocking error, as is an `exceeds_all_reasons` that
+contradicts §4.7.  Both were unchecked through the first two passes and both
+produced systematic errors -- 131 ALT sites carrying `YES` where §4.7 row 3 says
+`NO`, and 337 (site, constraint) pairs carrying `UNKNOWN` where §4.5's
+participants row says `SUPPORTED`.  `--rule-table` picks 1.10 or 1.11 (they
+differ only on the `DefaultsDomainIs` rows); `--rule-checks off` restores the
+older behaviour.  An annotation may contradict a row on purpose by writing
+`DOMAIN_OVERRIDE: <why>` / `ALT_OVERRIDE: <why>` in `notes`, the same escape the
+guard-liveness fact already has -- the scanner's `domain_hint` is a prefill, and
+a site whose suite is resolved across files is exactly where it is wrong.
+
 Flow coverage (§5) is a blocking rule, not a warning.  §5 seeds three paths
 from facts the batch already carries, so whether a site owes a flow record is
 decided here, not by the annotator: a site in a deps / pods unit owes a
@@ -36,6 +49,12 @@ scanner's prefills (that is the annotator's job, we only count it), an UNSURE
 fate without a needs_context request, a needs_context with no UNKNOWN /
 UNSURE anywhere, a needs_context whose only UNKNOWN is an EXCEPTION clause.
 
+`--site-index` validates records against whichever batch each site belongs to,
+instead of requiring one output file per batch.  The first pass was cut into
+different batches than the second (188 files vs 183, renumbered from b0164), so
+without it the older pass cannot be re-validated at all.  Count / order checks
+are skipped in that mode; everything else runs unchanged.
+
 Output lines beginning with `#` are ignored (the batch-name comment the
 prompt asks for).
 """
@@ -47,6 +66,8 @@ import json
 import pathlib
 import re
 import sys
+
+import rule_table
 
 VOCAB = {
     "site_class": {"RRA", "ALT"},
@@ -96,6 +117,13 @@ FLOW_DUTY_WHY = {
 RE_CTX_LINE = re.compile(r"^\s*(\d+)(?:>>)?\s?(.*)$")
 #: every `L<n>: <片段>` in a text field
 RE_CITE_Q = re.compile(r"\bL(\d+)\s*[:：]\s*([^\n;；]{4,})")
+#: a citation that names another file -- `<path> L<n>: …` or `<path>:<n>（原文 …）`.  Those line
+#: numbers belong to that file, not to this site's context window, so they are blanked out before
+#: the window comparison below.  Without this, a correct cross-file citation (which §1 rule 3 asks
+#: for) is reported as "对不上原文", and the annotator's only way out is to stop citing files.
+RE_XFILE_Q = re.compile(r"[A-Za-z0-9_@./+\-]*[A-Za-z0-9_@+\-]\.[A-Za-z0-9_]+"
+                        r"(?:\s+L|\s*[:：])\s*\d+"
+                        r"(?:\s*[:：]\s*[^;；。\n]*|\s*[（(]\s*原文\s*[^）)\n]*[）)])?")
 
 
 def context_text(site):
@@ -122,7 +150,8 @@ def check_quotes(site, rec, errors, stats):
     if not ctx: return
     lo, hi = min(ctx), max(ctx)
     for field in ("fate_evidence", "notes", "is_api_use_reason"):
-        for m in RE_CITE_Q.finditer(rec.get(field) or ""):
+        text = RE_XFILE_Q.sub(lambda m: " " * len(m.group(0)), rec.get(field) or "")
+        for m in RE_CITE_Q.finditer(text):
             n, frag = int(m.group(1)), m.group(2)
             if not (lo <= n <= hi): continue
             stats[("quote", "checked")] += 1
@@ -193,6 +222,27 @@ def pseudo_batch_from_worksheets(ws_dir, rows):
     return header, sites
 
 
+def build_site_index(batches_dir):
+    """`site_id -> (batch header, site)` across every batch in the directory.
+
+    Batch boundaries are not stable between passes (the second pass folded the
+    first pass's six `a####` batches into the main sequence and renumbered from
+    b0164), but `site_id` is.  Validating by site rather than by file is what
+    lets an older pass be checked against the same rules.
+    """
+    index = {}
+    dup = []
+    for p in sorted(pathlib.Path(batches_dir).glob("*__*.jsonl")):
+        header, sites = read_batch(p)
+        header = dict(header)
+        header.setdefault("_batch", p.name)
+        for sid, s in sites.items():
+            if sid in index:
+                dup.append(sid)
+            index[sid] = (header, s)
+    return index, dup
+
+
 def find_batch(batches_dir, rows):
     """The batch whose site_ids best cover the output's site_ids."""
     ids = {r["site_id"] for _, r in rows if isinstance(r, dict) and "site_id" in r}
@@ -204,9 +254,40 @@ def find_batch(batches_dir, rows):
     return best[1] if best else None
 
 
-def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence=True):
+def predicate_of(reasons, applicable_reason, declared, verdict_key):
+    """The constraint predicate behind one `constraint_verdicts` key.
+
+    Keys are bare ids (`RCA92_C1`) except under `applicable_reason=UNSURE`, where
+    they are `<code>/<id>` because several declared reasons are in play.
+    """
+    codes = [applicable_reason] if applicable_reason not in ("UNSURE",) else list(declared)
+    if "/" in str(verdict_key):
+        codes = [str(verdict_key).split("/")[0]]
+    want = str(verdict_key).split("/")[-1]
+    for code in codes:
+        for c in (reasons.get(code, {}) or {}).get("constraints", []) or []:
+            if c.get("id") == want:
+                return str(c.get("predicate") or "")
+    return ""
+
+
+def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence=True,
+             rule_table_version="1.11", rule_checks=True, site_index=None):
     rows, bad = read_output(out_path)
-    if batch_path is not None:
+    headers = {}
+    if site_index is not None:
+        # One record may come from any batch; each site keeps its own header so
+        # `reasons`, `unit_location` and the entitlement facts stay that site's.
+        sites = {}
+        for _, r in rows:
+            sid = r.get("site_id") if isinstance(r, dict) else None
+            if sid in site_index:
+                h, s = site_index[sid]
+                sites[sid] = s
+                headers[sid] = h
+        header = {"_batch": "(site-index)", "site_ids": list(sites), "reasons": {},
+                  "n_sites": len(sites)}
+    elif batch_path is not None:
         header, sites = read_batch(batch_path)
     else:
         header, sites = pseudo_batch_from_worksheets(ws_dir, rows)
@@ -216,20 +297,29 @@ def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence
     got = [r.get("site_id") for _, r in rows]
     dup = [k for k, v in collections.Counter(got).items() if v > 1]
     if dup: errors.append(f"重复 site_id: {dup}")
-    if batch_path is not None:
+    if site_index is not None:
+        unknown = [k for k in got if k not in sites]
+        if unknown:
+            warnings.append(f"--site-index：{len(unknown)} 个 site_id 不在任何批次里（跳过）: {unknown[:5]}")
+        stats_skipped = len(unknown)
+    elif batch_path is not None:
         if len(got) != len(expected): errors.append(f"行数 {len(got)} ≠ n_sites {len(expected)}")
         missing = [k for k in expected if k not in got]; extra = [k for k in got if k not in sites]
         if missing: errors.append(f"缺 {len(missing)} 个: {missing[:5]}{'…' if len(missing) > 5 else ''}")
         if extra: errors.append(f"多出 {len(extra)} 个不属于本批: {extra[:5]}")
         if not missing and not extra and got != expected: warnings.append("顺序与批次头 site_ids 不一致")
+        stats_skipped = 0
     else:
+        stats_skipped = 0
         unknown = [k for k in got if k not in sites]
         warnings.append(f"无批次包：只校验字段，不校验数量/顺序；{len(unknown)} 个 site_id 在工作表里找不到（跳过）: {unknown[:5]}")
 
     stats = collections.Counter(); disagree = collections.Counter()
+    if stats_skipped: stats[("site_index", "not_in_any_batch")] = stats_skipped
     for n, r in rows:
         sid = r.get("site_id"); s = sites.get(sid)
         if not s: continue
+        H = headers.get(sid, header)
         tag = f"{sid} ({s['file'].split('/')[-1]}:{s['line']})"
         for k in REQUIRED:
             if k not in r: errors.append(f"{tag} 缺字段 {k}")
@@ -258,7 +348,7 @@ def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence
         else:
             if r["is_api_use"] == "NO" and flows: errors.append(f"{tag} is_api_use=NO 但 flows 非空")
             if flow_rules:
-                duties = flow_duties(s, r, header.get("unit_location"))
+                duties = flow_duties(s, r, H.get("unit_location"))
                 got = {fl.get("path_type") for fl in flows if isinstance(fl, dict)}
                 for d in sorted(duties - got):
                     stats[("flow_missing", d)] += 1
@@ -303,7 +393,7 @@ def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence
                         if not isinstance(q, dict) or q.get("kind") not in REQUEST_KINDS or not q.get("symbol"):
                             errors.append(f"{tag} needs_context.requests 项要有 kind∈{sorted(REQUEST_KINDS)} 与 symbol: {q!r}")
         # reason / verdicts
-        reasons = header.get("reasons", {})
+        reasons = H.get("reasons", {})
         ar = r["applicable_reason"]; cv = r["constraint_verdicts"]
         declared = [c for cat, codes in (s.get("declared_reasons") or {}).items() for c in codes] if r["site_class"] == "RRA" else []
         if r["site_class"] == "ALT":
@@ -338,7 +428,7 @@ def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence
                     mixed_callers = len([d for d in ((s.get("callers") or {}).get("by_domain") or {}) if d not in ("UNKNOWN",)]) > 1
                     if not (mixed_inst or mixed_callers):
                         errors.append(f"{tag} verdict {k} 按域分开，但工作表没有 MIXED_DOMAINS（instance_domains / callers）")
-                    pred = next((c.get("predicate", "") for code in ([ar] if ar not in ("UNSURE",) else declared) for c in reasons.get(code, {}).get("constraints", []) if c.get("id") == k.split("/")[-1]), "")
+                    pred = predicate_of(reasons, ar, declared, k)
                     if not pred.startswith("DefaultsDomainIs"):
                         errors.append(f"{tag} verdict {k} 按域分开，但它不是 DefaultsDomainIs 类约束（{pred}）")
                 if any(x in ("SUPPORTED", "CONFLICT") for x in vals):
@@ -348,6 +438,55 @@ def validate(batch_path, out_path, ws_dir=None, flow_rules=True, quoted_evidence
                     elif quoted_evidence and not (RE_QUOTED.search(blob) or RE_UNIT_FACT.search(r["notes"] or "")):
                         errors.append(f"{tag} verdict {k}={v} 的证据只有行号没有代码片段，无法对着源码核："
                                       f"写成 `L<n>: <该行的原文片段>`（§1 第 3 条）")
+        # rule tables (§4.5 / §4.7).  Only rows the table actually gives are
+        # checked: `expected_*` returning None means the table is silent, which
+        # is counted and never turned into an error.  A deliberate departure is
+        # declared in `notes` the way guard liveness already is -- the domain
+        # prefill is a hint, and the sites where a suite is only resolvable
+        # across files are exactly the ones it gets wrong.
+        if rule_checks:
+            groups = rule_table.group_facts_of(H, s)
+            dom_ev = rule_table.resolve_domain(s, r, H)
+            notes_txt = r["notes"] or ""
+            for k, v in (cv or {}).items():
+                pred = predicate_of(reasons, ar, declared, k)
+                if not rule_table.is_domain_predicate(pred): continue
+                branches = list(v.items()) if isinstance(v, dict) else [(None, v)]
+                for label, got in branches:
+                    ev = rule_table.evidence_for_domain_label(label, groups) if label else dom_ev
+                    want = rule_table.expected_domain_verdict(pred, ev, groups, rule_table_version)
+                    if want is None:
+                        stats[("rule_check", f"R-UD-DOMAIN:{ev.kind}:no_expectation")] += 1
+                        continue
+                    stats[("rule_check", "R-UD-DOMAIN:checked")] += 1
+                    if got == want: continue
+                    where = f"{k}[{label}]" if label else k
+                    if "DOMAIN_OVERRIDE:" in notes_txt:
+                        stats[("rule_check", "R-UD-DOMAIN:overridden")] += 1
+                        disagree["domain_rule_override"] += 1
+                        continue
+                    stats[("rule_check", "R-UD-DOMAIN:violated")] += 1
+                    errors.append(
+                        f"{tag} {where}={got!r} 与 §4.5 规则表（{rule_table_version}）不符：域证据 "
+                        f"{ev.kind}（来源 {ev.source}，suite={ev.suite!r}，在 entitlement 里={ev.in_entitlements}）"
+                        f"下 `{pred}` 应为 {want}。若这里的预填/文本读错了，改判并在 notes 写 "
+                        f"DOMAIN_OVERRIDE: <这个域到底是什么，证据在哪一行>")
+            if r["site_class"] == "ALT" and r["is_api_use"] == "YES":
+                want = rule_table.expected_alt_exceeds(r)
+                if want is None:
+                    stats[("rule_check", "R-ALT-EXCEEDS:no_expectation")] += 1
+                else:
+                    stats[("rule_check", "R-ALT-EXCEEDS:checked")] += 1
+                    if r["exceeds_all_reasons"] != want:
+                        if "ALT_OVERRIDE:" in notes_txt:
+                            stats[("rule_check", "R-ALT-EXCEEDS:overridden")] += 1
+                            disagree["alt_rule_override"] += 1
+                        else:
+                            stats[("rule_check", "R-ALT-EXCEEDS:violated")] += 1
+                            errors.append(
+                                f"{tag} exceeds_all_reasons={r['exceeds_all_reasons']!r} 与 §4.7 不符："
+                                f"value_fate={r['value_fate']}、escape={'有' if r['escape'] else '无'} "
+                                f"下应为 {want}。要推翻就在 notes 写 ALT_OVERRIDE: <理由>")
         # consistency
         if r["is_api_use"] == "NO":
             if not r["is_api_use_reason"].startswith(NO_CODES): errors.append(f"{tag} is_api_use=NO 的 is_api_use_reason 必须以代码开头（§4.1）: {r['is_api_use_reason'][:40]!r}")
@@ -444,6 +583,17 @@ def compare(batch_path, a_path, b_path, ws_dir=None):
     return 0
 
 
+def _totals(report):
+    """Errors / warnings / stats summed over files, so a full-corpus run answers
+    `how many R-UD-DOMAIN violations` without the reader summing 183 objects."""
+    tot = {"files": len(report), "errors": 0, "warnings": 0, "stats": collections.Counter()}
+    for _, rep in report.items():
+        tot["errors"] += len(rep["errors"]); tot["warnings"] += len(rep["warnings"])
+        for k, v in rep["stats"].items(): tot["stats"][k] += v
+    tot["stats"] = dict(sorted(tot["stats"].items()))
+    return tot
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--batches", default=None, help="批次目录（含 MANIFEST.json）")
@@ -453,6 +603,9 @@ def main(argv=None):
     ap.add_argument("--json", dest="out", default=None, help="把校验结果写成 JSON")
     ap.add_argument("--flow-rules", choices=("on", "off"), default="on", help="§5 流覆盖是否算阻塞错误（默认 on；off 用于复现 1.9 的口径）")
     ap.add_argument("--quoted-evidence", choices=("on", "off"), default="on", help="SUPPORTED/CONFLICT 的证据是否必须带代码片段（默认 on）")
+    ap.add_argument("--rule-table", choices=rule_table.TABLES, default="1.11", help="§4.5 域判定按哪一版规则表校验（1.10 == 1.9；1.11 改了 DefaultsDomainIs 两行）")
+    ap.add_argument("--rule-checks", choices=("on", "off"), default="on", help="§4.5/§4.7 规则表一致性是否算阻塞错误（默认 on）")
+    ap.add_argument("--site-index", action="store_true", help="按 site_id 找所属批次，不要求一个输出文件对应一个批次（跨批次/合并文件/上一轮的批次划分）")
     a = ap.parse_args(argv)
     if a.compare:
         rows, _ = read_output(a.compare[0]); bp = find_batch(a.batches, rows) if a.batches else None
@@ -460,21 +613,40 @@ def main(argv=None):
     rc = 0; report = {}
     if not a.batches and not a.worksheets:
         ap.error("--batches 或 --worksheets 至少给一个")
+    if a.site_index and not a.batches:
+        ap.error("--site-index 需要 --batches")
+    index = None
+    if a.site_index:
+        index, dup = build_site_index(a.batches)
+        print(f"# site-index：{len(index)} 个站点，来自 {a.batches}" + (f"；{len(dup)} 个 site_id 在多个批次里重复" if dup else ""))
+        if dup:
+            rc = 1
+            print(f"   ERR  批次目录里有重复 site_id（前 5 个）：{sorted(set(dup))[:5]}")
     for out in a.outputs:
         rows, _ = read_output(out)
-        bp = find_batch(a.batches, rows) if a.batches else None
-        if a.batches and not bp:
+        bp = None if index is not None else (find_batch(a.batches, rows) if a.batches else None)
+        if a.batches and index is None and not bp:
             print(f"{out}: 找不到对应批次（site_id 一个都对不上）"); rc = 1; continue
-        header, errors, warnings, stats, disagree, _ = validate(bp, out, a.worksheets, a.flow_rules == "on", a.quoted_evidence == "on")
+        header, errors, warnings, stats, disagree, _ = validate(
+            bp, out, a.worksheets, a.flow_rules == "on", a.quoted_evidence == "on",
+            rule_table_version=a.rule_table, rule_checks=a.rule_checks == "on", site_index=index)
         verdict = "通过" if not errors else "打回"
-        print(f"== {out} → {bp.name if bp else '(worksheets)'}: {verdict}，{len(errors)} 错误，{len(warnings)} 警告")
+        print(f"== {out} → {bp.name if bp else ('(site-index)' if index is not None else '(worksheets)')}: {verdict}，{len(errors)} 错误，{len(warnings)} 警告")
         for e in errors: print(f"   ERR  {e}")
         for w in warnings: print(f"   WARN {w}")
         print("   统计:", ", ".join(f"{k[0]}={k[1]}:{v}" for k, v in sorted(stats.items())))
         if disagree: print("   与预填不一致:", dict(disagree))
         report[out] = {"batch": bp.name if bp else None, "errors": errors, "warnings": warnings, "stats": {f"{k[0]}={k[1]}": v for k, v in stats.items()}, "disagree": dict(disagree)}
         if errors: rc = 1
-    if a.out: pathlib.Path(a.out).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+    if a.out:
+        # The run's own settings travel with the numbers: a violation count is
+        # meaningless without the table it was counted against.
+        payload = {"run": {"batches": a.batches, "worksheets": a.worksheets,
+                           "rule_table": a.rule_table, "rule_checks": a.rule_checks,
+                           "flow_rules": a.flow_rules, "quoted_evidence": a.quoted_evidence,
+                           "site_index": bool(a.site_index), "outputs": len(a.outputs)},
+                   "totals": _totals(report), "files": report}
+        pathlib.Path(a.out).write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
     return rc
 
 

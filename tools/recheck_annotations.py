@@ -46,7 +46,16 @@ import annotate_validate as V  # noqa: E402
 
 #: `L123` on its own, or `L123: <片段>` up to the next clause separator
 RE_CITE = re.compile(r"(?:^|[\s（(；;，,、])L(\d+)\b(?:\s*[:：]\s*(.*?)(?=[;；。]|$))?")
-RE_FILE_CITE = re.compile(r"([A-Za-z0-9_@.\-+/ ]+\.[A-Za-z0-9_]+)\s+L(\d+)")
+#: A citation that names a file: `<path> L<n>: <片段>` (§1 rule 3) or `<path>:<n>（原文 <片段>）`
+#: (the same shape as `flows[].hops[].loc`).  Both forms are accepted.
+#:
+#: The path may not contain spaces -- with a space in the class, `key=X @ a/B.swift L27`
+#: swallowed `X @ a/B.swift` as the file name.  `@` stays, because unit directories carry it
+#: (`deps/swift-nio@558f24a46471/...`).
+RE_FILE_CITE = re.compile(
+    r"(?P<path>[A-Za-z0-9_@./+\-]*[A-Za-z0-9_@+\-]\.[A-Za-z0-9_]+)"
+    r"(?:\s+L|\s*[:：])\s*(?P<line>\d+)"
+    r"(?:\s*[:：]\s*(?P<frag1>[^;；。\n]*)|\s*[（(]\s*原文\s*(?P<frag2>[^）)\n]*)[）)])?")
 RE_HOP = re.compile(r"^(.*):(\d+)$")
 VIS_PUBLIC = re.compile(r"\b(public|open)\b|@objc")
 
@@ -91,9 +100,16 @@ def check_citations(corpus, unit_location, site, rec, problems, tally=None):
     for field in ("fate_evidence", "notes", "is_api_use_reason"):
         text = rec.get(field) or ""
         if not isinstance(text, str): continue
-        # `<file> L<n>: …` -- another file of this unit (or `<unit_location>/<file> L<n>` of another unit)
+        # `<file> L<n>: …` / `<file>:<n>（原文 …）` -- another file of this unit, or
+        # `<unit_location>/<file>` of another unit.  Each match is blanked out of `text`
+        # afterwards: a line number that belongs to another file must not then be checked
+        # against the site's own file, which is how a correct cross-file citation was being
+        # reported as "this file only has N lines".
+        masked = list(text)
         for m in RE_FILE_CITE.finditer(text):
-            raw, n = m.group(1).strip(), int(m.group(2))
+            raw, n = m.group("path").strip(), int(m.group("line"))
+            frag = m.group("frag1") or m.group("frag2")
+            masked[m.start():m.end()] = " " * (m.end() - m.start())
             loc, rel = unit_location, raw
             for tree in ("repos/", "deps/", "pods/"):
                 if raw.startswith(tree):
@@ -104,7 +120,17 @@ def check_citations(corpus, unit_location, site, rec, problems, tally=None):
             if ls is None:
                 problems.append((rec["site_id"], field, f"引用的文件不在 src/ 里: {loc}/{rel}")); continue
             if not (1 <= n <= len(ls)):
-                problems.append((rec["site_id"], field, f"{loc}/{rel} 只有 {len(ls)} 行，引用了 L{n}"))
+                problems.append((rec["site_id"], field, f"{loc}/{rel} 只有 {len(ls)} 行，引用了 L{n}")); continue
+            checkable = bool(frag) and len(norm(frag)) >= 8
+            if tally is not None:
+                tally["cites"] += 1; tally["with_fragment"] += checkable
+            if checkable:
+                got, want = norm(ls[n - 1]), norm(frag)
+                if want not in got and got not in want and not want.startswith(got[:20]):
+                    if tally is not None: tally["fragment_mismatch"] += 1
+                    problems.append((rec["site_id"], field,
+                                     f"{loc}/{rel} L{n} 上没有引用的片段：引 {frag.strip()[:60]!r}，实为 {ls[n - 1].strip()[:80]!r}"))
+        text = "".join(masked)
         # bare `L<n>[: 片段]` -- the site's own file
         ls = corpus.lines(unit_location, own)
         if ls is None: continue

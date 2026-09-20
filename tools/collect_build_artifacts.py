@@ -414,6 +414,94 @@ def verify_bundle(zpath, app_name, exe_name):
     return v
 
 
+# --------------------------------------------------------------------------- #
+# DWARF line tables
+# --------------------------------------------------------------------------- #
+#: `dwarfdump --debug-line` output for one executable can run to hundreds of MB
+#: of text for a large Swift app; gzip takes it to a few MB.  Above this many
+#: gzipped bytes per job the tables are still uploaded, and the manifest says so
+#: -- dropping them silently would look the same as "this app has no debug info".
+DWARF_GZ_BUDGET_BYTES = 300 * 1024 * 1024
+
+
+def _dsym_binaries(products_root):
+    """Every DWARF payload under Build/Products/**/*.dSYM/Contents/Resources/DWARF/."""
+    out = []
+    root = pathlib.Path(products_root)
+    if not root.is_dir():
+        return out
+    for ds in sorted(root.rglob("*.dSYM")):
+        dw = ds / "Contents" / "Resources" / "DWARF"
+        if not dw.is_dir():
+            continue
+        for b in sorted(dw.iterdir()):
+            if b.is_file():
+                out.append((ds, b))
+    return out
+
+
+def _stream_gz(cmd, dst, timeout):
+    """Run `cmd`, gzip its stdout straight to `dst`; return (rc, rows, note)."""
+    rows = 0
+    try:
+        with open(dst, "wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", compresslevel=6) as gz:
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            try:
+                for line in proc.stdout:
+                    gz.write(line)
+                    if line.startswith(b"0x"):
+                        rows += 1
+                proc.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                return -1, rows, f"timeout after {timeout}s"
+            err = proc.stderr.read().decode("utf-8", "replace").strip()
+            return proc.returncode, rows, err[:300] or None
+    except OSError as exc:
+        return -1, rows, f"{type(exc).__name__}: {exc}"
+
+
+def collect_dwarf_line_tables(derived_data, out_dir, budget_bytes=DWARF_GZ_BUDGET_BYTES,
+                              timeout=1800):
+    """dSYM -> gzipped `dwarfdump --debug-line` per executable, with UUIDs.
+
+    Records only; judges nothing.  A missing dSYM is recorded as an empty index,
+    which is "not observed", not "no debug info".
+    """
+    products = pathlib.Path(derived_data) / "Build" / "Products"
+    ddir = pathlib.Path(out_dir) / "dwarf"
+    ddir.mkdir(parents=True, exist_ok=True)
+    index = []
+    total = 0
+    for ds, b in _dsym_binaries(products):
+        rec = {"dsym": ds.name, "binary": b.name, "dwarf_bytes": b.stat().st_size,
+               "uuid": None, "arch": None, "line_table": None, "bytes_gz": None,
+               "rows": None, "rc": None, "note": None}
+        rc_u, out_u = run(["dwarfdump", "--uuid", str(b)])
+        if rc_u == 0:
+            parts = out_u.split()
+            if len(parts) >= 2 and parts[0] == "UUID:":
+                rec["uuid"] = parts[1]
+                rec["arch"] = parts[2].strip("()") if len(parts) > 2 else None
+        flat = f"{ds.name}__{b.name}".replace("/", "_").replace(" ", "_")
+        dst = ddir / f"{flat}.debug-line.txt.gz"
+        rc, rows, note = _stream_gz(["dwarfdump", "--debug-line", str(b)], dst, timeout)
+        rec.update(rc=rc, rows=rows, note=note)
+        if rc == 0:
+            rec["line_table"] = f"dwarf/{dst.name}"
+            rec["bytes_gz"] = dst.stat().st_size
+            total += rec["bytes_gz"]
+        else:
+            try:
+                dst.unlink()
+            except OSError:
+                pass
+        index.append(rec)
+    with open(ddir / "dwarf_index.json", "w", encoding="utf-8") as fh:
+        json.dump(index, fh, ensure_ascii=False, indent=2)
+    return index, total
+
+
 def collect_variants(derived_data, out_dir, map_sections=None,
                      strip_styles=("all",), bundle_max_bytes=0):
     """Find the built .app and emit one binary per strip style, from ONE link.
@@ -605,6 +693,8 @@ def main(argv=None):
     ap.add_argument("--strip-variants", default="all",
                     help="逗号分隔的 strip 档位；一次链接产出多份二进制，"
                          "共用同一份 map。例：none,all")
+    ap.add_argument("--max-dwarf-mb", type=float, default=300.0,
+                    help="DWARF 行号表（gzip 后）的每 job 预算（MB）；超了照传，manifest 记 DWARF_OVER_BUDGET")
     ap.add_argument("--max-bundle-mb", type=float, default=200.0,
                     help="app bundle 压缩包的预算（MB）；超了照传，只在 manifest 里记 "
                          "BUNDLE_OVER_BUDGET —— 悄悄丢掉会和「这个 App 没有清单」长得一样")
@@ -649,6 +739,8 @@ def main(argv=None):
     variants, shared = collect_variants(dd, out_dir, map_sections=map_sections,
                                         strip_styles=styles,
                                         bundle_max_bytes=int(args.max_bundle_mb * 1024 * 1024))
+    dwarf_index, dwarf_gz_total = collect_dwarf_line_tables(
+        dd, out_dir, budget_bytes=int(args.max_dwarf_mb * 1024 * 1024))
 
     requested = [m for m in maps if m["is_requested_basename"]]
     app_maps = [m for m in maps if m["output_kind"] == KIND_APP]
@@ -696,6 +788,15 @@ def main(argv=None):
         # it.  Widening it now would silently change what the old numbers meant.  This
         # one answers the new question — can the analyser be pointed at this job at all.
         "bundle_usable": bool((shared.get("bundle_verify") or {}).get("verdict", "").startswith("OK")),
+        # DWARF line tables (dSYM -> `dwarfdump --debug-line`, gzipped), one per
+        # executable, matched to bundle.*.ipa binaries by UUID.  `dsyms_found`
+        # counts DWARF payloads seen; `dwarf_line_tables` counts the ones whose
+        # dump succeeded.  The two differing is a fact worth keeping.
+        "dsyms_found": len(dwarf_index),
+        "dwarf_line_tables": sum(1 for d in dwarf_index if d["line_table"]),
+        "dwarf_bytes_gz": dwarf_gz_total,
+        "dwarf_over_budget": dwarf_gz_total > int(args.max_dwarf_mb * 1024 * 1024),
+        "dwarf_uuids": {d["binary"]: d["uuid"] for d in dwarf_index},
     }
 
     with open(out_dir / "maps_index.json", "w", encoding="utf-8") as fh:
@@ -749,6 +850,12 @@ def main(argv=None):
         for line in (shared.get("bundle_unreadable") or [])[:5]:
             print(f"    读不了：{line}")
     print()
+    print(f"=== DWARF 行号表 {manifest['dwarf_line_tables']}/{manifest['dsyms_found']} 份，"
+          f"gzip 后 {manifest['dwarf_bytes_gz']:,} 字节"
+          f"{'（超预算）' if manifest['dwarf_over_budget'] else ''} ===")
+    for d in dwarf_index:
+        print(f"    {d['dsym']:<40} {d['binary']:<28} uuid={d['uuid']} rows={d['rows']} "
+              f"{'gz=' + format(d['bytes_gz'], ',') if d['bytes_gz'] else 'rc=' + str(d['rc']) + ' ' + str(d['note'])}")
     print(f"=== map 候选 {len(maps)} 个，按输出类型：{dict(kinds)} ===")
     print(f"    上传 {manifest['maps_uploaded']} 个，"
           f"压缩后 {manifest['map_bytes_uploaded_gz']:,} 字节；"

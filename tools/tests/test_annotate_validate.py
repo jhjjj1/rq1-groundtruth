@@ -16,6 +16,11 @@ import annotate_validate as V  # noqa: E402
 import recheck_annotations as R  # noqa: E402
 
 SIG_PUB = "public func duration() -> TimeInterval {"
+#: 批次里上下文窗口的真实形态：行号右对齐到 5 位，站点那一行带 `>>`。check_quotes 拿它当
+#: 「文件原文」用，所以夹具必须是真的窗口，否则那条检查在测试里根本没跑。
+_SRC = {11: SIG_PUB, 12: "    let t = ProcessInfo.processInfo.systemUptime",
+        13: '    os_log("%f", t)', 14: "}"}
+CTX = [f"{n:5d}{'>>' if n == 12 else '  '} {_SRC.get(n, f'// {n}')}" for n in range(1, 21)]
 
 
 def batch(tmp, name, unit_location, sites):
@@ -35,7 +40,8 @@ def site(sid, **kw):
          "category": "SystemBootTime", "site_class": "RRA", "declared_reasons": {}, "operation_prefill": "READ",
          "domain_hint": None, "key": None, "wrapper_ref": None, "callers": None, "guard_live_on_ios": True,
          "instance_domains": None, "unit_role_prefill": "THIRD_PARTY", "declaring_unit_prefill": "Timing",
-         "enclosing_function": SIG_PUB, "compile_guard": []}
+         "enclosing_function": SIG_PUB, "compile_guard": [], "context": {"start_line": 1, "site_line": 12,
+         "function_lines": [11, 14], "truncated": False, "lines": CTX}}
     s.update(kw); return s
 
 
@@ -101,6 +107,22 @@ def main():
         assert not errs(bp4, write(tmp, "g.jsonl", [good])), errs(bp4, write(tmp, "g.jsonl", [good]))
         assert not V.validate(bp4, write(tmp, "p.jsonl", [para]), quoted_evidence=False)[1]   # 1.9 的口径放过复述
 
+        # ---- 跨文件证据：§1 第 3 条的 `<路径> L<n>: <片段>` 与 hops 同形的 `<路径>:<n>（原文 …）`
+        # 都不能拿站点自己的上下文窗口去比 —— 那个行号属于别的文件。第二轮标注被这个假错
+        # 逼得只能改写证据形式，这里钉死两种形式都放行。
+        xf = rec("d" * 16, applicable_reason="35F9.1", constraint_verdicts={"R35F9_C1": "SUPPORTED"},
+                 fate_evidence="L12: let t = ProcessInfo.processInfo.systemUptime;"
+                               "Other/Helper.swift L9001: let start = clock()",
+                 notes='TERMINAL: L13: os_log;key=kLast @ Store/Keys.swift:4207（原文 static let kLast = "lastSync"）')
+        assert not errs(bp4, write(tmp, "xf.jsonl", [xf])), errs(bp4, write(tmp, "xf.jsonl", [xf]))
+        # 行号确实指站点自己的文件时，窗口比对照旧生效 —— 屏蔽不能把真错也放过
+        wrong2 = rec("d" * 16, applicable_reason="35F9.1", constraint_verdicts={"R35F9_C1": "SUPPORTED"},
+                     fate_evidence="L12: let t = CACurrentMediaTime()", notes="TERMINAL: L13: os_log")
+        assert any("对不上" in x for x in errs(bp4, write(tmp, "w2.jsonl", [wrong2]))), errs(bp4, write(tmp, "w2.jsonl", [wrong2]))
+        # `key=X @ a/B.swift L27` 里的文件名不该被连着 `X @ ` 一起吞掉
+        m = R.RE_FILE_CITE.search("key=kLast @ Store/Keys.swift L27: static let kLast")
+        assert m and m.group("path") == "Store/Keys.swift" and m.group("line") == "27", m and m.groupdict()
+
         # ---- guard liveness is a computed fact, not a hint
         s5 = site("e" * 16, guard_live_on_ios=False, compile_guard=["#if DEBUG"])
         bp5 = batch(tmp, "b0005__repos__demo-app", "repos/demo-app", [s5])
@@ -134,7 +156,7 @@ def main():
         assert probs and "只有 13 行" in probs[0][2], probs
 
         print("PASS  §5 三种欠账（TRIGGER / CHANNEL / 说明值停在哪）+ NO_CONSUMER_FOUND 记账 + 证据必须引原文 + "
-              "守卫事实要显式推翻 + 片段与源码逐字比对；并复现 1.9 的口径确实放过前两类")
+              "守卫事实要显式推翻 + 片段与源码逐字比对 + 跨文件证据两种写法都放行；并复现 1.9 的口径确实放过前两类")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
